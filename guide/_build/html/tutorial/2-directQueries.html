@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Data cleanup" href="3-cleanup.html" />
+    <link rel="next" title="Basic Analysis" href="3-basic-analysis.html" />
     <link rel="prev" title="Data preparation" href="1-dataPreparation.html" /> 
 </head>
 
@@ -88,7 +88,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="1-dataPreparation.html">Data preparation</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Direct queries over data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-cleanup.html">Data cleanup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-basic-analysis.html">Basic Analysis</a></li>
 </ul>
 </li>
 </ul>
@@ -403,7 +403,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1">## Load the data</span>
-<span class="n">records</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;records.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">records</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;demo-keywords.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -575,7 +575,7 @@ div.rendered_html tbody tr:hover {
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="3-cleanup.html" class="btn btn-neutral float-right" title="Data cleanup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="3-basic-analysis.html" class="btn btn-neutral float-right" title="Basic Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="1-dataPreparation.html" class="btn btn-neutral float-left" title="Data preparation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

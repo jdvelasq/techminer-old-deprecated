@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Data cleanup &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+  <title>Direct queries over data &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Functions for manipulating records (rows) in a dataframe" href="../records.html" />
-    <link rel="prev" title="Direct queries over data" href="2-directQueries.html" /> 
+    <link rel="next" title="Basic Analysis" href="3-basic-analysis.html" />
+    <link rel="prev" title="Data preparation" href="1-dataPreparation.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,11 +87,8 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="1-dataPreparation.html">Data preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-directQueries.html">Direct queries over data</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Data cleanup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Remove-duplicate-recods-in-a-dataframe">Remove duplicate recods in a dataframe</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Direct queries over data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-basic-analysis.html">Basic Analysis</a></li>
 </ul>
 </li>
 </ul>
@@ -147,13 +144,13 @@
         
           <li><a href="index.html">Tutorial</a> &raquo;</li>
         
-      <li>Data cleanup</li>
+      <li>Direct queries over data</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/tutorial/3-cleanup.ipynb.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/tutorial/2-directQueries.ipynb.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -388,20 +385,185 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Data-cleanup">
-<h1>Data cleanup<a class="headerlink" href="#Data-cleanup" title="Permalink to this headline">¶</a></h1>
-<p>The library contains functions for manipulating and cleaning dataframes. Functions are generic and can be applied over any pandas.Dataframe.</p>
-<div class="section" id="Remove-duplicate-recods-in-a-dataframe">
-<h2>Remove duplicate recods in a dataframe<a class="headerlink" href="#Remove-duplicate-recods-in-a-dataframe" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Direct-queries-over-data">
+<h1>Direct queries over data<a class="headerlink" href="#Direct-queries-over-data" title="Permalink to this headline">¶</a></h1>
+<p>Some directec queries can be made directly over the dataframe without recurring to special functions or code.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 </pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">## Load the data</span>
+<span class="n">records</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;demo-keywords.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##</span>
+<span class="c1">## Number of records in the dataframe</span>
+<span class="c1">##</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>156
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##</span>
+<span class="c1">## Number of sources</span>
+<span class="c1">##</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">[</span><span class="s1">&#39;Source title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>107
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##</span>
+<span class="c1">## Ten most cited documents</span>
+<span class="c1">##</span>
+<span class="n">records</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Cited by&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[[</span><span class="s1">&#39;Title&#39;</span><span class="p">,</span> <span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Cited by&#39;</span><span class="p">]][</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Title</th>
+      <th>Authors</th>
+      <th>Year</th>
+      <th>Cited by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>119</th>
+      <td>Rise of the machines: Algorithmic trading in t...</td>
+      <td>Chaboud A.P., Chiquoine B., Hjalmarsson E., Ve...</td>
+      <td>2014</td>
+      <td>105</td>
+    </tr>
+    <tr>
+      <th>66</th>
+      <td>The Penn-Lehman Automated Trading Project</td>
+      <td>Kearns M., Ortiz L.</td>
+      <td>2003</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <th>125</th>
+      <td>Application of evolutionary computation for ru...</td>
+      <td>Hu Y., Liu K., Zhang X., Su L., Ngai E.W.T., L...</td>
+      <td>2015</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>Automated trading with performance weighted ra...</td>
+      <td>Booth A., Gerding E., McGroarty F.</td>
+      <td>2014</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>Automated trading with boosting and expert wei...</td>
+      <td>Creamer G., Freund Y.</td>
+      <td>2010</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>Intra-daily volume modeling and prediction for...</td>
+      <td>Brownlees C.T., Cipollini F., Gallo G.M.</td>
+      <td>2011</td>
+      <td>29</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>Flexible least squares for temporal data minin...</td>
+      <td>Montana G., Triantafyllopoulos K., Tsagaris T.</td>
+      <td>2009</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>134</th>
+      <td>Robust technical trading strategies using GP f...</td>
+      <td>Berutich J.M., López F., Luna F., Quintana D.</td>
+      <td>2016</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Algorithmic trading review</td>
+      <td>Treleaven P., Galas M., Lalchand V.</td>
+      <td>2013</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>108</th>
+      <td>Portfolio of automated trading systems: Comple...</td>
+      <td>Raudys S.</td>
+      <td>2013</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 
@@ -413,10 +575,10 @@ div.rendered_html tbody tr:hover {
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../records.html" class="btn btn-neutral float-right" title="Functions for manipulating records (rows) in a dataframe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="3-basic-analysis.html" class="btn btn-neutral float-right" title="Basic Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="2-directQueries.html" class="btn btn-neutral float-left" title="Direct queries over data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="1-dataPreparation.html" class="btn btn-neutral float-left" title="Data preparation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -14,6 +14,14 @@ Functions in this module
 
 """
 
+import pandas as pd
+import numpy as np
+import geopandas
+import re
+import altair as alt
+import matplotlib.pyplot as plt
+
+
 def documentsByTerm(df, term, sep=None):
     
     if sep is not None:
@@ -25,14 +33,40 @@ def documentsByTerm(df, term, sep=None):
     return df.groupby(term).size()
 
 
-def extractCountries(df):
-    
-    term = df.Affiliations
-    
+def extractCountries(x, sep=';'):
+    """
+
+    >>> import pandas as pd
+    >>> x = pd.DataFrame({
+    ...     'Affiliations': [
+    ...         'University, Cuba; University, Venezuela',
+    ...         'Univesity, United States; Univesity, Singapore',
+    ...         'University;',
+    ...         'University; Univesity',
+    ...         'University,',
+    ...         'University',
+    ...         None]    
+    ... })
+    >>> x['Affiliations'].map(lambda x: extractCountries(x))
+    0             Cuba;Venezuela
+    1    United States;Singapore
+    2                       None
+    3                       None
+    4                       None
+    5                       None
+    6                       None
+    Name: Affiliations, dtype: object
+    """
+
+    if x is None:
+        return None
+
     ##
     ## lista generica de nombres de paises
     ##
-    country_names = sorted(geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres')).name.tolist())
+    country_names = sorted(
+        geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres')).name.tolist()
+    )
         
     ## paises faltantes / nombres incompletos
     country_names.append('United States')           # United States of America
@@ -40,31 +74,37 @@ def extractCountries(df):
     country_names.append('Russian Federation')      # Russia
     country_names.append('Czech Republic')          # Czechia
     country_names.append('Bosnia and Herzegovina')  # Bosnia and Herz.
-    country_names.append('Malta')
+    country_names.append('Malta')                   #
 
     ##
     ## Reemplazo de nombres de regiones administrativas
     ## por nombres de paises
     ##
-    term = [re.sub('Bosnia and Herzegovina', 'Bosnia and Herz.', t) if t is not None else t for t in term]
-    term = [re.sub('Czech Republic', 'Czechia', t) if t is not None else t for t in term]
-    term = [re.sub('Russian Federation', 'Russia', t) if t is not None else t for t in term]
-    term = [re.sub('Hong Kong', 'China', t) if t is not None else t for t in term]
-    term = [re.sub('Macau', 'China', t) if t is not None else t for t in term]
-    term = [re.sub('Macao', 'China', t) if t is not None else t for t in term]
-    term = [t if t is not None else '' for t in term ]
+    x = re.sub('Bosnia and Herzegovina', 'Bosnia and Herz.', x) 
+    x = re.sub('Czech Republic', 'Czechia', x)
+    x = re.sub('Russian Federation', 'Russia', x) 
+    x = re.sub('Hong Kong', 'China', x)
+    x = re.sub('Macau', 'China', x)
+    x = re.sub('Macao', 'China', x)
+    
 
-    countries = [[affiliation.split(',')[-1].strip() for affiliation in x.split(';')] for x in term]
-    countries =  [ ';'.join([country if (country in country_names) else '' for country in country_list]) for country_list in countries]
-        
-    return [None if t == '' else t for t in countries ]
+    countries = [affiliation.split(',')[-1].strip() for affiliation in x.split(sep)]
+
+    countries =  ';'.join(
+        [country if country in country_names else '' for country in countries]
+    )
+    
+    if countries == '' or countries == ';':
+        return None
+    else:
+        return countries
 
 
 def documentsByYear(df, plot=False, cumulative=False):
     
     docs_per_year = pd.Series(0, index=range(min(df.Year), max(df.Year)+1))
     
-    df0 = records.groupby('Year')[['Year']].count()
+    df0 = df.groupby('Year')[['Year']].count()
     for idx, x in zip(df0.index, df0.Year):
         docs_per_year[idx] = x
     docs_per_year = docs_per_year.to_frame()
@@ -106,6 +146,7 @@ def citationsByYear(df, plot=False, cumulative=False):
         )
     else:
         return citations_per_year
+
 
 def termByTerm(df, termA, termB, sepA=None, sepB=None, 
                ascendingA=None, ascendingB=None, minmax=None,

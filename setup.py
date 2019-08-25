@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='techMiner',
-      version='0.0.3',
+      version='0.0.0',
       description='Tech mining of bibliograpy',
       long_description='Tech mining of bibliograpy',
       classifiers=[

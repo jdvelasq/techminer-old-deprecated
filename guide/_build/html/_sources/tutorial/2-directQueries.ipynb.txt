@@ -30,7 +30,7 @@
    "outputs": [],
    "source": [
     "## Load the data\n",
-    "records = pd.read_json('records.json', orient='records', lines=True)"
+    "records = pd.read_json('demo-keywords.json', orient='records', lines=True)"
    ]
   },
   {

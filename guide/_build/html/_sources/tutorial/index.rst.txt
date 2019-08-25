@@ -6,6 +6,6 @@ Tutorial
 
     1-dataPreparation
     2-directQueries
-    3-cleanup
+    3-basic-analysis
 
 
