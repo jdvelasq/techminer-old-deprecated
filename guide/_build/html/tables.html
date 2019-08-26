@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Functions for analysis &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+  <title>&lt;no title&gt; &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Functions for manipulating records (rows) in a dataframe" href="records.html" />
-    <link rel="prev" title="Functions for field transformation" href="lists.html" /> 
+    <link rel="next" title="&lt;no title&gt;" href="records.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="lists.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,20 +84,9 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/index.html">Tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="mapfunc.html">Elementary functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lists.html">Functions for field transformation</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Functions for analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#functions-in-this-module">Functions in this module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="records.html">Functions for manipulating records (rows) in a dataframe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graphs.html">Graphs for analysis</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 </ul>
 
             
@@ -145,7 +134,7 @@
         
           <li><a href="modules.html">Modules</a> &raquo;</li>
         
-      <li>Functions for analysis</li>
+      <li>&lt;no title&gt;</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,84 +177,6 @@
     text-align: unset;
 }
 </style>
-<span class="target" id="module-techMiner.tables"></span><div class="section" id="functions-for-analysis">
-<h1>Functions for analysis<a class="headerlink" href="#functions-for-analysis" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>The functions in this module allows the user to transform fields in a dataframe.</p>
-</div>
-<div class="section" id="functions-in-this-module">
-<h2>Functions in this module<a class="headerlink" href="#functions-in-this-module" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="techMiner.tables.citationsByYear">
-<code class="sig-prename descclassname">techMiner.tables.</code><code class="sig-name descname">citationsByYear</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">plot=False</em>, <em class="sig-param">cumulative=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/tables.html#citationsByYear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.tables.citationsByYear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="techMiner.tables.documentsByTerm">
-<code class="sig-prename descclassname">techMiner.tables.</code><code class="sig-name descname">documentsByTerm</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">term</em>, <em class="sig-param">sep=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/tables.html#documentsByTerm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.tables.documentsByTerm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="techMiner.tables.documentsByYear">
-<code class="sig-prename descclassname">techMiner.tables.</code><code class="sig-name descname">documentsByYear</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">plot=False</em>, <em class="sig-param">cumulative=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/tables.html#documentsByYear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.tables.documentsByYear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="techMiner.tables.stack">
-<code class="sig-prename descclassname">techMiner.tables.</code><code class="sig-name descname">stack</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xlabel</em>, <em class="sig-param">ylabel=None</em>, <em class="sig-param">vlabel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/tables.html#stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.tables.stack" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]},</span>
-<span class="gp">... </span>   <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
-<span class="go">   A  B  C</span>
-<span class="go">a  0  3  6</span>
-<span class="go">b  1  4  7</span>
-<span class="go">c  2  5  8</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">vlabel</span><span class="o">=</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span>
-<span class="go">   Z  X  Y</span>
-<span class="go">0  0  a  A</span>
-<span class="go">1  3  a  B</span>
-<span class="go">2  6  a  C</span>
-<span class="go">3  1  b  A</span>
-<span class="go">4  4  b  B</span>
-<span class="go">5  7  b  C</span>
-<span class="go">6  2  c  A</span>
-<span class="go">7  5  c  B</span>
-<span class="go">8  8  c  C</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]},</span>
-<span class="gp">... </span>   <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
-<span class="go">   A  X</span>
-<span class="go">0  0  a</span>
-<span class="go">1  1  b</span>
-<span class="go">2  2  c</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
-<span class="go">      A  X</span>
-<span class="go">   0  0  0</span>
-<span class="go">   1  1  1</span>
-<span class="go">   2  2  2</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="techMiner.tables.termByTerm">
-<code class="sig-prename descclassname">techMiner.tables.</code><code class="sig-name descname">termByTerm</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">termA</em>, <em class="sig-param">termB</em>, <em class="sig-param">sepA=None</em>, <em class="sig-param">sepB=None</em>, <em class="sig-param">ascendingA=None</em>, <em class="sig-param">ascendingB=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/tables.html#termByTerm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.tables.termByTerm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-</div>
 
 
            </div>
@@ -275,10 +186,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="records.html" class="btn btn-neutral float-right" title="Functions for manipulating records (rows) in a dataframe" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="records.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="lists.html" class="btn btn-neutral float-left" title="Functions for field transformation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="lists.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

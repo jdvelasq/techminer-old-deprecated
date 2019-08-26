@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Elementary functions &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+  <title>&lt;no title&gt; &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Functions for field transformation" href="lists.html" />
+    <link rel="next" title="&lt;no title&gt;" href="lists.html" />
     <link rel="prev" title="Modules" href="modules.html" /> 
 </head>
 
@@ -84,16 +84,9 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/index.html">Tutorial</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Elementary functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lists.html">Functions for field transformation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tables.html">Functions for analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="records.html">Functions for manipulating records (rows) in a dataframe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graphs.html">Graphs</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
 </ul>
 
             
@@ -141,7 +134,7 @@
         
           <li><a href="modules.html">Modules</a> &raquo;</li>
         
-      <li>Elementary functions</li>
+      <li>&lt;no title&gt;</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -184,311 +177,6 @@
     text-align: unset;
 }
 </style>
-<span class="target" id="module-techMiner.mapfunc"></span><div class="section" id="elementary-functions">
-<h1>Elementary functions<a class="headerlink" href="#elementary-functions" title="Permalink to this headline">¶</a></h1>
-<p>This module contains functions that can be applied to each element of a pandas.Series
-object using the map function.</p>
-<dl class="function">
-<dt id="techMiner.mapfunc.asciify">
-<code class="sig-prename descclassname">techMiner.mapfunc.</code><code class="sig-name descname">asciify</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/mapfunc.html#asciify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.mapfunc.asciify" title="Permalink to this definition">¶</a></dt>
-<dd><p>Translate non-ascii charaters to ascii equivalent.</p>
-<p><strong>Example:</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">asciify</span><span class="p">(</span><span class="s1">&#39;áéíóúÁÉÍÓÚñÑ&#39;</span><span class="p">)</span>
-<span class="go">&#39;aeiouaeiounn&#39;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="techMiner.mapfunc.extractCountries">
-<code class="sig-prename descclassname">techMiner.mapfunc.</code><code class="sig-name descname">extractCountries</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">sep=';'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/mapfunc.html#extractCountries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.mapfunc.extractCountries" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">&#39;Affiliations&#39;</span><span class="p">:</span> <span class="p">[</span>
-<span class="gp">... </span>        <span class="s1">&#39;University, Cuba; University, Venezuela&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;Univesity, United States; Univesity, Singapore&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;University;&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;University; Univesity&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;University,&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;University&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="kc">None</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;Affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extractCountries</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="go">0             Cuba;Venezuela</span>
-<span class="go">1    United States;Singapore</span>
-<span class="go">2                       None</span>
-<span class="go">3                       None</span>
-<span class="go">4                       None</span>
-<span class="go">5                       None</span>
-<span class="go">6                       None</span>
-<span class="go">Name: Affiliations, dtype: object</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="techMiner.mapfunc.extractKeywords">
-<code class="sig-prename descclassname">techMiner.mapfunc.</code><code class="sig-name descname">extractKeywords</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">keywords</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/mapfunc.html#extractKeywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.mapfunc.extractKeywords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a new list extracting the words in a field that match a
-list of keywords</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>string</em>) – A string object.</p></li>
-<li><p><strong>keywords</strong> (<em>list</em>) – a list of strings.</p></li>
-<li><p><strong>method</strong> (<em>None</em><em>, </em><em>'strict'</em><em>, </em><em>'insensitive'</em><em>, </em><em>'regex'</em>) – a list of strings.</p></li>
-</ul>
-</dd>
-</dl>
-<p>Options for <cite>method</cite>:</p>
-<ul class="simple">
-<li><p>‘strict’: Match whole words, case sensitive.</p></li>
-<li><p>‘insensitive’: Match whole words, case insensitive.</p></li>
-<li><p>‘regex’: use keywords as regular expressions.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>string.</p>
-</dd>
-</dl>
-<p><strong>Examples</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;áaa; bbb-ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb;ddd;eee&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa bbb aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;eee&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">              f</span>
-<span class="go">0  áaa; bbb-ccc</span>
-<span class="go">1   bbb;ddd;eee</span>
-<span class="go">2   aaa bbb aaa</span>
-<span class="go">3       aaa ccc</span>
-<span class="go">4           aaa</span>
-<span class="go">5           eee</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">]))</span>
-<span class="go">0        aaa bbb</span>
-<span class="go">1            bbb</span>
-<span class="go">2    aaa bbb aaa</span>
-<span class="go">3            aaa</span>
-<span class="go">4            aaa</span>
-<span class="go">5           None</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AAA; bbb-ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb;ddd;eee&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa bbb aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;eee&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">              f</span>
-<span class="go">0  AAA; bbb-ccc</span>
-<span class="go">1   bbb;ddd;eee</span>
-<span class="go">2   aaa bbb aaa</span>
-<span class="go">3       aaa ccc</span>
-<span class="go">4           aaa</span>
-<span class="go">5           eee</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;AAA&#39;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">))</span>
-<span class="go">0     AAA</span>
-<span class="go">1    None</span>
-<span class="go">2    None</span>
-<span class="go">3    None</span>
-<span class="go">4    None</span>
-<span class="go">5    None</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;aaaaa&#39;</span><span class="p">,</span> <span class="s1">&#39;baaab&#39;</span><span class="p">,</span> <span class="s1">&#39;baab&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">       f</span>
-<span class="go">0     aa</span>
-<span class="go">1    aaa</span>
-<span class="go">2      a</span>
-<span class="go">3  aaaaa</span>
-<span class="go">4  baaab</span>
-<span class="go">5   baab</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a{3,4}&#39;</span><span class="p">,</span> <span class="s1">&#39;ba</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;regex&#39;</span><span class="p">))</span>
-<span class="go">0     None</span>
-<span class="go">1      aaa</span>
-<span class="go">2     None</span>
-<span class="go">3    aaaaa</span>
-<span class="go">4    baaab</span>
-<span class="go">5     None</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="techMiner.mapfunc.extractNearbyPhrases">
-<code class="sig-prename descclassname">techMiner.mapfunc.</code><code class="sig-name descname">extractNearbyPhrases</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">keywords</em>, <em class="sig-param">n=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/mapfunc.html#extractNearbyPhrases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.mapfunc.extractNearbyPhrases" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the words in the proximity of the terms matching
-a keywords list.</p>
-<blockquote>
-<div><dl class="simple">
-<dt>Args:</dt><dd><p>x (string): A string object.
-keywords (list): a list of strings.
-n (integer): number of words around term.</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>string.</p>
-</dd>
-</dl>
-<p><strong>Examples</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;aaa 1 2 3 4 5&#39;</span><span class="p">,</span> <span class="s1">&#39;1 aaa 2 3 4 5&#39;</span><span class="p">,</span> <span class="s1">&#39;1 2 aaa 3 4 5&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="s1">&#39;1 2 3 aaa 4 5&#39;</span><span class="p">,</span> <span class="s1">&#39;1 2 3 4 aaa 5&#39;</span><span class="p">,</span> <span class="s1">&#39;1 2 3 4 5 aaa&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">               f</span>
-<span class="go">0  aaa 1 2 3 4 5</span>
-<span class="go">1  1 aaa 2 3 4 5</span>
-<span class="go">2  1 2 aaa 3 4 5</span>
-<span class="go">3  1 2 3 aaa 4 5</span>
-<span class="go">4  1 2 3 4 aaa 5</span>
-<span class="go">5  1 2 3 4 5 aaa</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extractNearbyPhrases</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
-<span class="go">0        aaa 1 2</span>
-<span class="go">1      1 aaa 2 3</span>
-<span class="go">2    1 2 aaa 3 4</span>
-<span class="go">3    2 3 aaa 4 5</span>
-<span class="go">4      3 4 aaa 5</span>
-<span class="go">5        4 5 aaa</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="techMiner.mapfunc.fingerprint">
-<code class="sig-prename descclassname">techMiner.mapfunc.</code><code class="sig-name descname">fingerprint</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/mapfunc.html#fingerprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.mapfunc.fingerprint" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span><span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a A b&#39;</span><span class="p">,</span> <span class="s1">&#39;b a a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;b c&#39;</span><span class="p">,</span> <span class="s1">&#39;c b&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">})</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fingerprint</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="go">0     a b</span>
-<span class="go">1     a b</span>
-<span class="go">2    None</span>
-<span class="go">3     b c</span>
-<span class="go">4     b c</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="techMiner.mapfunc.removeKeywords">
-<code class="sig-prename descclassname">techMiner.mapfunc.</code><code class="sig-name descname">removeKeywords</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">keywords</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/mapfunc.html#removeKeywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.mapfunc.removeKeywords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a new list removing the words in a field that match a
-list of keywords</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>string</em>) – A string object.</p></li>
-<li><p><strong>keywords</strong> (<em>list</em>) – a list of strings.</p></li>
-<li><p><strong>method</strong> (<em>None</em><em>, </em><em>'strict'</em><em>, </em><em>'insensitive'</em><em>, </em><em>'regex'</em>) – a list of strings.</p></li>
-</ul>
-</dd>
-</dl>
-<p>Options for <cite>method</cite>:</p>
-<ul class="simple">
-<li><p>‘strict’: Match whole words, case sensitive.</p></li>
-<li><p>‘insensitive’: Match whole words, case insensitive.</p></li>
-<li><p>‘regex’: use keywords as regular expressions.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>string.</p>
-</dd>
-</dl>
-<p><strong>Examples</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AAA; bbb-ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb;ddd;eee&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa bbb aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;eee&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">              f</span>
-<span class="go">0  AAA; bbb-ccc</span>
-<span class="go">1   bbb;ddd;eee</span>
-<span class="go">2   aaa bbb aaa</span>
-<span class="go">3       aaa ccc</span>
-<span class="go">4           aaa</span>
-<span class="go">5           eee</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">removeKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">]))</span>
-<span class="go">0        ccc</span>
-<span class="go">1    ddd eee</span>
-<span class="go">2       None</span>
-<span class="go">3        ccc</span>
-<span class="go">4       None</span>
-<span class="go">5        eee</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AAA; bbb-ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb;ddd;eee&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa bbb aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;eee&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">              f</span>
-<span class="go">0  AAA; bbb-ccc</span>
-<span class="go">1   bbb;ddd;eee</span>
-<span class="go">2   aaa bbb aaa</span>
-<span class="go">3       aaa ccc</span>
-<span class="go">4           aaa</span>
-<span class="go">5           eee</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">removeKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;AAA&#39;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">))</span>
-<span class="go">0        bbb ccc</span>
-<span class="go">1    bbb ddd eee</span>
-<span class="go">2    aaa bbb aaa</span>
-<span class="go">3        aaa ccc</span>
-<span class="go">4            aaa</span>
-<span class="go">5            eee</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;aaaaa&#39;</span><span class="p">,</span> <span class="s1">&#39;baaab&#39;</span><span class="p">,</span> <span class="s1">&#39;baab&#39;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">       f</span>
-<span class="go">0     aa</span>
-<span class="go">1    aaa</span>
-<span class="go">2      a</span>
-<span class="go">3  aaaaa</span>
-<span class="go">4  baaab</span>
-<span class="go">5   baab</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">removeKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a{3,4}&#39;</span><span class="p">,</span> <span class="s1">&#39;ba</span><span class="si">{3}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;regex&#39;</span><span class="p">))</span>
-<span class="go">0      aa</span>
-<span class="go">1    None</span>
-<span class="go">2       a</span>
-<span class="go">3    None</span>
-<span class="go">4    None</span>
-<span class="go">5    baab</span>
-<span class="go">Name: f, dtype: object</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</div>
 
 
            </div>
@@ -498,7 +186,7 @@ list of keywords</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="lists.html" class="btn btn-neutral float-right" title="Functions for field transformation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="lists.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

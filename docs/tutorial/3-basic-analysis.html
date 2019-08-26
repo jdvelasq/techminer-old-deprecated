@@ -89,7 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="1-dataPreparation.html">Data preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="2-directQueries.html">Direct queries over data</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Basic Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Number-of-documents-by-document-type">Number of documents by document type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Number-of-documents-per-document-type">Number of documents per document type</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Citations-per-document">Citations per document</a></li>
 <li class="toctree-l3"><a class="reference internal" href="# Number-of-authors-per-document"> Number of authors per document</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Number-of-documents-per-source-title">Number of documents per source title</a></li>
@@ -413,14 +413,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="section" id="Number-of-documents-by-document-type">
-<h2>Number of documents by document type<a class="headerlink" href="#Number-of-documents-by-document-type" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Number-of-documents-per-document-type">
+<h2>Number of documents per document type<a class="headerlink" href="#Number-of-documents-per-document-type" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">documentsByTerm</span>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">documentsPerTerm</span>
 </pre></div>
 </div>
 </div>
@@ -429,7 +429,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">)</span>
+<span></span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -437,24 +437,70 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Document Type
-Article              72
-Book Chapter          5
-Conference Paper     72
-Conference Review     1
-Note                  1
-Review                5
-dtype: int64
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Document Type</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Article</td>
+      <td>72</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Conference Paper</td>
+      <td>72</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Book Chapter</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Review</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Conference Review</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Note</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">();</span>
+<span></span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="s1">&#39;Document Type&#39;</span><span class="p">,</span> <span class="s1">&#39;Num Documents&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -470,11 +516,8 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">barh_chart</span>
-
-<span class="n">barh_chart</span><span class="p">(</span>
-    <span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Num Documents&#39;</span><span class="p">)</span>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">alt_barh_graph</span>
+<span class="n">alt_barh_graph</span><span class="p">(</span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -486,15 +529,13 @@ dtype: int64
 <img alt="../_images/tutorial_3-basic-analysis_8_0.png" src="../_images/tutorial_3-basic-analysis_8_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Citations-per-document">
-<h2>Citations per document<a class="headerlink" href="#Citations-per-document" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Cited by&#39;</span><span class="p">)</span>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">alt_bar_graph</span>
+<span class="n">alt_bar_graph</span><span class="p">(</span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -502,172 +543,1353 @@ dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Cited by
-0      61
-1      16
-2      12
-3      10
-4       9
-5       6
-6       5
-7      10
-8       1
-9       3
-11      4
-12      1
-13      1
-14      2
-15      2
-16      1
-18      1
-19      1
-20      2
-21      1
-23      1
-29      1
-31      1
-38      1
-45      1
-49      1
-105     1
-dtype: int64
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_9_0.png" src="../_images/tutorial_3-basic-analysis_9_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">sns_barh_plot</span>
+<span class="n">sns_barh_plot</span><span class="p">(</span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_10_0.png" src="../_images/tutorial_3-basic-analysis_10_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">sns_bar_plot</span>
+<span class="n">sns_bar_plot</span><span class="p">(</span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Document Type&#39;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_11_0.png" src="../_images/tutorial_3-basic-analysis_11_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Citations-per-document">
+<h2>Citations per document<a class="headerlink" href="#Citations-per-document" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Cited by&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Cited by</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>61</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>11</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>20</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>15</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>14</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>13</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>16</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>19</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>21</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>23</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>29</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>31</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>38</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>45</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>49</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>105</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id=" Number-of-authors-per-document">
 <h2> Number of authors per document<a class="headerlink" href="# Number-of-authors-per-document" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">records</span><span class="p">[</span><span class="s1">&#39;Num Authors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">records</span><span class="p">[</span><span class="s1">&#39;Author(s) ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)))</span>
-<span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Num Authors&#39;</span><span class="p">)</span>
+<span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Num Authors&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Num Authors
-1    21
-2    54
-3    41
-4    24
-5    11
-6     5
-dtype: int64
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Num Authors</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>41</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="Number-of-documents-per-source-title">
 <h2>Number of documents per source title<a class="headerlink" href="#Number-of-documents-per-source-title" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Source title&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span></span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Source title&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Source title
-Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)    17
-Quantitative Finance                                                                                                                     9
-Expert Systems with Applications                                                                                                         9
-Communications in Computer and Information Science                                                                                       4
-Computational Economics                                                                                                                  3
-                                                                                                                                        ..
-Journal of Financial Markets                                                                                                             1
-Journal of Information and Computational Science                                                                                         1
-Journal of Theoretical and Applied Information Technology                                                                                1
-Journal of University of Science and Technology of China                                                                                 1
-18th European Conference on Information Systems, ECIS 2010                                                                               1
-Length: 107, dtype: int64
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Source title</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>75</th>
+      <td>Lecture Notes in Computer Science (including s...</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>Expert Systems with Applications</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>Quantitative Finance</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Communications in Computer and Information Sci...</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Computational Economics</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>Proceedings of the International Joint Confere...</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>IEEE Transactions on Neural Networks and Learn...</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Applied Soft Computing Journal</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>Computational Intelligence</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>Studies in Computational Intelligence</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>ACM International Conference Proceeding Series</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>Proceedings - 2016 7th International Conferenc...</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>Proceedings of the 2018 IEEE Symposium Series ...</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2012 IEEE Conference on Computational Intellig...</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>Lecture Notes in Artificial Intelligence (Subs...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>Journal of Theoretical and Applied Information...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>Neural Computing and Applications</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>Knowledge-Based Systems</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>Neurocomputing</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>Journal of University of Science and Technolog...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>68</th>
+      <td>Journal of Financial Econometrics</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>Journal of Information and Computational Science</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>69</th>
+      <td>Journal of Financial Markets</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>Physica A: Statistical Mechanics and its Appli...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>67</th>
+      <td>Journal of Finance</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>66</th>
+      <td>Journal of Communications Technology and Elect...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>Journal of Chemical and Pharmaceutical Research</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>64</th>
+      <td>Journal of Business Economics and Management</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>63</th>
+      <td>Journal of Behavioral Finance</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>Journal of Applied Statistics</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2017 IEEE Symposium Series on Computational In...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2016 IEEE Symposium Series on Computational In...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2016 IEEE International Conference on Informat...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015 National Conference on Parallel Computing...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Communications of the ACM</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>Computational Management Science</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>IEICE Transactions on Information and Systems</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>Computational Optimization and Applications</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>IEEE/IAFE Conference on Computational Intellig...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2005 ICSC Congress on Computational Intelligen...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>IEEE Internet of Things Journal</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>IEEE Intelligent Systems</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>IEEE Access</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>ICEIS 2007 - 9th International Conference on E...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>ICARM 2016 - 2016 International Conference on ...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>Genetic Programming and Evolvable Machines</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>GECCO 2013 - Proceedings of the 2013 Genetic a...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>Frontiers of Computer Science in China</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>Frontiers of Computer Science</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>Forecasting Volatility in the Financial Markets</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>Financial Innovation</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>ESANN 2011 proceedings, 19th European Symposiu...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>ECTI-CON 2017 - 2017 14th International Confer...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>Dr. Dobb's Journal</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>Decision Support Systems</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>Data Mining for Business Applications</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>Contaduria y Administracion</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>Conferences in Research and Practice in Inform...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>Conference of Open Innovation Association, FRUCT</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>106</th>
+      <td>Xitong Gongcheng Lilun yu Shijian/System Engin...</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>107 rows × 2 columns</p>
+</div></div>
 </div>
 </div>
 <div class="section" id=" Number-of-documents-per-author">
 <h2> Number of documents per author<a class="headerlink" href="# Number-of-documents-per-author" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span></span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Authors
-Maringer D.     5
-Ng W.L.         4
-Kablan A.       4
-Montana G.      4
-Arévalo A.      3
-               ..
-Orihara R.      1
-Ortiz L.        1
-Otero F.E.B.    1
-O’Neill M.      1
-Lin J.-Y.       1
-Length: 356, dtype: int64
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Authors</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>195</th>
+      <td>Maringer D.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>213</th>
+      <td>Ng W.L.</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>205</th>
+      <td>Montana G.</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>141</th>
+      <td>Kablan A.</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Arévalo A.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>Kanniainen J.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>Debenham J.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>345</th>
+      <td>Zhang J.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>Iosifidis A.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>327</th>
+      <td>Wang F.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>313</th>
+      <td>Tsagaris T.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>Gabbouj M.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>273</th>
+      <td>Sandoval J.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>Deng X.</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>276</th>
+      <td>Sezer O.B.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>Dong K.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>271</th>
+      <td>Salmon M.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Abdunabi T.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>293</th>
+      <td>Stone P.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>Gorse D.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>295</th>
+      <td>Stübinger J.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>68</th>
+      <td>De Castro P.A.L.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>Creamer G.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>Cliff D.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>307</th>
+      <td>Tran D.T.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>309</th>
+      <td>Trenta F.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>310</th>
+      <td>Triantafyllopoulos K.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>268</th>
+      <td>Rundo F.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td>Raudys A.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>106</th>
+      <td>Groth S.S.</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>108</th>
+      <td>Gruver W.A.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>107</th>
+      <td>Grottke M.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>105</th>
+      <td>Grigoriev D.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>103</th>
+      <td>Gonçalves R.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>Gomber P.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>Ghini V.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>Gerding E.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>Gaydadjiev G.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>Gao S.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>119</th>
+      <td>Hjalmarsson E.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>Hogenboom F.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>121</th>
+      <td>Hoos H.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>133</th>
+      <td>Iskrich D.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>142</th>
+      <td>Kajiji N.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>Johnson C.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>138</th>
+      <td>Jiang Z.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>137</th>
+      <td>Jeong G.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>136</th>
+      <td>Jasra A.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>135</th>
+      <td>Janosek M.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>134</th>
+      <td>Jamali H.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>131</th>
+      <td>Huang Y.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>122</th>
+      <td>Hsiao C.-Y.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>130</th>
+      <td>Huang S.-J.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>128</th>
+      <td>Huang R.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>127</th>
+      <td>Huang Q.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>126</th>
+      <td>Huang K.-K.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>125</th>
+      <td>Huang H.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>Huang C.-P.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>123</th>
+      <td>Hu Y.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>Özdemir A.</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>356 rows × 2 columns</p>
+</div></div>
 </div>
 </div>
 <div class="section" id="Number-of-documents-per-keyword">
 <h2>Number of documents per keyword<a class="headerlink" href="#Number-of-documents-per-keyword" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Keywords&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span></span><span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Keywords&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Keywords
-Algorithmic trading               37
-High frequency trading            19
-Automated trading                 15
-Machine learning                  13
-Deep learning                     11
-                                  ..
-Recurrent neural network (RNN)     1
-Recursively updating               1
-Regime-switching                   1
-Rule discovery                     1
-?-stable processes                 1
-Length: 361, dtype: int64
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Keywords</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>9</th>
+      <td>Algorithmic trading</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>123</th>
+      <td>High frequency trading</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Automated trading</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>155</th>
+      <td>Machine learning</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>Deep learning</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>258</th>
+      <td>Technical analysis</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>327</th>
+      <td>multiagent systems</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>Financial forecasting</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Automated trading system</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>Forecasting</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>Genetic algorithm</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>247</th>
+      <td>Stock market</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>regularization</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Big data</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>336</th>
+      <td>portfolio management</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>208</th>
+      <td>Portfolio optimization</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Algorithmic trading systems</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td>directional change</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>Statistical arbitrage</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>299</th>
+      <td>convolutional neural networks</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>145</th>
+      <td>LSTM</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>Efficient market hypothesis</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>Limit order book</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>287</th>
+      <td>agent-based modeling</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>Forex</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>Decision support system</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>Data mining</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>Fundamental analysis</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>Finance</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>295</th>
+      <td>classification</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>Graph mining</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>131</th>
+      <td>Independent component analysis</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>Grammatical evolution</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>Gold</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>112</th>
+      <td>Gaussian Process Kernel</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>GMM</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>110</th>
+      <td>Fuzzy rule based systems</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>109</th>
+      <td>Fuzzy rule based classification system</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>108</th>
+      <td>Futures market</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>130</th>
+      <td>Incremental support vector regression</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>Index</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>154</th>
+      <td>MACD optimization</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>143</th>
+      <td>Knowledge discovery</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>153</th>
+      <td>Literature review</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>152</th>
+      <td>Liquidity shock</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>151</th>
+      <td>Liquidity risk</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>149</th>
+      <td>Linterpolative boolean algebra</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>147</th>
+      <td>Lead–lag structure</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>146</th>
+      <td>LSTM neural network</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>Koopman operator</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>142</th>
+      <td>Keywords-machine learning</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>133</th>
+      <td>Indicator selection</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>141</th>
+      <td>Kaggle challenge</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>Japanese yen</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>139</th>
+      <td>Investors’ mood</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>138</th>
+      <td>Investments</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>137</th>
+      <td>Inverse-variance weighting</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>136</th>
+      <td>Intraday trading</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>135</th>
+      <td>Intraday Seasonality Observation Model</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>360</th>
+      <td>well-calibrated forecasts</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>361 rows × 2 columns</p>
+</div></div>
 </div>
 </div>
 <div class="section" id="Documents-per-country">
 <h2>Documents per country<a class="headerlink" href="#Documents-per-country" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -676,50 +1898,302 @@ Length: 361, dtype: int64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">records</span><span class="p">[</span><span class="s1">&#39;Country&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">records</span><span class="p">[</span><span class="s1">&#39;Affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extractCountries</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">documentsByTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Country&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">documentsPerTerm</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="s1">&#39;Country&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Country
-United Kingdom    42
-China             36
-United States     26
-Brazil            12
-Italy             10
-Germany            9
-Canada             8
-Colombia           8
-Spain              7
-Russia             6
-dtype: int64
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Country</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>46</th>
+      <td>United Kingdom</td>
+      <td>42</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>China</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>United States</td>
+      <td>26</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Brazil</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Italy</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Germany</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Canada</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Colombia</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>Spain</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>Switzerland</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>Russia</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Lithuania</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>India</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>Turkey</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Finland</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>Taiwan</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Chile</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>South Korea</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Australia</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Ireland</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Denmark</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Belgium</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Morocco</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>Sweden</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>Portugal</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Hungary</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Afghanistan</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Netherlands</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>New Zealand</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>Thailand</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Croatia</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>Romania</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Greece</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>Saudi Arabia</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Czechia</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>Singapore</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Japan</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>United Arab Emirates</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>Sri Lanka</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td></td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>Slovenia</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>Serbia</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Peru</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>Mexico</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Israel</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Cyprus</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Bosnia and Herz.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>Malta</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="Number-of-documents-per-year">
 <h2>Number of documents per year<a class="headerlink" href="#Number-of-documents-per-year" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">documentsByYear</span>
-<span class="n">documentsByYear</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">documentsPerYear</span>
+<span class="n">documentsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -741,349 +2215,140 @@ dtype: int64
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Documents</th>
       <th>Year</th>
+      <th>Num Documents</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>1994</th>
+      <td>1994</td>
       <td>1</td>
-      <td>1994</td>
     </tr>
     <tr>
       <th>1995</th>
-      <td>0</td>
       <td>1995</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1996</th>
-      <td>0</td>
       <td>1996</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1997</th>
-      <td>0</td>
       <td>1997</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1998</th>
-      <td>0</td>
       <td>1998</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1999</th>
-      <td>0</td>
       <td>1999</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2000</th>
-      <td>0</td>
       <td>2000</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2001</th>
-      <td>0</td>
       <td>2001</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2002</th>
-      <td>0</td>
       <td>2002</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2003</th>
-      <td>2</td>
       <td>2003</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>2004</th>
-      <td>2</td>
       <td>2004</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>2005</th>
-      <td>2</td>
       <td>2005</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>2006</th>
-      <td>2</td>
       <td>2006</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>2007</th>
-      <td>5</td>
       <td>2007</td>
+      <td>5</td>
     </tr>
     <tr>
       <th>2008</th>
-      <td>5</td>
       <td>2008</td>
+      <td>5</td>
     </tr>
     <tr>
       <th>2009</th>
-      <td>6</td>
       <td>2009</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>2010</th>
-      <td>9</td>
       <td>2010</td>
+      <td>9</td>
     </tr>
     <tr>
       <th>2011</th>
-      <td>3</td>
       <td>2011</td>
+      <td>3</td>
     </tr>
     <tr>
       <th>2012</th>
-      <td>17</td>
       <td>2012</td>
+      <td>17</td>
     </tr>
     <tr>
       <th>2013</th>
+      <td>2013</td>
       <td>11</td>
-      <td>2013</td>
     </tr>
     <tr>
       <th>2014</th>
+      <td>2014</td>
       <td>14</td>
-      <td>2014</td>
     </tr>
     <tr>
       <th>2015</th>
+      <td>2015</td>
       <td>8</td>
-      <td>2015</td>
     </tr>
     <tr>
       <th>2016</th>
-      <td>12</td>
       <td>2016</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>2017</th>
+      <td>2017</td>
       <td>17</td>
-      <td>2017</td>
     </tr>
     <tr>
       <th>2018</th>
+      <td>2018</td>
       <td>19</td>
-      <td>2018</td>
     </tr>
     <tr>
       <th>2019</th>
+      <td>2019</td>
       <td>21</td>
-      <td>2019</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/tutorial_3-basic-analysis_24_0.png" src="../_images/tutorial_3-basic-analysis_24_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">documentsByYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/tutorial_3-basic-analysis_25_0.png" src="../_images/tutorial_3-basic-analysis_25_0.png" />
-</div>
-</div>
-</div>
-<div class="section" id=" Citations-per-year">
-<h2> Citations per year<a class="headerlink" href="# Citations-per-year" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">citationsByYear</span>
-<span class="n">citationsByYear</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Citations</th>
-      <th>Year</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1994</th>
-      <td>3</td>
-      <td>1994</td>
-    </tr>
-    <tr>
-      <th>1995</th>
-      <td>0</td>
-      <td>1995</td>
-    </tr>
-    <tr>
-      <th>1996</th>
-      <td>0</td>
-      <td>1996</td>
-    </tr>
-    <tr>
-      <th>1997</th>
-      <td>0</td>
-      <td>1997</td>
-    </tr>
-    <tr>
-      <th>1998</th>
-      <td>0</td>
-      <td>1998</td>
-    </tr>
-    <tr>
-      <th>1999</th>
-      <td>0</td>
-      <td>1999</td>
-    </tr>
-    <tr>
-      <th>2000</th>
-      <td>0</td>
-      <td>2000</td>
-    </tr>
-    <tr>
-      <th>2001</th>
-      <td>0</td>
-      <td>2001</td>
-    </tr>
-    <tr>
-      <th>2002</th>
-      <td>0</td>
-      <td>2002</td>
-    </tr>
-    <tr>
-      <th>2003</th>
-      <td>49</td>
-      <td>2003</td>
-    </tr>
-    <tr>
-      <th>2004</th>
-      <td>6</td>
-      <td>2004</td>
-    </tr>
-    <tr>
-      <th>2005</th>
-      <td>6</td>
-      <td>2005</td>
-    </tr>
-    <tr>
-      <th>2006</th>
-      <td>3</td>
-      <td>2006</td>
-    </tr>
-    <tr>
-      <th>2007</th>
-      <td>12</td>
-      <td>2007</td>
-    </tr>
-    <tr>
-      <th>2008</th>
-      <td>20</td>
-      <td>2008</td>
-    </tr>
-    <tr>
-      <th>2009</th>
-      <td>56</td>
-      <td>2009</td>
-    </tr>
-    <tr>
-      <th>2010</th>
-      <td>61</td>
-      <td>2010</td>
-    </tr>
-    <tr>
-      <th>2011</th>
-      <td>30</td>
-      <td>2011</td>
-    </tr>
-    <tr>
-      <th>2012</th>
-      <td>103</td>
-      <td>2012</td>
-    </tr>
-    <tr>
-      <th>2013</th>
-      <td>54</td>
-      <td>2013</td>
-    </tr>
-    <tr>
-      <th>2014</th>
-      <td>188</td>
-      <td>2014</td>
-    </tr>
-    <tr>
-      <th>2015</th>
-      <td>55</td>
-      <td>2015</td>
-    </tr>
-    <tr>
-      <th>2016</th>
-      <td>79</td>
-      <td>2016</td>
-    </tr>
-    <tr>
-      <th>2017</th>
-      <td>59</td>
-      <td>2017</td>
-    </tr>
-    <tr>
-      <th>2018</th>
-      <td>39</td>
-      <td>2018</td>
-    </tr>
-    <tr>
-      <th>2019</th>
-      <td>9</td>
-      <td>2019</td>
     </tr>
   </tbody>
 </table>
@@ -1094,12 +2359,29 @@ dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">citationsByYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">alt_barh_graph</span><span class="p">(</span><span class="n">documentsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_27_0.png" src="../_images/tutorial_3-basic-analysis_27_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_bar_graph</span><span class="p">(</span><span class="n">documentsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1107,27 +2389,458 @@ dtype: int64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">citationsByYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="n">documentsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Year</th>
+      <th>Num Documents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1994</th>
+      <td>1994</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1995</th>
+      <td>1995</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1996</th>
+      <td>1996</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1997</th>
+      <td>1997</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1998</th>
+      <td>1998</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1999</th>
+      <td>1999</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>2000</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2001</th>
+      <td>2001</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2002</th>
+      <td>2002</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2003</th>
+      <td>2003</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2004</th>
+      <td>2004</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>2005</th>
+      <td>2005</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2006</th>
+      <td>2006</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2007</th>
+      <td>2007</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>2008</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>2009</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <th>2010</th>
+      <td>2010</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>2011</th>
+      <td>2011</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>2012</th>
+      <td>2012</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>2013</th>
+      <td>2013</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>2014</th>
+      <td>2014</td>
+      <td>79</td>
+    </tr>
+    <tr>
+      <th>2015</th>
+      <td>2015</td>
+      <td>87</td>
+    </tr>
+    <tr>
+      <th>2016</th>
+      <td>2016</td>
+      <td>99</td>
+    </tr>
+    <tr>
+      <th>2017</th>
+      <td>2017</td>
+      <td>116</td>
+    </tr>
+    <tr>
+      <th>2018</th>
+      <td>2018</td>
+      <td>135</td>
+    </tr>
+    <tr>
+      <th>2019</th>
+      <td>2019</td>
+      <td>156</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_barh_graph</span><span class="p">(</span><span class="n">documentsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorial_3-basic-analysis_29_0.png" src="../_images/tutorial_3-basic-analysis_29_0.png" />
+<img alt="../_images/tutorial_3-basic-analysis_30_0.png" src="../_images/tutorial_3-basic-analysis_30_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_bar_graph</span><span class="p">(</span><span class="n">documentsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_31_0.png" src="../_images/tutorial_3-basic-analysis_31_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id=" Citations-per-year">
+<h2> Citations per year<a class="headerlink" href="# Citations-per-year" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">citationsPerYear</span>
+<span class="n">citationsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Year</th>
+      <th>Cited by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1994</th>
+      <td>1994</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1995</th>
+      <td>1995</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1996</th>
+      <td>1996</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1997</th>
+      <td>1997</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1998</th>
+      <td>1998</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1999</th>
+      <td>1999</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>2000</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2001</th>
+      <td>2001</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2002</th>
+      <td>2002</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2003</th>
+      <td>2003</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <th>2004</th>
+      <td>2004</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2005</th>
+      <td>2005</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2006</th>
+      <td>2006</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2007</th>
+      <td>2007</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>2008</th>
+      <td>2008</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2009</th>
+      <td>2009</td>
+      <td>56</td>
+    </tr>
+    <tr>
+      <th>2010</th>
+      <td>2010</td>
+      <td>61</td>
+    </tr>
+    <tr>
+      <th>2011</th>
+      <td>2011</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>2012</th>
+      <td>2012</td>
+      <td>103</td>
+    </tr>
+    <tr>
+      <th>2013</th>
+      <td>2013</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <th>2014</th>
+      <td>2014</td>
+      <td>188</td>
+    </tr>
+    <tr>
+      <th>2015</th>
+      <td>2015</td>
+      <td>55</td>
+    </tr>
+    <tr>
+      <th>2016</th>
+      <td>2016</td>
+      <td>79</td>
+    </tr>
+    <tr>
+      <th>2017</th>
+      <td>2017</td>
+      <td>59</td>
+    </tr>
+    <tr>
+      <th>2018</th>
+      <td>2018</td>
+      <td>39</td>
+    </tr>
+    <tr>
+      <th>2019</th>
+      <td>2019</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_bar_graph</span><span class="p">(</span><span class="n">citationsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_34_0.png" src="../_images/tutorial_3-basic-analysis_34_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_bar_graph</span><span class="p">(</span><span class="n">citationsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_35_0.png" src="../_images/tutorial_3-basic-analysis_35_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_barh_graph</span><span class="p">(</span><span class="n">citationsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_36_0.png" src="../_images/tutorial_3-basic-analysis_36_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_barh_graph</span><span class="p">(</span><span class="n">citationsPerYear</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_3-basic-analysis_37_0.png" src="../_images/tutorial_3-basic-analysis_37_0.png" />
 </div>
 </div>
 </div>
 <div class="section" id="Keywords-per-year">
 <h2>Keywords per year<a class="headerlink" href="#Keywords-per-year" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1136,7 +2849,7 @@ dtype: int64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1153,7 +2866,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1656,7 +3369,7 @@ dtype: int64
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1673,7 +3386,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2176,7 +3889,7 @@ dtype: int64
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2193,7 +3906,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -3709,7 +5422,7 @@ dtype: int64
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -3726,7 +5439,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -4932,7 +6645,7 @@ dtype: int64
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -4949,7 +6662,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -5145,7 +6858,7 @@ dtype: int64
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -5164,7 +6877,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -6370,7 +8083,7 @@ dtype: int64
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -6387,7 +8100,7 @@ dtype: int64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
