@@ -7,5 +7,6 @@ Tutorial
     1-dataPreparation
     2-directQueries
     3-basic-analysis
+    4-matrix-analysis
 
 

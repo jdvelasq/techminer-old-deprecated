@@ -23,6 +23,10 @@ import altair as alt
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import geopandas
+import geoplot
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 from techMiner.mapfunc import asciify, fingerprint
 
 def documentsPerTerm(df, term, sep=None):
@@ -153,6 +157,20 @@ def sns_bar_plot(x):
     result.set_xticklabels(labels, rotation=90)
     return result
 
+def worldmap(x, figsize=(14,7)):
+    world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
+    world = world[world.name!="Antarctica"]
+    world['q'] = 0
+    world.index = world.name
 
+    x.Country = [w if w != 'United States' else 'United States of America' for w in x.Country]
+    x.index = x.Country
+    for country in x.Country:
+        if country in world.index:
+            world.at[country, 'q'] = x.loc[country, 'Num Documents']    
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.1)
+    world.plot(column='q',  legend=True, ax=ax, cax=cax, cmap='Pastel2');
 
 

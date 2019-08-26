@@ -343,13 +343,10 @@ def extractCountries(x, sep=';'):
         geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres')).name.tolist()
     )
         
-    ## paises faltantes / nombres incompletos
-    country_names.append('United States')           # United States of America
-    country_names.append('Singapore')               #
-    country_names.append('Russian Federation')      # Russia
-    country_names.append('Czech Republic')          # Czechia
-    country_names.append('Bosnia and Herzegovina')  # Bosnia and Herz.
-    country_names.append('Malta')                   #
+    ## paises faltantes
+    country_names.append('Singapore')            
+    country_names.append('Malta') 
+    country_names.append('United States') 
 
     ##
     ## Reemplazo de nombres de regiones administrativas
@@ -362,7 +359,6 @@ def extractCountries(x, sep=';'):
     x = re.sub('Macau', 'China', x)
     x = re.sub('Macao', 'China', x)
     
-
     countries = [affiliation.split(',')[-1].strip() for affiliation in x.split(sep)]
 
     countries =  ';'.join(
