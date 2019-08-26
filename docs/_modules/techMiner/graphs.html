@@ -84,12 +84,7 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">Tutorial</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../records.html">Functions for manipulating records (rows) in a dataframe</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lists.html">Functions for field transformation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../graphs.html">Graphs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../common.html">Support rutines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Modules</a></li>
 </ul>
 
             
@@ -154,7 +149,7 @@
             
   <h1>Source code for techMiner.graphs</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Graphs</span>
+<span class="sd">Graphs for analysis</span>
 <span class="sd">===============================================================================</span>
 
 <span class="sd">Overview</span>
@@ -174,8 +169,51 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
 
-<div class="viewcode-block" id="network"><a class="viewcode-back" href="../../graphs.html#techMiner.graphs.network">[docs]</a><span class="k">def</span> <span class="nf">network</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span><span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span><span class="n">fond_size</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">stack</span>
+
+<div class="viewcode-block" id="heatmap"><a class="viewcode-back" href="../../graphs.html#techMiner.graphs.heatmap">[docs]</a><span class="k">def</span> <span class="nf">heatmap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a dataframe as a heatmap. </span>
+
+<span class="sd">    Arsgs:</span>
+<span class="sd">        x (pandas.DataFrame):  Matrix of values to plot</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greys&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="p">))</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="s1">&#39;box&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="barh_chart"><a class="viewcode-back" href="../../graphs.html#techMiner.graphs.barh_chart">[docs]</a><span class="k">def</span> <span class="nf">barh_chart</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plots a pandas.DataFrame using Altair.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">mark_bar</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;:N&#39;</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">EncodingSortField</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">xlabel</span> <span class="o">+</span> <span class="s1">&#39;:Q&#39;</span><span class="p">)),</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">xlabel</span> <span class="o">+</span> <span class="s1">&#39;:Q&#39;</span><span class="p">,</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">xlabel</span> <span class="o">+</span> <span class="s1">&#39;:Q&#39;</span>
+    <span class="p">)</span></div>
+
+    
+
+<span class="c1"># def circle_chat(x, xlabel, ylabel, values):</span>
+
+<span class="c1">#     alt.Chart(x).mark_circle().encode(</span>
+<span class="c1">#         alt.X(xlabel + &#39;N&#39;,</span>
+<span class="c1">#             axis=alt.Axis(labelAngle=270)),</span>
+<span class="c1">#         alt.Y(ylabel + &#39;:N&#39;),</span>
+<span class="c1">#         size=&#39;Cited by&#39;,</span>
+<span class="c1">#         color=&#39;Cited by&#39;)</span>
+
+
+
+<div class="viewcode-block" id="network"><a class="viewcode-back" href="../../graphs.html#techMiner.graphs.network">[docs]</a><span class="k">def</span> <span class="nf">network</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;lightblue&#39;</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">fond_size</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function generates the network graph for data matrix.</span>
 
@@ -185,6 +223,7 @@
 <span class="sd">        edge_color (str): color name used to plot edges</span>
 <span class="sd">        node_size (int): node size</span>
 <span class="sd">        fond_size (int): node label fond size</span>
+
 <span class="sd">    Returns:</span>
 <span class="sd">        None</span>
 <span class="sd">    #</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graphs &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+  <title>Graphs for analysis &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
   
 
   
@@ -35,8 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Support rutines" href="common.html" />
-    <link rel="prev" title="Functions for field transformation" href="lists.html" /> 
+    <link rel="prev" title="Functions for manipulating records (rows) in a dataframe" href="records.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,18 +83,20 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="tutorial/index.html">Tutorial</a></li>
-</ul>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="records.html">Functions for manipulating records (rows) in a dataframe</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lists.html">Functions for field transformation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Graphs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#functions-in-this-module">Functions in this module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mapfunc.html">Elementary functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lists.html">Functions for field transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tables.html">Functions for analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="records.html">Functions for manipulating records (rows) in a dataframe</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Graphs for analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions-in-this-module">Functions in this module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="common.html">Support rutines</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -141,7 +142,9 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Graphs</li>
+          <li><a href="modules.html">Modules</a> &raquo;</li>
+        
+      <li>Graphs for analysis</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -184,8 +187,8 @@
     text-align: unset;
 }
 </style>
-<span class="target" id="module-techMiner.graphs"></span><div class="section" id="graphs">
-<h1>Graphs<a class="headerlink" href="#graphs" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-techMiner.graphs"></span><div class="section" id="graphs-for-analysis">
+<h1>Graphs for analysis<a class="headerlink" href="#graphs-for-analysis" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>This module implements the following functions for analysis of techMiner:</p>
@@ -195,6 +198,27 @@
 </div>
 <div class="section" id="functions-in-this-module">
 <h2>Functions in this module<a class="headerlink" href="#functions-in-this-module" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="techMiner.graphs.barh_chart">
+<code class="sig-prename descclassname">techMiner.graphs.</code><code class="sig-name descname">barh_chart</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xlabel='X'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/graphs.html#barh_chart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.graphs.barh_chart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a pandas.DataFrame using Altair.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="techMiner.graphs.heatmap">
+<code class="sig-prename descclassname">techMiner.graphs.</code><code class="sig-name descname">heatmap</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">figsize=(10</em>, <em class="sig-param">10)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/graphs.html#heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.graphs.heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a dataframe as a heatmap.</p>
+<dl class="simple">
+<dt>Arsgs:</dt><dd><p>x (pandas.DataFrame):  Matrix of values to plot</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="function">
 <dt id="techMiner.graphs.network">
 <code class="sig-prename descclassname">techMiner.graphs.</code><code class="sig-name descname">network</code><span class="sig-paren">(</span><em class="sig-param">matrix</em>, <em class="sig-param">node_color='lightblue'</em>, <em class="sig-param">edge_color='lightgrey'</em>, <em class="sig-param">node_size=80</em>, <em class="sig-param">fond_size=4</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/graphs.html#network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.graphs.network" title="Permalink to this definition">¶</a></dt>
@@ -227,10 +251,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="common.html" class="btn btn-neutral float-right" title="Support rutines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="lists.html" class="btn btn-neutral float-left" title="Functions for field transformation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="records.html" class="btn btn-neutral float-left" title="Functions for manipulating records (rows) in a dataframe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

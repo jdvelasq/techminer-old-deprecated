@@ -1,5 +1,5 @@
 """
-Functions for basic analysis 
+Functions for analysis 
 ===============================================================================
 
 Overview
@@ -22,6 +22,68 @@ import altair as alt
 import matplotlib.pyplot as plt
 
 
+def stack(x, xlabel, ylabel=None, vlabel=None):
+    """
+    >>> import pandas as pd
+    >>> x = pd.DataFrame({
+    ...    'A': [0, 1, 2],
+    ...    'B': [3, 4, 5],
+    ...    'C': [6, 7, 8]},
+    ...    index=['a', 'b', 'c'])
+    >>> x
+       A  B  C
+    a  0  3  6
+    b  1  4  7
+    c  2  5  8
+
+    >>> stack(x, xlabel='X', ylabel='Y', vlabel='Z')
+       Z  X  Y
+    0  0  a  A
+    1  3  a  B
+    2  6  a  C
+    3  1  b  A
+    4  4  b  B
+    5  7  b  C
+    6  2  c  A
+    7  5  c  B
+    8  8  c  C
+
+    >>> x = pd.DataFrame({
+    ...    'A': [0, 1, 2]},
+    ...    index=['a', 'b', 'c'])
+    >>> stack(x, xlabel='X')
+       A  X
+    0  0  a
+    1  1  b
+    2  2  c
+
+    >>> stack(x.A, xlabel='X')
+          A  X
+       0  0  0
+       1  1  1
+       2  2  2
+
+    """
+    if isinstance(x, pd.Series):
+        x = pd.DataFrame(x)
+        x.columns = [xlabel]
+
+    if isinstance(x, pd.DataFrame):
+        if len(x.columns) == 1:
+            x[x.index.name] = x.index
+            x.index = range(len(x.index))
+            return x
+        else:
+            z = x.stack()
+            xindex = [i for i,_ in z.index]
+            yindex = [i for _,i in z.index]
+            z = pd.DataFrame({vlabel: z.tolist()})
+            z[xlabel] = xindex
+            z[ylabel] = yindex
+            return z
+
+
+
 def documentsByTerm(df, term, sep=None):
     
     if sep is not None:
@@ -32,72 +94,6 @@ def documentsByTerm(df, term, sep=None):
         
     return df.groupby(term).size()
 
-
-def extractCountries(x, sep=';'):
-    """
-
-    >>> import pandas as pd
-    >>> x = pd.DataFrame({
-    ...     'Affiliations': [
-    ...         'University, Cuba; University, Venezuela',
-    ...         'Univesity, United States; Univesity, Singapore',
-    ...         'University;',
-    ...         'University; Univesity',
-    ...         'University,',
-    ...         'University',
-    ...         None]    
-    ... })
-    >>> x['Affiliations'].map(lambda x: extractCountries(x))
-    0             Cuba;Venezuela
-    1    United States;Singapore
-    2                       None
-    3                       None
-    4                       None
-    5                       None
-    6                       None
-    Name: Affiliations, dtype: object
-    """
-
-    if x is None:
-        return None
-
-    ##
-    ## lista generica de nombres de paises
-    ##
-    country_names = sorted(
-        geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres')).name.tolist()
-    )
-        
-    ## paises faltantes / nombres incompletos
-    country_names.append('United States')           # United States of America
-    country_names.append('Singapore')               #
-    country_names.append('Russian Federation')      # Russia
-    country_names.append('Czech Republic')          # Czechia
-    country_names.append('Bosnia and Herzegovina')  # Bosnia and Herz.
-    country_names.append('Malta')                   #
-
-    ##
-    ## Reemplazo de nombres de regiones administrativas
-    ## por nombres de paises
-    ##
-    x = re.sub('Bosnia and Herzegovina', 'Bosnia and Herz.', x) 
-    x = re.sub('Czech Republic', 'Czechia', x)
-    x = re.sub('Russian Federation', 'Russia', x) 
-    x = re.sub('Hong Kong', 'China', x)
-    x = re.sub('Macau', 'China', x)
-    x = re.sub('Macao', 'China', x)
-    
-
-    countries = [affiliation.split(',')[-1].strip() for affiliation in x.split(sep)]
-
-    countries =  ';'.join(
-        [country if country in country_names else '' for country in countries]
-    )
-    
-    if countries == '' or countries == ';':
-        return None
-    else:
-        return countries
 
 
 def documentsByYear(df, plot=False, cumulative=False):
@@ -149,8 +145,7 @@ def citationsByYear(df, plot=False, cumulative=False):
 
 
 def termByTerm(df, termA, termB, sepA=None, sepB=None, 
-               ascendingA=None, ascendingB=None, minmax=None,
-               plot=False, figsize=(10,10)):
+               ascendingA=None, ascendingB=None, minmax=None):
     
     df = df[[termA, termB]].dropna()
     
@@ -229,16 +224,7 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None,
         result = result[r.columns]
         result = result.loc[r.index,:]
     
-    if plot is True:
-        plt.figure(figsize=figsize)
-        plt.pcolor(result.values, cmap='Greys')
-        plt.xticks(np.arange(len(result.columns))+0.5, result.columns, rotation='vertical')
-        plt.yticks(np.arange(len(result.index))+0.5, result.index)
-        plt.gca().set_aspect('equal', 'box')
-        plt.gca().invert_yaxis()
-        
-    else:
-        return result
+    return result
 
 
 

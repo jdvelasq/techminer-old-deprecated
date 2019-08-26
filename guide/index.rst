@@ -38,23 +38,13 @@ of open source tools.
 Table of Contents
 ===============================================================================
 
-**techMiner** is organized in the following modules:
+
 
 .. toctree::
    :maxdepth: 1
 
-   tutorial/index.rst
-
-**Modules**
-
-.. toctree::
-    :maxdepth: 1
-
-    records
-    lists
-    graphs
-
-    common
+   tutorial/index
+   modules
 
    
 
