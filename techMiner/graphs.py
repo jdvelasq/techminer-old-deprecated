@@ -5,9 +5,9 @@ Graphs
 Overview
 -------------------------------------------------------------------------------
 
-This module implements the following functions for analysis of biblioAnalyzer:
+This module implements the following functions for analysis of techMiner:
 
-* network: generates the network graph  for data matrix.
+* network_graph: generates the network graph for data matrix.
 
 
 
@@ -23,7 +23,8 @@ import itertools
 from collections import OrderedDict 
 
 
-def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='lightblue',edge_color='lightgrey',edge_color2='lightcoral',node_size=None,fond_size=4):
+def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='lightblue',
+                  edge_color='lightgrey',edge_color2='lightcoral',node_size=None,fond_size=4):
     """
     This function generates network graph for matrix.
 
