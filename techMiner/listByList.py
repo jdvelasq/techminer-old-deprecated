@@ -18,6 +18,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import altair as alt
+import seaborn as sns
 import networkx as nx
 
 import geopandas
@@ -34,11 +35,11 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
 
     >>> import pandas as pd
     >>> df = pd.DataFrame({
-    ... 'a':[0, 1, 2, 3, 4, 0, 1],
-    ... 'b':['a', 'b', 'c', 'd', 'e', 'a', 'b']
+    ... 'A':[0, 1, 2, 3, 4, 0, 1],
+    ... 'B':['a', 'b', 'c', 'd', 'e', 'a', 'b']
     ... })
     >>> df # doctest: +NORMALIZE_WHITESPACE
-       a  b
+       A  B
     0  0  a
     1  1  b
     2  2  c
@@ -47,14 +48,18 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
     5  0  a
     6  1  b    
 
-    >>> termByTerm(df, 'a', 'b')
-       a  b  Num Documents
+    >>> termByTerm(df, 'A', 'B')
+       A  B  Num Documents
     0  0  a              2
     1  1  b              2
     2  2  c              1
     3  3  d              1
     4  4  e              1
 
+    >>> termByTerm(df, 'A', 'B', minmax=(2,8))
+       A  B  Num Documents
+    0  0  a              2
+    1  1  b              2
     """
     
     df = df[[termA, termB]].dropna()
@@ -103,13 +108,20 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
         'Num Documents': x.tolist()
     })
 
+    if minmax is not None:
+
+        minval, maxval = minmax
+        df = df[ df[df.columns[2]] >= minval ]
+        df = df[ df[df.columns[2]] <= maxval ]
+
     return df
 
 
 
 
-def matrix(df, ascendingA=None, ascendingB=None, minmax=None):
-    """
+def matrix(df, ascendingA=None, ascendingB=None):
+    """Displays a term by term dataframe as a matrix.
+
     >>> import pandas as pd
     >>> df = pd.DataFrame({
     ... 'a':[0, 1, 2, 3, 4, 0, 1],
@@ -141,10 +153,6 @@ def matrix(df, ascendingA=None, ascendingB=None, minmax=None):
     3  0.0  0.0  0.0  1.0  0.0
     4  0.0  0.0  0.0  0.0  1.0
 
-    >>> matrix(x, minmax=(2, 8))
-         a    b
-    0  2.0  0.0
-    1  0.0  2.0
     """
 
     if df.columns[0] == 'Year':
@@ -171,191 +179,26 @@ def matrix(df, ascendingA=None, ascendingB=None, minmax=None):
     result.columns = termB_unique
     result.index = termA_unique
 
-    for  idx in df.index:
-        row = df.iloc[idx, 0]
-        col = df.iloc[idx, 1]
-        val = df.iloc[idx, 2]
+    for index, r in df.iterrows():
+        row = r[0]
+        col = r[1]
+        val = r[2]
         result.loc[row, col] = val
-    
-    if minmax is not None:
-
-        minval, maxval = minmax
-        r = result.copy()
-       
-        for a in termA_unique:
-            for b in termB_unique:
-                if r.loc[a, b] < minval or r.loc[a, b] > maxval:
-                    r.loc[a, b] = np.nan
         
-        r = r.dropna(axis='index', how='all').dropna(axis='columns', how='all')
-        result = result[r.columns]
-        result = result.loc[r.index,:]
-    
     return result
 
 
-
-
-# def stack(x, xlabel, ylabel=None, vlabel=None):
-#     """
-#     >>> import pandas as pd
-#     >>> x = pd.DataFrame({
-#     ...    'A': [0, 1, 2],
-#     ...    'B': [3, 4, 5],
-#     ...    'C': [6, 7, 8]},
-#     ...    index=['a', 'b', 'c'])
-#     >>> x
-#        A  B  C
-#     a  0  3  6
-#     b  1  4  7
-#     c  2  5  8
-
-#     >>> stack(x, xlabel='X', ylabel='Y', vlabel='Z')
-#        Z  X  Y
-#     0  0  a  A
-#     1  3  a  B
-#     2  6  a  C
-#     3  1  b  A
-#     4  4  b  B
-#     5  7  b  C
-#     6  2  c  A
-#     7  5  c  B
-#     8  8  c  C
-
-#     >>> x = pd.DataFrame({
-#     ...    'A': [0, 1, 2]},
-#     ...    index=['a', 'b', 'c'])
-
-#     # >>> stack(x, xlabel='X')
-#     #    A  X
-#     # 0  0  a
-#     # 1  1  b
-#     # 2  2  c
-
-#     # >>> stack(x.A, xlabel='X')
-#     #       A  X
-#     #    0  0  0
-#     #    1  1  1
-#     #    2  2  2
-
-#     """
-#     if isinstance(x, pd.Series):
-#         x = pd.DataFrame(x)
-#         x.columns = [xlabel]
-
-#     if isinstance(x, pd.DataFrame):
-#         if len(x.columns) == 1:
-#             x[x.index.name] = x.index
-#             x.index = range(len(x.index))
-#             return x
-#         else:
-#             z = x.stack()
-#             xindex = [i for i,_ in z.index]
-#             yindex = [i for _,i in z.index]
-#             z = pd.DataFrame({vlabel: z.tolist()})
-#             z[xlabel] = xindex
-#             z[ylabel] = yindex
-#             return z
-
-
-
-
-
-
-
-def termByTerm0(df, termA, termB, sepA=None, sepB=None, 
-               ascendingA=None, ascendingB=None, minmax=None):
-    
-    df = df[[termA, termB]].dropna()
-    
-    ##
-    ## Expande las dos columnas de los datos originales
-    ##
-    if sepA is None and sepB is None:
-        df = df[[termA, termB]]
-    
-    if sepA is not None and sepB is None:
-        
-        t = [(x, y) for x, y in zip(df[termA], df[termB])]
-        t = [(c, b) for a, b in t for c in a.split(sepA)]
-        df = pd.DataFrame({
-            termA: [a for a,b in t],
-            termB: [b for a,b in t]
-        })
-        
-    if sepA is None and sepB is not None:
-    
-        t = [(x, y) for x, y in zip(df[termA], df[termB])]
-        t = [(a, c) for a, b in t for c in b.split(sepB)]
-        df = pd.DataFrame({
-            termA: [a for a,b in t],
-            termB: [b for a,b in t]
-        })
-
-    if sepA is not None and sepB is not None:
-    
-        t = [(x, y) for x, y in zip(df[termA], df[termB])]
-        t = [(c, b) for a, b in t for c in a.split(sepA)]
-        t = [(a, c) for a, b in t for c in b.split(sepB)]
-        df = pd.DataFrame({
-            termA: [a for a,b in t],
-            termB: [b for a,b in t]
-        })
-
-    if termA == 'Year':
-        termA_unique = range(min(df.Year), max(df.Year)+1)
-    else:
-        termA_unique = df[termA].unique()
-        
-    if termB == 'Year':
-        termB_unique = range(min(df.Year), max(df.Year)+1)
-    else:
-        termB_unique = df[termB].unique()
-        
-    if ascendingA is not None:
-        termA_unique = sorted(termA_unique, reverse = not ascendingA)
-
-    if ascendingB is not None:
-        termB_unique = sorted(termB_unique, reverse = not ascendingB)
-
-    result = pd.DataFrame(
-        np.zeros((len(termA_unique), len(termB_unique)))
-    )
-    
-    result.columns = termB_unique
-    result.index = termA_unique
-
-    for  a,b in zip(df[termA], df[termB]):
-        result.loc[a, b] += 1
-    
-    if minmax is not None:
-
-        minval, maxval = minmax
-        r = result.copy()
-       
-        for a in termA_unique:
-            for b in termB_unique:
-                if r.loc[a, b] < minval or r.loc[a, b] > maxval:
-                    r.loc[a, b] = np.nan
-        
-        r = r.dropna(axis='index', how='all')
-        r = r.dropna(axis='columns', how='all')
-        result = result[r.columns]
-        result = result.loc[r.index,:]
-    
-    return result
-
-
-
-def heatmap(x, figsize=(10,10)):
+def heatmap(df, ascendingA=None, ascendingB=None, figsize=(10,10)):
     """Plots a dataframe as a heatmap. 
 
     Arsgs:
-        x (pandas.DataFrame):  Matrix of values to plot
+        x (pandas.DataFrame):  Dataframe generated with the matrix function.
 
     Returns:
         None
+    
     """
+    x = matrix(df, ascendingA, ascendingB)
     plt.figure(figsize=figsize)
     plt.pcolor(x.values, cmap='Greys')
     plt.xticks(np.arange(len(x.columns))+0.5, x.columns, rotation='vertical')
@@ -363,28 +206,26 @@ def heatmap(x, figsize=(10,10)):
     plt.gca().set_aspect('equal', 'box')
     plt.gca().invert_yaxis()
 
-def alt_heatmap(x):
-    # Convert this grid to columnar data expected by Altair
-    source = pd.DataFrame({'x': x.ravel(),
-                        'y': y.ravel(),
-                        'z': z.ravel()})
-
-    alt.Chart(source).mark_rect().encode(
-        x='x:O',
-        y='y:O',
-        color='z:Q'
+def alt_heatmap(df):
+    return alt.Chart(df).mark_rect().encode(
+        x=df.columns[0] + ':O',
+        y=df.columns[1] + ':O',
+        color=df.columns[2] + ':Q'
     )
 
+def alt_circleplot(df):
+    return alt.Chart(df).mark_circle().encode(
+        alt.X(df.columns[0] + ':N',
+        axis=alt.Axis(labelAngle=270)),
+        alt.Y(df.columns[1] + ':N'),
+        size=df.columns[2],
+        color=df.columns[2])
 
 
-# def circle_chat(x, xlabel, ylabel, values):
+def sns_heatmap(df):
+    return sns.heatmap(df)
 
-#     alt.Chart(x).mark_circle().encode(
-#         alt.X(xlabel + 'N',
-#             axis=alt.Axis(labelAngle=270)),
-#         alt.Y(ylabel + ':N'),
-#         size='Cited by',
-#         color='Cited by')
+
 
 
 def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='lightblue',
@@ -475,6 +316,160 @@ def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='
     if save:
         plt.savefig(name, format="PNG", dpi=300, bbox_inches='tight')
     plt.show()
+
+
+
+
+
+# def stack(x, xlabel, ylabel=None, vlabel=None):
+#     """
+#     >>> import pandas as pd
+#     >>> x = pd.DataFrame({
+#     ...    'A': [0, 1, 2],
+#     ...    'B': [3, 4, 5],
+#     ...    'C': [6, 7, 8]},
+#     ...    index=['a', 'b', 'c'])
+#     >>> x
+#        A  B  C
+#     a  0  3  6
+#     b  1  4  7
+#     c  2  5  8
+
+#     >>> stack(x, xlabel='X', ylabel='Y', vlabel='Z')
+#        Z  X  Y
+#     0  0  a  A
+#     1  3  a  B
+#     2  6  a  C
+#     3  1  b  A
+#     4  4  b  B
+#     5  7  b  C
+#     6  2  c  A
+#     7  5  c  B
+#     8  8  c  C
+
+#     >>> x = pd.DataFrame({
+#     ...    'A': [0, 1, 2]},
+#     ...    index=['a', 'b', 'c'])
+
+#     # >>> stack(x, xlabel='X')
+#     #    A  X
+#     # 0  0  a
+#     # 1  1  b
+#     # 2  2  c
+
+#     # >>> stack(x.A, xlabel='X')
+#     #       A  X
+#     #    0  0  0
+#     #    1  1  1
+#     #    2  2  2
+
+#     """
+#     if isinstance(x, pd.Series):
+#         x = pd.DataFrame(x)
+#         x.columns = [xlabel]
+
+#     if isinstance(x, pd.DataFrame):
+#         if len(x.columns) == 1:
+#             x[x.index.name] = x.index
+#             x.index = range(len(x.index))
+#             return x
+#         else:
+#             z = x.stack()
+#             xindex = [i for i,_ in z.index]
+#             yindex = [i for _,i in z.index]
+#             z = pd.DataFrame({vlabel: z.tolist()})
+#             z[xlabel] = xindex
+#             z[ylabel] = yindex
+#             return z
+
+
+
+
+
+
+
+# def termByTerm0(df, termA, termB, sepA=None, sepB=None, 
+#                ascendingA=None, ascendingB=None, minmax=None):
+    
+#     df = df[[termA, termB]].dropna()
+    
+#     ##
+#     ## Expande las dos columnas de los datos originales
+#     ##
+#     if sepA is None and sepB is None:
+#         df = df[[termA, termB]]
+    
+#     if sepA is not None and sepB is None:
+        
+#         t = [(x, y) for x, y in zip(df[termA], df[termB])]
+#         t = [(c, b) for a, b in t for c in a.split(sepA)]
+#         df = pd.DataFrame({
+#             termA: [a for a,b in t],
+#             termB: [b for a,b in t]
+#         })
+        
+#     if sepA is None and sepB is not None:
+    
+#         t = [(x, y) for x, y in zip(df[termA], df[termB])]
+#         t = [(a, c) for a, b in t for c in b.split(sepB)]
+#         df = pd.DataFrame({
+#             termA: [a for a,b in t],
+#             termB: [b for a,b in t]
+#         })
+
+#     if sepA is not None and sepB is not None:
+    
+#         t = [(x, y) for x, y in zip(df[termA], df[termB])]
+#         t = [(c, b) for a, b in t for c in a.split(sepA)]
+#         t = [(a, c) for a, b in t for c in b.split(sepB)]
+#         df = pd.DataFrame({
+#             termA: [a for a,b in t],
+#             termB: [b for a,b in t]
+#         })
+
+#     if termA == 'Year':
+#         termA_unique = range(min(df.Year), max(df.Year)+1)
+#     else:
+#         termA_unique = df[termA].unique()
+        
+#     if termB == 'Year':
+#         termB_unique = range(min(df.Year), max(df.Year)+1)
+#     else:
+#         termB_unique = df[termB].unique()
+        
+#     if ascendingA is not None:
+#         termA_unique = sorted(termA_unique, reverse = not ascendingA)
+
+#     if ascendingB is not None:
+#         termB_unique = sorted(termB_unique, reverse = not ascendingB)
+
+#     result = pd.DataFrame(
+#         np.zeros((len(termA_unique), len(termB_unique)))
+#     )
+    
+#     result.columns = termB_unique
+#     result.index = termA_unique
+
+#     for  a,b in zip(df[termA], df[termB]):
+#         result.loc[a, b] += 1
+    
+#     if minmax is not None:
+
+#         minval, maxval = minmax
+#         r = result.copy()
+       
+#         for a in termA_unique:
+#             for b in termB_unique:
+#                 if r.loc[a, b] < minval or r.loc[a, b] > maxval:
+#                     r.loc[a, b] = np.nan
+        
+#         r = r.dropna(axis='index', how='all')
+#         r = r.dropna(axis='columns', how='all')
+#         result = result[r.columns]
+#         result = result.loc[r.index,:]
+    
+#     return result
+
 
 
 

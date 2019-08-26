@@ -1,4 +1,4 @@
-.. automodule:: techMiner.lists
+.. automodule:: techMiner.transform
     :members:
     :undoc-members:
     :show-inheritance:
