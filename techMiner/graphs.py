@@ -22,6 +22,48 @@ from scipy.optimize import minimize
 import itertools
 from collections import OrderedDict 
 
+from techMiner import stack
+
+def heatmap(x, figsize=(10,10)):
+    """Plots a dataframe as a heatmap. 
+
+    Arsgs:
+        x (pandas.DataFrame):  Matrix of values to plot
+
+    Returns:
+        None
+    """
+    plt.figure(figsize=figsize)
+    plt.pcolor(x.values, cmap='Greys')
+    plt.xticks(np.arange(len(x.columns))+0.5, x.columns, rotation='vertical')
+    plt.yticks(np.arange(len(x.index))+0.5, x.index)
+    plt.gca().set_aspect('equal', 'box')
+    plt.gca().invert_yaxis()
+
+
+def barh_chart(x, xlabel='X'):
+    """Plots a pandas.DataFrame using Altair.
+    """
+    df = stack(x, xlabel)
+    return alt.Chart(df).mark_bar().encode(
+        y = alt.Y(x.index.name + ':N', sort=alt.EncodingSortField(field=xlabel + ':Q')),
+        x = xlabel + ':Q',
+        color = xlabel + ':Q'
+    )
+
+    
+
+# def circle_chat(x, xlabel, ylabel, values):
+
+#     alt.Chart(x).mark_circle().encode(
+#         alt.X(xlabel + 'N',
+#             axis=alt.Axis(labelAngle=270)),
+#         alt.Y(ylabel + ':N'),
+#         size='Cited by',
+#         color='Cited by')
+
+
+
 
 def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='lightblue',
                   edge_color='lightgrey',edge_color2='lightcoral',node_size=None,fond_size=4):
