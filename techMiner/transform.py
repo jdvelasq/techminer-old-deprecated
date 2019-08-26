@@ -11,6 +11,7 @@ import pandas as pd
 import string
 import re
 import geopandas
+import json
 
 
 def extractKeywords(x, keywords, method=None):

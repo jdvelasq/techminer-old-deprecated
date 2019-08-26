@@ -23,7 +23,6 @@ from scipy.optimize import minimize
 import itertools
 from collections import OrderedDict 
 
-from techMiner import stack
 
 
 ## moved to listByList.py

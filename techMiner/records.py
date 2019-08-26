@@ -19,7 +19,7 @@ import pandas as pd
 import string
 import re
 
-from techMiner.mapfunc import asciify, fingerprint
+from techMiner.transform import asciify, fingerprint
 
 def displayRecords(df):
     """Show one or more records of dataframe at a time. User can use standard

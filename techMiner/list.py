@@ -27,7 +27,7 @@ import geopandas
 import geoplot
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from techMiner.mapfunc import asciify, fingerprint
+from techMiner.transform import asciify, fingerprint
 
 def documentsByTerm(df, term, sep=None):
     """Computes the number of documents per term. 
