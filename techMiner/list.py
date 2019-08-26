@@ -29,7 +29,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from techMiner.mapfunc import asciify, fingerprint
 
-def documentsPerTerm(df, term, sep=None):
+def documentsByTerm(df, term, sep=None):
     """Computes the number of documents per term. 
     """
     
@@ -47,7 +47,7 @@ def documentsPerTerm(df, term, sep=None):
 
 
 
-def documentsPerYear(df, cumulative=False):
+def documentsByYear(df, cumulative=False):
     """Computes the number of documents per year.
     """
     docs_per_year = pd.Series(0, index=range(min(df.Year), max(df.Year)+1))
@@ -66,7 +66,7 @@ def documentsPerYear(df, cumulative=False):
     return docs_per_year
 
 
-def citationsPerYear(df, cumulative=False):
+def citationsByYear(df, cumulative=False):
     """Computes the number of citations to docuement per year.
     """
     citations_per_year = pd.Series(0, index=range(min(df.Year), max(df.Year)+1))
@@ -90,7 +90,7 @@ def alt_barh_graph(x):
     """Plots a pandas.DataFrame using Altair.
 
     Args:
-        x (pandas.DataFrame): dataframe returned by documentsPerTerm function.
+        x (pandas.DataFrame): dataframe returned by documentsByTerm function.
 
     Returns:
         Altair object.
@@ -107,7 +107,7 @@ def alt_bar_graph(x):
     """Plots a pandas.DataFrame using Altair.
 
     Args:
-        x (pandas.DataFrame): dataframe returned by documentsPerTerm function.
+        x (pandas.DataFrame): dataframe returned by documentsByTerm function.
 
     Returns:
         Altair object.
@@ -124,7 +124,7 @@ def sns_barh_plot(x):
     """Plots a pandas.DataFrame using Seaborn.
 
     Args:
-        x (pandas.DataFrame): dataframe returned by documentsPerTerm function.
+        x (pandas.DataFrame): dataframe returned by documentsByTerm function.
 
     Returns:
         Searborn object.
@@ -141,7 +141,7 @@ def sns_bar_plot(x):
     """Plots a pandas.DataFrame using Seaborn.
 
     Args:
-        x (pandas.DataFrame): dataframe returned by documentsPerTerm function.
+        x (pandas.DataFrame): dataframe returned by documentsByTerm function.
 
     Returns:
         Searborn object.
