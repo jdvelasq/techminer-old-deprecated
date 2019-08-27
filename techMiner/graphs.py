@@ -74,9 +74,7 @@ def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='
                 else:
                     edge_colour = edge_color
                 graph.add_edge(from_node, to_node, weight=weight, color = edge_colour)
-
-    print('edges')
-    print(graph.edges())                      
+                    
     #calculate distance between relationated nodes to avoid overlaping
     path_length = nx.shortest_path_length(graph)
     distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
