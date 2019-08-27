@@ -178,6 +178,188 @@
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span> 
 
+<span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">documentsByTerm</span>
+
+<div class="viewcode-block" id="correlation"><a class="viewcode-back" href="../../listByList.html#techMiner.listByList.correlation">[docs]</a><span class="k">def</span> <span class="nf">correlation</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">termA</span><span class="p">,</span> <span class="n">termB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; df = pd.DataFrame({</span>
+<span class="sd">    ... &#39;A&#39;:[&#39;a;b&#39;, &#39;b&#39;, &#39;c;a&#39;, &#39;b;a&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;,&#39;a;b;c&#39;, &#39;e;a&#39;, None]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; df # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">         A</span>
+<span class="sd">    0    a;b</span>
+<span class="sd">    1      b</span>
+<span class="sd">    2    c;a</span>
+<span class="sd">    3    b;a</span>
+<span class="sd">    4      c</span>
+<span class="sd">    5      d</span>
+<span class="sd">    6      e</span>
+<span class="sd">    7  a;b;c</span>
+<span class="sd">    8    e;a  </span>
+<span class="sd">    9   None</span>
+
+<span class="sd">    &gt;&gt;&gt; correlation(df, termA=&#39;A&#39;, sepA=&#39;;&#39;) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">       A (row) A (col)  Autocorrelation</span>
+<span class="sd">    0        a       a         1.000000</span>
+<span class="sd">    1        a       b         0.670820</span>
+<span class="sd">    2        a       c         0.516398</span>
+<span class="sd">    3        a       d         0.000000</span>
+<span class="sd">    4        a       e         0.316228</span>
+<span class="sd">    5        b       a         0.670820</span>
+<span class="sd">    6        b       b         1.000000</span>
+<span class="sd">    7        b       c         0.288675</span>
+<span class="sd">    8        b       d         0.000000</span>
+<span class="sd">    9        b       e         0.000000</span>
+<span class="sd">    10       c       a         0.516398</span>
+<span class="sd">    11       c       b         0.288675</span>
+<span class="sd">    12       c       c         1.000000</span>
+<span class="sd">    13       c       d         0.000000</span>
+<span class="sd">    14       c       e         0.000000</span>
+<span class="sd">    15       d       a         0.000000</span>
+<span class="sd">    16       d       b         0.000000</span>
+<span class="sd">    17       d       c         0.000000</span>
+<span class="sd">    18       d       d         1.000000</span>
+<span class="sd">    19       d       e         0.000000</span>
+<span class="sd">    20       e       a         0.316228</span>
+<span class="sd">    21       e       b         0.000000</span>
+<span class="sd">    22       e       c         0.000000</span>
+<span class="sd">    23       e       d         0.000000</span>
+<span class="sd">    24       e       e         1.000000</span>
+
+<span class="sd">    &gt;&gt;&gt; df = pd.DataFrame({</span>
+<span class="sd">    ... &#39;c1&#39;:[&#39;a;b&#39;,   &#39;b&#39;, &#39;c;a&#39;, &#39;b;a&#39;, &#39;c&#39;,   &#39;d&#39;, &#39;e&#39;, &#39;a;b;c&#39;, &#39;e;a&#39;, None,  None],</span>
+<span class="sd">    ... &#39;c2&#39;:[&#39;A;B;C&#39;, &#39;B&#39;, &#39;B;D&#39;, &#39;B;C&#39;, &#39;C;B&#39;, &#39;A&#39;, &#39;A&#39;, &#39;B;C&#39;,    None, &#39;B;D&#39;, None]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; df # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">           c1     c2</span>
+<span class="sd">    0     a;b  A;B;C</span>
+<span class="sd">    1       b      B</span>
+<span class="sd">    2     c;a    B;D</span>
+<span class="sd">    3     b;a    B;C</span>
+<span class="sd">    4       c    C;B</span>
+<span class="sd">    5       d      A</span>
+<span class="sd">    6       e      A</span>
+<span class="sd">    7   a;b;c    B;C</span>
+<span class="sd">    8     e;a   None</span>
+<span class="sd">    9    None    B;D</span>
+<span class="sd">    10   None   None</span>
+
+<span class="sd">    &gt;&gt;&gt; correlation(df, termA=&#39;c1&#39;, termB=&#39;c2&#39;, sepA=&#39;;&#39;, sepB=&#39;;&#39;) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">       c1 c2  Crosscorrelation</span>
+<span class="sd">    0   a  A          0.258199</span>
+<span class="sd">    1   a  B          0.676123</span>
+<span class="sd">    2   a  C          0.670820</span>
+<span class="sd">    3   a  D          0.316228</span>
+<span class="sd">    4   b  A          0.288675</span>
+<span class="sd">    5   b  B          0.755929</span>
+<span class="sd">    6   b  C          0.750000</span>
+<span class="sd">    7   b  D          0.000000</span>
+<span class="sd">    8   c  A          0.000000</span>
+<span class="sd">    9   c  B          0.654654</span>
+<span class="sd">    10  c  C          0.577350</span>
+<span class="sd">    11  c  D          0.408248</span>
+<span class="sd">    12  d  A          0.577350</span>
+<span class="sd">    13  d  B          0.000000</span>
+<span class="sd">    14  d  C          0.000000</span>
+<span class="sd">    15  d  D          0.000000</span>
+<span class="sd">    16  e  A          0.408248</span>
+<span class="sd">    17  e  B          0.000000</span>
+<span class="sd">    18  e  C          0.000000</span>
+<span class="sd">    19  e  D          0.000000</span>
+
+<span class="sd">    &quot;&quot;&quot;</span> 
+
+    <span class="k">if</span> <span class="n">termA</span> <span class="o">==</span> <span class="n">termB</span><span class="p">:</span>
+        <span class="n">sepB</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">termB</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">documentsByTerm</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">termA</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sepA</span><span class="p">)</span>
+    <span class="n">termsA</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">termA</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">termsA</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">termsA</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">termsA</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">termsA</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+        
+    <span class="k">if</span> <span class="n">termB</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">documentsByTerm</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">termB</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sepB</span><span class="p">)</span>
+        <span class="n">termsB</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">termB</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">:</span>
+            <span class="n">termsB</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">termsB</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">termsB</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">termsB</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">termsB</span> <span class="o">=</span> <span class="n">termsA</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">termsA</span><span class="p">))),</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">termsA</span><span class="p">,</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">termA</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sepA</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sepA</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="p">]</span> 
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">z</span><span class="p">:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">termB</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">termsB</span><span class="p">))),</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">termsB</span><span class="p">,</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">termB</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">sepB</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sepB</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="p">]</span> 
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">z</span><span class="p">:</span>
+                    <span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>            
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="k">if</span> <span class="n">termB</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">col0</span> <span class="o">=</span> <span class="n">termA</span>
+        <span class="n">col1</span> <span class="o">=</span> <span class="n">termB</span>
+        <span class="n">col2</span> <span class="o">=</span> <span class="s1">&#39;Crosscorrelation&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">col0</span> <span class="o">=</span> <span class="n">termA</span> <span class="o">+</span> <span class="s1">&#39; (row)&#39;</span>
+        <span class="n">col1</span> <span class="o">=</span> <span class="n">termA</span> <span class="o">+</span> <span class="s1">&#39; (col)&#39;</span>
+        <span class="n">col2</span> <span class="o">=</span> <span class="s1">&#39;Autocorrelation&#39;</span>
+
+    <span class="n">result</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">termsA</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">termsB</span><span class="p">),</span> <span class="mi">3</span><span class="p">)),</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col0</span><span class="p">,</span> <span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">termsA</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">termsB</span><span class="p">:</span>
+            <span class="n">s1</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">a</span><span class="p">]</span>
+            <span class="n">s2</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">b</span><span class="p">]</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">s1</span> <span class="o">*</span> <span class="n">s2</span><span class="p">))</span>
+            <span class="n">den</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s1</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">s2</span><span class="o">**</span><span class="mi">2</span><span class="p">))))</span>
+            <span class="k">if</span> <span class="n">den</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span>  <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">col0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">col1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">col2</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">result</span>       </div>
+
+    
+
 
 
 <div class="viewcode-block" id="termByTerm"><a class="viewcode-back" href="../../listByList.html#techMiner.listByList.termByTerm">[docs]</a><span class="k">def</span> <span class="nf">termByTerm</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">termA</span><span class="p">,</span> <span class="n">termB</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

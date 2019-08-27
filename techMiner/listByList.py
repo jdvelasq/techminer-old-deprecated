@@ -28,6 +28,188 @@ import itertools
 from scipy.optimize import minimize
 from collections import OrderedDict 
 
+from techMiner import documentsByTerm
+
+def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
+    """
+
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({
+    ... 'A':['a;b', 'b', 'c;a', 'b;a', 'c', 'd', 'e','a;b;c', 'e;a', None]
+    ... })
+    >>> df # doctest: +NORMALIZE_WHITESPACE
+         A
+    0    a;b
+    1      b
+    2    c;a
+    3    b;a
+    4      c
+    5      d
+    6      e
+    7  a;b;c
+    8    e;a  
+    9   None
+
+    >>> correlation(df, termA='A', sepA=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+       A (row) A (col)  Autocorrelation
+    0        a       a         1.000000
+    1        a       b         0.670820
+    2        a       c         0.516398
+    3        a       d         0.000000
+    4        a       e         0.316228
+    5        b       a         0.670820
+    6        b       b         1.000000
+    7        b       c         0.288675
+    8        b       d         0.000000
+    9        b       e         0.000000
+    10       c       a         0.516398
+    11       c       b         0.288675
+    12       c       c         1.000000
+    13       c       d         0.000000
+    14       c       e         0.000000
+    15       d       a         0.000000
+    16       d       b         0.000000
+    17       d       c         0.000000
+    18       d       d         1.000000
+    19       d       e         0.000000
+    20       e       a         0.316228
+    21       e       b         0.000000
+    22       e       c         0.000000
+    23       e       d         0.000000
+    24       e       e         1.000000
+
+    >>> df = pd.DataFrame({
+    ... 'c1':['a;b',   'b', 'c;a', 'b;a', 'c',   'd', 'e', 'a;b;c', 'e;a', None,  None],
+    ... 'c2':['A;B;C', 'B', 'B;D', 'B;C', 'C;B', 'A', 'A', 'B;C',    None, 'B;D', None]
+    ... })
+    >>> df # doctest: +NORMALIZE_WHITESPACE
+           c1     c2
+    0     a;b  A;B;C
+    1       b      B
+    2     c;a    B;D
+    3     b;a    B;C
+    4       c    C;B
+    5       d      A
+    6       e      A
+    7   a;b;c    B;C
+    8     e;a   None
+    9    None    B;D
+    10   None   None
+
+    >>> correlation(df, termA='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+       c1 c2  Crosscorrelation
+    0   a  A          0.258199
+    1   a  B          0.676123
+    2   a  C          0.670820
+    3   a  D          0.316228
+    4   b  A          0.288675
+    5   b  B          0.755929
+    6   b  C          0.750000
+    7   b  D          0.000000
+    8   c  A          0.000000
+    9   c  B          0.654654
+    10  c  C          0.577350
+    11  c  D          0.408248
+    12  d  A          0.577350
+    13  d  B          0.000000
+    14  d  C          0.000000
+    15  d  D          0.000000
+    16  e  A          0.408248
+    17  e  B          0.000000
+    18  e  C          0.000000
+    19  e  D          0.000000
+
+    """ 
+
+    if termA == termB:
+        sepB = None
+        termB = None
+
+
+    x = documentsByTerm(df, termA, sep=sepA)
+    termsA = x.loc[:, termA]
+    if N is None or len(x) <= N:
+        termsA = sorted(termsA)
+    else:
+        termsA = sorted(termsA[0:N])
+        
+    if termB is not None:
+        x = documentsByTerm(df, termB, sep=sepB)
+        termsB = x.loc[:, termB]
+        if N is None or len(x) <= N:
+            termsB = sorted(termsB)
+        else:
+            termsB = sorted(termsB[0:N])
+    else:
+        termsB = termsA
+    
+    x = pd.DataFrame(
+        data = np.zeros((len(df), len(termsA))),
+        columns = termsA,
+        index = df.index)
+
+    for idx in df.index:
+        w = df.loc[idx, termA]
+        if w is not None:
+            if sepA is not None:
+                z = w.split(sepA)
+            else:
+                z = [w] 
+            for k in z:
+                x.loc[idx, k] = 1
+
+    if termB is not None:
+
+        y = pd.DataFrame(
+            data = np.zeros((len(df), len(termsB))),
+            columns = termsB,
+            index = df.index)
+
+        for idx in df.index:
+            w = df.loc[idx, termB]
+            if w is not None:
+                if sepB is not None:
+                    z = w.split(sepB)
+                else:
+                    z = [w] 
+                for k in z:
+                    y.loc[idx, k] = 1            
+    else:
+        y = x
+
+    if termB is not None:
+        col0 = termA
+        col1 = termB
+        col2 = 'Crosscorrelation'
+    else:
+        col0 = termA + ' (row)'
+        col1 = termA + ' (col)'
+        col2 = 'Autocorrelation'
+
+    result =  pd.DataFrame(
+        data = np.zeros((len(termsA) * len(termsB), 3)),
+        columns = [col0, col1, col2]
+    )
+
+    idx = 0
+    for a in termsA:
+        for b in termsB:
+            s1 = x.loc[:, a]
+            s2 = y.loc[:, b]
+            num = np.sum((s1 * s2))
+            den = (np.sqrt((np.sum(s1**2))*(np.sum(s2**2))))
+            if den != 0.0:
+                value =  num / den
+            result.loc[idx, col0] = a
+            result.loc[idx, col1] = b
+            result.loc[idx, col2] = value
+
+            idx += 1
+
+    return result       
+
+    
+
 
 
 def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):

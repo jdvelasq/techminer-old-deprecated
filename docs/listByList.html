@@ -206,6 +206,101 @@
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="techMiner.listByList.correlation">
+<code class="sig-prename descclassname">techMiner.listByList.</code><code class="sig-name descname">correlation</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">termA</em>, <em class="sig-param">termB=None</em>, <em class="sig-param">sepA=None</em>, <em class="sig-param">sepB=None</em>, <em class="sig-param">N=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/listByList.html#correlation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.listByList.correlation" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="s1">&#39;a;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;a;b;c&#39;</span><span class="p">,</span> <span class="s1">&#39;e;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
+<span class="go">     A</span>
+<span class="go">0    a;b</span>
+<span class="go">1      b</span>
+<span class="go">2    c;a</span>
+<span class="go">3    b;a</span>
+<span class="go">4      c</span>
+<span class="go">5      d</span>
+<span class="go">6      e</span>
+<span class="go">7  a;b;c</span>
+<span class="go">8    e;a</span>
+<span class="go">9   None</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">correlation</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span> 
+<span class="go">   A (row) A (col)  Autocorrelation</span>
+<span class="go">0        a       a         1.000000</span>
+<span class="go">1        a       b         0.670820</span>
+<span class="go">2        a       c         0.516398</span>
+<span class="go">3        a       d         0.000000</span>
+<span class="go">4        a       e         0.316228</span>
+<span class="go">5        b       a         0.670820</span>
+<span class="go">6        b       b         1.000000</span>
+<span class="go">7        b       c         0.288675</span>
+<span class="go">8        b       d         0.000000</span>
+<span class="go">9        b       e         0.000000</span>
+<span class="go">10       c       a         0.516398</span>
+<span class="go">11       c       b         0.288675</span>
+<span class="go">12       c       c         1.000000</span>
+<span class="go">13       c       d         0.000000</span>
+<span class="go">14       c       e         0.000000</span>
+<span class="go">15       d       a         0.000000</span>
+<span class="go">16       d       b         0.000000</span>
+<span class="go">17       d       c         0.000000</span>
+<span class="go">18       d       d         1.000000</span>
+<span class="go">19       d       e         0.000000</span>
+<span class="go">20       e       a         0.316228</span>
+<span class="go">21       e       b         0.000000</span>
+<span class="go">22       e       c         0.000000</span>
+<span class="go">23       e       d         0.000000</span>
+<span class="go">24       e       e         1.000000</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;c1&#39;</span><span class="p">:[</span><span class="s1">&#39;a;b&#39;</span><span class="p">,</span>   <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>   <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;a;b;c&#39;</span><span class="p">,</span> <span class="s1">&#39;e;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;c2&#39;</span><span class="p">:[</span><span class="s1">&#39;A;B;C&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B;D&#39;</span><span class="p">,</span> <span class="s1">&#39;B;C&#39;</span><span class="p">,</span> <span class="s1">&#39;C;B&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B;C&#39;</span><span class="p">,</span>    <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;B;D&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
+<span class="go">       c1     c2</span>
+<span class="go">0     a;b  A;B;C</span>
+<span class="go">1       b      B</span>
+<span class="go">2     c;a    B;D</span>
+<span class="go">3     b;a    B;C</span>
+<span class="go">4       c    C;B</span>
+<span class="go">5       d      A</span>
+<span class="go">6       e      A</span>
+<span class="go">7   a;b;c    B;C</span>
+<span class="go">8     e;a   None</span>
+<span class="go">9    None    B;D</span>
+<span class="go">10   None   None</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">correlation</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="n">termB</span><span class="o">=</span><span class="s1">&#39;c2&#39;</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span> 
+<span class="go">   c1 c2  Crosscorrelation</span>
+<span class="go">0   a  A          0.258199</span>
+<span class="go">1   a  B          0.676123</span>
+<span class="go">2   a  C          0.670820</span>
+<span class="go">3   a  D          0.316228</span>
+<span class="go">4   b  A          0.288675</span>
+<span class="go">5   b  B          0.755929</span>
+<span class="go">6   b  C          0.750000</span>
+<span class="go">7   b  D          0.000000</span>
+<span class="go">8   c  A          0.000000</span>
+<span class="go">9   c  B          0.654654</span>
+<span class="go">10  c  C          0.577350</span>
+<span class="go">11  c  D          0.408248</span>
+<span class="go">12  d  A          0.577350</span>
+<span class="go">13  d  B          0.000000</span>
+<span class="go">14  d  C          0.000000</span>
+<span class="go">15  d  D          0.000000</span>
+<span class="go">16  e  A          0.408248</span>
+<span class="go">17  e  B          0.000000</span>
+<span class="go">18  e  C          0.000000</span>
+<span class="go">19  e  D          0.000000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="techMiner.listByList.heatmap">
 <code class="sig-prename descclassname">techMiner.listByList.</code><code class="sig-name descname">heatmap</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">ascendingA=None</em>, <em class="sig-param">ascendingB=None</em>, <em class="sig-param">figsize=(10</em>, <em class="sig-param">10)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techMiner/listByList.html#heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techMiner.listByList.heatmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a dataframe as a heatmap.</p>

@@ -94,6 +94,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#Document-type-per-year">Document type per year</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Keywords-by-year">Keywords by year</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Authors-per-document-type">Authors per document type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Autocorrelation">Autocorrelation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Crosscorrelation">Crosscorrelation</a></li>
 </ul>
 </li>
 </ul>
@@ -910,13 +912,903 @@ div.rendered_html tbody tr:hover {
 </table>
 </div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</div>
+<div class="section" id="Autocorrelation">
+<h2>Autocorrelation<a class="headerlink" href="#Autocorrelation" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">correlation</span>
+
+<span class="n">correlation</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+    <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;Keywords&#39;</span><span class="p">,</span>
+    <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span>
+<span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Keywords (row)</th>
+      <th>Keywords (col)</th>
+      <th>Autocorrelation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Algorithmic trading</td>
+      <td>Algorithmic trading</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Algorithmic trading</td>
+      <td>Automated trading</td>
+      <td>0.084895</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Algorithmic trading</td>
+      <td>Automated trading system</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Algorithmic trading</td>
+      <td>Deep learning</td>
+      <td>0.099136</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Algorithmic trading</td>
+      <td>Financial forecasting</td>
+      <td>0.201347</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Algorithmic trading</td>
+      <td>Forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Algorithmic trading</td>
+      <td>High frequency trading</td>
+      <td>0.075431</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Algorithmic trading</td>
+      <td>Machine learning</td>
+      <td>0.227980</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Algorithmic trading</td>
+      <td>Technical analysis</td>
+      <td>0.164399</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Algorithmic trading</td>
+      <td>multiagent systems</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Automated trading</td>
+      <td>Algorithmic trading</td>
+      <td>0.084895</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Automated trading</td>
+      <td>Automated trading</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Automated trading</td>
+      <td>Automated trading system</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Automated trading</td>
+      <td>Deep learning</td>
+      <td>0.077850</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Automated trading</td>
+      <td>Financial forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Automated trading</td>
+      <td>Forecasting</td>
+      <td>0.230940</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Automated trading</td>
+      <td>High frequency trading</td>
+      <td>0.059235</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Automated trading</td>
+      <td>Machine learning</td>
+      <td>0.214834</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Automated trading</td>
+      <td>Technical analysis</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Automated trading</td>
+      <td>multiagent systems</td>
+      <td>0.292770</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Automated trading system</td>
+      <td>Algorithmic trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Automated trading system</td>
+      <td>Automated trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Automated trading system</td>
+      <td>Automated trading system</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Automated trading system</td>
+      <td>Deep learning</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>Automated trading system</td>
+      <td>Financial forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>Automated trading system</td>
+      <td>Forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Automated trading system</td>
+      <td>High frequency trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Automated trading system</td>
+      <td>Machine learning</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>Automated trading system</td>
+      <td>Technical analysis</td>
+      <td>0.272166</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Automated trading system</td>
+      <td>multiagent systems</td>
+      <td>0.154303</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>Machine learning</td>
+      <td>Algorithmic trading</td>
+      <td>0.227980</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>Machine learning</td>
+      <td>Automated trading</td>
+      <td>0.214834</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>Machine learning</td>
+      <td>Automated trading system</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>Machine learning</td>
+      <td>Deep learning</td>
+      <td>0.083624</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>Machine learning</td>
+      <td>Financial forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>Machine learning</td>
+      <td>Forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>Machine learning</td>
+      <td>High frequency trading</td>
+      <td>0.063628</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>Machine learning</td>
+      <td>Machine learning</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>Machine learning</td>
+      <td>Technical analysis</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>Machine learning</td>
+      <td>multiagent systems</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>Technical analysis</td>
+      <td>Algorithmic trading</td>
+      <td>0.164399</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>Technical analysis</td>
+      <td>Automated trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>Technical analysis</td>
+      <td>Automated trading system</td>
+      <td>0.272166</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>Technical analysis</td>
+      <td>Deep learning</td>
+      <td>0.100504</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>Technical analysis</td>
+      <td>Financial forecasting</td>
+      <td>0.272166</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>Technical analysis</td>
+      <td>Forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>Technical analysis</td>
+      <td>High frequency trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>Technical analysis</td>
+      <td>Machine learning</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>Technical analysis</td>
+      <td>Technical analysis</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>Technical analysis</td>
+      <td>multiagent systems</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>multiagent systems</td>
+      <td>Algorithmic trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>multiagent systems</td>
+      <td>Automated trading</td>
+      <td>0.292770</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>multiagent systems</td>
+      <td>Automated trading system</td>
+      <td>0.154303</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>multiagent systems</td>
+      <td>Deep learning</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>multiagent systems</td>
+      <td>Financial forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>multiagent systems</td>
+      <td>Forecasting</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>multiagent systems</td>
+      <td>High frequency trading</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>multiagent systems</td>
+      <td>Machine learning</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>multiagent systems</td>
+      <td>Technical analysis</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>multiagent systems</td>
+      <td>multiagent systems</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 3 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">alt_circleplot</span><span class="p">(</span>
+    <span class="n">correlation</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+    <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;Keywords&#39;</span><span class="p">,</span>
+    <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4-matrix-analysis_20_0.png" src="../_images/tutorial_4-matrix-analysis_20_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">heatmap</span><span class="p">(</span>
+    <span class="n">correlation</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+    <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;Keywords&#39;</span><span class="p">,</span>
+    <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4-matrix-analysis_21_0.png" src="../_images/tutorial_4-matrix-analysis_21_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Crosscorrelation">
+<h2>Crosscorrelation<a class="headerlink" href="#Crosscorrelation" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+    <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;Keywords&#39;</span><span class="p">,</span>
+    <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span>
+    <span class="n">termB</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+    <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;,&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Keywords</th>
+      <th>Authors</th>
+      <th>Crosscorrelation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Algorithmic trading</td>
+      <td>Arévalo A.</td>
+      <td>0.189832</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Algorithmic trading</td>
+      <td>Debenham J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Algorithmic trading</td>
+      <td>Iosifidis A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Algorithmic trading</td>
+      <td>Kablan A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Algorithmic trading</td>
+      <td>Kanniainen J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Algorithmic trading</td>
+      <td>Maringer D.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Algorithmic trading</td>
+      <td>Montana G.</td>
+      <td>0.164399</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Algorithmic trading</td>
+      <td>Ng W.L.</td>
+      <td>0.164399</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Algorithmic trading</td>
+      <td>Wang F.</td>
+      <td>0.116248</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Algorithmic trading</td>
+      <td>Zhang J.</td>
+      <td>0.094916</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Automated trading</td>
+      <td>Arévalo A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Automated trading</td>
+      <td>Debenham J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Automated trading</td>
+      <td>Iosifidis A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Automated trading</td>
+      <td>Kablan A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Automated trading</td>
+      <td>Kanniainen J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Automated trading</td>
+      <td>Maringer D.</td>
+      <td>0.182574</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Automated trading</td>
+      <td>Montana G.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Automated trading</td>
+      <td>Ng W.L.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Automated trading</td>
+      <td>Wang F.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Automated trading</td>
+      <td>Zhang J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Automated trading system</td>
+      <td>Arévalo A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Automated trading system</td>
+      <td>Debenham J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Automated trading system</td>
+      <td>Iosifidis A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Automated trading system</td>
+      <td>Kablan A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>Automated trading system</td>
+      <td>Kanniainen J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>Automated trading system</td>
+      <td>Maringer D.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Automated trading system</td>
+      <td>Montana G.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>Automated trading system</td>
+      <td>Ng W.L.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>Automated trading system</td>
+      <td>Wang F.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>Automated trading system</td>
+      <td>Zhang J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>Machine learning</td>
+      <td>Arévalo A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>Machine learning</td>
+      <td>Debenham J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>Machine learning</td>
+      <td>Iosifidis A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>Machine learning</td>
+      <td>Kablan A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>Machine learning</td>
+      <td>Kanniainen J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>Machine learning</td>
+      <td>Maringer D.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>Machine learning</td>
+      <td>Montana G.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>Machine learning</td>
+      <td>Ng W.L.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>Machine learning</td>
+      <td>Wang F.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>Machine learning</td>
+      <td>Zhang J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>Technical analysis</td>
+      <td>Arévalo A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>Technical analysis</td>
+      <td>Debenham J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>Technical analysis</td>
+      <td>Iosifidis A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>Technical analysis</td>
+      <td>Kablan A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>Technical analysis</td>
+      <td>Kanniainen J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>Technical analysis</td>
+      <td>Maringer D.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>Technical analysis</td>
+      <td>Montana G.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>Technical analysis</td>
+      <td>Ng W.L.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>Technical analysis</td>
+      <td>Wang F.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>Technical analysis</td>
+      <td>Zhang J.</td>
+      <td>0.192450</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>multiagent systems</td>
+      <td>Arévalo A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>multiagent systems</td>
+      <td>Debenham J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>multiagent systems</td>
+      <td>Iosifidis A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>multiagent systems</td>
+      <td>Kablan A.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>multiagent systems</td>
+      <td>Kanniainen J.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>multiagent systems</td>
+      <td>Maringer D.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>multiagent systems</td>
+      <td>Montana G.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>multiagent systems</td>
+      <td>Ng W.L.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>multiagent systems</td>
+      <td>Wang F.</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>multiagent systems</td>
+      <td>Zhang J.</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 3 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">heatmap</span><span class="p">(</span>
+    <span class="n">correlation</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+        <span class="n">termA</span><span class="o">=</span><span class="s1">&#39;Keywords&#39;</span><span class="p">,</span>
+        <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span>
+        <span class="n">termB</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+        <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorial_4-matrix-analysis_24_0.png" src="../_images/tutorial_4-matrix-analysis_24_0.png" />
 </div>
 </div>
 </div>
