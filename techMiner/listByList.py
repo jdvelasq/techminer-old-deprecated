@@ -27,11 +27,52 @@ import itertools
 
 from scipy.optimize import minimize
 from collections import OrderedDict 
+from sklearn.decomposition import PCA
 
 from techMiner import documentsByTerm
 
-def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
-    """
+
+def pca(df, term, sep=None, n_components=2, N=10):
+
+    x = documentsByTerm(df, term, sep=sep)
+    terms = x.loc[:, term].tolist()
+    if N is None or len(terms) <= N:
+        N = len(terms)
+    terms = sorted(terms[0:N])
+
+    x = pd.DataFrame(
+        data = np.zeros((len(df), len(terms))),
+        columns = terms,
+        index = df.index)
+
+    for idx in df.index:
+        w = df.loc[idx, term]
+        if w is not None:
+            if sep is not None:
+                z = w.split(sep)
+            else:
+                z = [w] 
+            for k in z:
+                if k in terms:
+                    x.loc[idx, k] = 1
+
+    s = x.sum(axis = 1)
+    x = x.loc[s > 0.0]
+
+    pca = PCA(n_components=n_components)
+    
+    values = np.transpose(pca.fit(X=x.values).components_)
+
+    result = pd.DataFrame(
+        values,
+        columns = ['F'+str(i) for i in range(n_components)],
+        index = terms )
+
+    return result
+
+
+def correlation(df, termA, termB=None, sepA=None, sepB=None, N=20):
+    """Computes autocorrelation and crosscorrelation.
 
     >>> import pandas as pd
     >>> df = pd.DataFrame({
@@ -78,9 +119,21 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
     23       e       d         0.000000
     24       e       e         1.000000
 
+    >>> correlation(df, termA='A', sepA=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+      A (row) A (col)  Autocorrelation
+    0       a       a         1.000000
+    1       a       b         0.670820
+    2       a       c         0.516398
+    3       b       a         0.670820
+    4       b       b         1.000000
+    5       b       c         0.288675
+    6       c       a         0.516398
+    7       c       b         0.288675
+    8       c       c         1.000000
+
     >>> df = pd.DataFrame({
     ... 'c1':['a;b',   'b', 'c;a', 'b;a', 'c',   'd', 'e', 'a;b;c', 'e;a', None,  None],
-    ... 'c2':['A;B;C', 'B', 'B;D', 'B;C', 'C;B', 'A', 'A', 'B;C',    None, 'B;D', None]
+    ... 'c2':['A;B;C', 'B', 'B;D', 'B;C', 'C;B', 'A', 'A', 'B;C',    None, 'B;E', None]
     ... })
     >>> df # doctest: +NORMALIZE_WHITESPACE
            c1     c2
@@ -93,7 +146,7 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
     6       e      A
     7   a;b;c    B;C
     8     e;a   None
-    9    None    B;D
+    9    None    B;E
     10   None   None
 
     >>> correlation(df, termA='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
@@ -101,23 +154,40 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
     0   a  A          0.258199
     1   a  B          0.676123
     2   a  C          0.670820
-    3   a  D          0.316228
-    4   b  A          0.288675
-    5   b  B          0.755929
-    6   b  C          0.750000
-    7   b  D          0.000000
-    8   c  A          0.000000
-    9   c  B          0.654654
-    10  c  C          0.577350
-    11  c  D          0.408248
-    12  d  A          0.577350
-    13  d  B          0.000000
-    14  d  C          0.000000
-    15  d  D          0.000000
-    16  e  A          0.408248
-    17  e  B          0.000000
-    18  e  C          0.000000
-    19  e  D          0.000000
+    3   a  D          0.447214
+    4   a  E          0.000000
+    5   b  A          0.288675
+    6   b  B          0.755929
+    7   b  C          0.750000
+    8   b  D          0.000000
+    9   b  E          0.000000
+    10  c  A          0.000000
+    11  c  B          0.654654
+    12  c  C          0.577350
+    13  c  D          0.577350
+    14  c  E          0.000000
+    15  d  A          0.577350
+    16  d  B          0.000000
+    17  d  C          0.000000
+    18  d  D          0.000000
+    19  d  E          0.000000
+    20  e  A          0.408248
+    21  e  B          0.000000
+    22  e  C          0.000000
+    23  e  D          0.000000
+    24  e  E          0.000000
+
+    >>> correlation(df, termA='c1', termB='c2', sepA=';', sepB=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+      c1 c2  Crosscorrelation
+    0  a  A          0.258199
+    1  a  B          0.676123
+    2  a  C          0.670820
+    3  b  A          0.288675
+    4  b  B          0.755929
+    5  b  C          0.750000
+    6  c  A          0.000000
+    7  c  B          0.654654
+    8  c  C          0.577350
 
     """ 
 
@@ -127,22 +197,22 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
 
 
     x = documentsByTerm(df, termA, sep=sepA)
-    termsA = x.loc[:, termA]
-    if N is None or len(x) <= N:
+    termsA = x.loc[:, termA].tolist()
+    if N is None or len(termsA) <= N:
         termsA = sorted(termsA)
     else:
         termsA = sorted(termsA[0:N])
-        
+
     if termB is not None:
         x = documentsByTerm(df, termB, sep=sepB)
-        termsB = x.loc[:, termB]
-        if N is None or len(x) <= N:
+        termsB = x.loc[:, termB].tolist()
+        if N is None or len(termsB) <= N:
             termsB = sorted(termsB)
         else:
             termsB = sorted(termsB[0:N])
     else:
         termsB = termsA
-    
+        
     x = pd.DataFrame(
         data = np.zeros((len(df), len(termsA))),
         columns = termsA,
@@ -207,8 +277,6 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=10):
             idx += 1
 
     return result       
-
-    
 
 
 
@@ -297,7 +365,6 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
         df = df[ df[df.columns[2]] <= maxval ]
 
     return df
-
 
 
 
