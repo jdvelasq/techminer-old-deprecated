@@ -32,6 +32,36 @@ from sklearn.decomposition import PCA
 from techMiner import documentsByTerm
 
 
+from sklearn.cluster import KMeans
+
+def kmeans(df, n_clusters=2):
+    """Apply KMeans to a pandas dataframe.
+    """
+
+    m = KMeans(n_clusters)
+    m.fit(df.values)
+    centers = pd.DataFrame(
+        m.cluster_centers_,
+        columns = df.columns,
+        index = ['Cluster ' + str(i) for i in range(n_clusters)])
+
+    clusters = pd.DataFrame(
+        {'cluster': m.predict(df.values)},
+        index = df.index)
+
+    return centers, clusters
+
+
+def pca2heatmap(x, figsize=(10, 10)):
+
+    x = x.apply(lambda x: abs(x))
+    plt.figure(figsize=figsize)
+    plt.pcolor(x.values, cmap='Greys')
+    plt.xticks(np.arange(len(x.columns))+0.5, x.columns, rotation='vertical')
+    plt.yticks(np.arange(len(x.index))+0.5, x.index)
+    plt.gca().set_aspect('equal', 'box')
+    plt.gca().invert_yaxis()
+
 def pca(df, term, sep=None, n_components=2, N=10):
 
     x = documentsByTerm(df, term, sep=sep)
@@ -437,17 +467,20 @@ def matrix(df, ascendingA=None, ascendingB=None):
     return result
 
 
-def heatmap(df, ascendingA=None, ascendingB=None, figsize=(10,10)):
+def heatmap(df, ascendingA=None, ascendingB=None, figsize=(10,10), transform=True):
     """Plots a dataframe as a heatmap. 
 
     Arsgs:
-        x (pandas.DataFrame):  Dataframe generated with the matrix function.
+        df (pandas.DataFrame):  Dataframe.
 
     Returns:
         None
     
     """
-    x = matrix(df, ascendingA, ascendingB)
+    if transform is True:
+        x = matrix(df, ascendingA, ascendingB)
+    else:
+        x = df
     plt.figure(figsize=figsize)
     plt.pcolor(x.values, cmap='Greys')
     plt.xticks(np.arange(len(x.columns))+0.5, x.columns, rotation='vertical')
