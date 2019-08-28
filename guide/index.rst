@@ -41,7 +41,7 @@ of open source tools.
 The current development version can be installed by clonning the GitHub repo 
 `<https://github.com/jdvelasq/techMiner>`_ and executing 
 
-``python3 setup.py install develop```
+``$ python3 setup.py install develop``
 
 at the command prompt.
 
@@ -83,7 +83,7 @@ Table of Contents
 ------------------------------------------------------------------------------------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    tutorial/index
 

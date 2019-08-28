@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tutorial &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+  <title>Step 1: Data download by the user &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction" href="1-introduction.html" />
-    <link rel="prev" title="techMiner: A Tool for Analyzing Bibliographic Data using Python" href="../index.html" /> 
+    <link rel="next" title="Step 2: Data merging" href="3-data-merging.html" />
+    <link rel="prev" title="Introduction" href="1-introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,9 +85,9 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="1-introduction.html">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-data-adquisition.html">Step 1: Data download by the user</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Step 1: Data download by the user</a></li>
 <li class="toctree-l2"><a class="reference internal" href="3-data-merging.html">Step 2: Data merging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="4-data-selection.html">Step 3: Record selection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="5-direct-queries.html">Direct queries over data</a></li>
@@ -143,13 +143,15 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Tutorial</li>
+          <li><a href="index.html">Tutorial</a> &raquo;</li>
+        
+      <li>Step 1: Data download by the user</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/tutorial/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/tutorial/2-data-adquisition.ipynb.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -186,46 +188,16 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="1-introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2-data-adquisition.html">Step 1: Data download by the user</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3-data-merging.html">Step 2: Data merging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4-data-selection.html">Step 3: Record selection</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="4-data-selection.html#Data-exportation-for-manual-review">Data exportation for manual review</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-data-selection.html#Filtering-of-selected-records">Filtering of selected records</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-data-selection.html#Removing-of-duplicated-records">Removing of duplicated records</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-data-selection.html#Column-edition">Column edition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="4-data-selection.html#Keywords-review">Keywords review</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="5-direct-queries.html">Direct queries over data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6-basic-analysis.html">Basic Analysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html#Number-of-documents-per-document-type">Number of documents per document type</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html#Citations-per-document">Citations per document</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html# Number-of-authors-per-document"> Number of authors per document</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html#Number-of-documents-per-source-title">Number of documents per source title</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html# Number-of-documents-per-author"> Number of documents per author</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html#Number-of-documents-per-keyword">Number of documents per keyword</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html#Documents-per-country">Documents per country</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html#Number-of-documents-per-year">Number of documents per year</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html# Citations-per-year"> Citations per year</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="7-matrix-analysis.html">Matrix Analysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Keywords-per-year">Keywords per year</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Document-type-per-year">Document type per year</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Keywords-by-year">Keywords by year</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Authors-per-document-type">Authors per document type</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Autocorrelation">Autocorrelation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Crosscorrelation">Crosscorrelation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html#Factor-analysis">Factor analysis</a></li>
-</ul>
-</li>
-</ul>
-</div>
+<div class="section" id="Step-1:-Data-download-by-the-user">
+<h1>Step 1: Data download by the user<a class="headerlink" href="#Step-1:-Data-download-by-the-user" title="Permalink to this headline">¶</a></h1>
+<p>The information is usually captured by the user directly in a biblographical database as Scopus using complex a search string. The refinement of the search string is iterative and preliminary analysis of the keywords can help debug the search string. In this first part of the tutorial it is assumed that the search string is refined.</p>
+<p>We recommend downloading the bibliographic information in three files to facilitate the loading of data in Python. The first file, named <code class="docutils literal notranslate"><span class="pre">demo-citations.csv</span></code>, contains the fields showed in the following figure:</p>
+<p><img alt="screen-capture-1.jpg" src="../_images/screen_capture_1.jpg" /></p>
+<p>The second file, named <code class="docutils literal notranslate"><span class="pre">demo-keywords.csv</span></code>, contains the information showed in the next figure.</p>
+<p><img alt="screen-capture-2.jpg" src="../_images/screen_capture_2.jpg" /></p>
+<p>Finally, the third file, <code class="docutils literal notranslate"><span class="pre">demo-refs.csv</span></code>, contains the information about references cited by docuemnts selected in the search.</p>
+<p><img alt="screen-capture-3.jpg" src="../_images/screen_capture_3.jpg" /></p>
+<p>The selected fields maximize the potential of information for obtain insights of the data.</p>
 </div>
 
 
@@ -236,10 +208,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="1-introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="3-data-merging.html" class="btn btn-neutral float-right" title="Step 2: Data merging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral float-left" title="techMiner: A Tool for Analyzing Bibliographic Data using Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="1-introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
