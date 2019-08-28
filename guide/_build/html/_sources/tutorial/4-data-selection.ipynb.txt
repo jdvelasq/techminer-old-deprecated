@@ -33,11 +33,29 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Group management"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Not all records in the dataframe `df` will be included in the analysis. To mark the registers, a new column called `'Selected'` will be created. This column is Boolean. In this tutorial, we call group to this class of columns.  \n",
+    "\n",
+    "In the next code, the new column is created with a default value of `False`. "
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 12,
    "metadata": {},
    "outputs": [],
-   "source": []
+   "source": [
+    "df['Selected'] = False"
+   ]
   },
   {
    "cell_type": "code",

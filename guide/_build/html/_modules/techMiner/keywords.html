@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>techMiner.keywords &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> techMiner - A Package for Bibliographical Analysis using Python
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">Tutorial</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Modules</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">techMiner - A Package for Bibliographical Analysis using Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>techMiner.keywords</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for techMiner.keywords</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for manipulating lists of keywords</span>
+<span class="sd">====================================================</span>
+
+<span class="sd">This module contains functions that can be applied to each element of a pandas.Series </span>
+<span class="sd">object using the map function. </span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">geopandas</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<div class="viewcode-block" id="extractKeywords"><a class="viewcode-back" href="../../keywords.html#techMiner.keywords.extractKeywords">[docs]</a><span class="k">def</span> <span class="nf">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullMatch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns a string with the keywords in x matching the list `keywords`.</span>
+
+<span class="sd">    The funcion allows the extraction of complex patterns using regular expresions (regex). </span>
+<span class="sd">    Detail information about regex sintax in Python can be obtained at https://docs.python.org/3/library/re.html#re-syntax.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (string): A string object.</span>
+<span class="sd">        keywordsList (string, list): string or list of strings searched. Each element of `keywordList` is interpreted as a regular expression.</span>
+<span class="sd">        ignoreCase (bool):  ignore case?</span>
+<span class="sd">        fullMatch (bool): the whole string matches the regular expression in keywordList.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        String.</span>
+
+<span class="sd">    **Recipes**</span>
+
+<span class="sd">    The following code exemplify some common cases using regular expressions.</span>
+
+<span class="sd">    * Partial match.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, &#39;hre&#39;)</span>
+<span class="sd">    &#39;hre&#39;</span>
+
+
+<span class="sd">    * Word whole only. r&#39;\b&#39; represents white space.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\btwo\b&quot;)</span>
+<span class="sd">    &#39;two&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\bTWO\b&quot;)</span>
+<span class="sd">    &#39;two&#39;</span>
+
+
+<span class="sd">    * Case sensitive.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\bTWO\b&quot;, ignoreCase=False)</span>
+<span class="sd">    &#39;&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one TWO three four five&#39;, r&quot;\bTWO\b&quot;, ignoreCase=False)</span>
+<span class="sd">    &#39;TWO&#39;</span>
+
+
+<span class="sd">    * A word followed by other word.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\btwo\Wthree\b&quot;)</span>
+<span class="sd">    &#39;two three&#39;</span>
+
+
+<span class="sd">    * Multiple white spaces.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two    three four five&#39;, r&quot;two\W+three&quot;)</span>
+<span class="sd">    &#39;two    three&#39;</span>
+
+<span class="sd">    * A list of keywords.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, [&quot;xxx&quot;, &quot;two&quot;, &quot;yyy&quot;])</span>
+<span class="sd">    &#39;two&#39;</span>
+
+
+<span class="sd">    * Adjacent terms but the order is unimportant.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\Wthree\Wtwo\b|\Wthree\Wtwo\b&quot;)</span>
+<span class="sd">    &#39;&#39;</span>
+
+<span class="sd">    * Near words.</span>
+
+<span class="sd">    Two words (`&#39;two&#39;`, `&#39;four&#39;`) separated by any other.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\btwo\W+\w+\W+four\b&quot;)</span>
+<span class="sd">    &#39;two three four&#39;</span>
+
+
+<span class="sd">    Two words (`&#39;two&#39;`, `&#39;five&#39;`) separated by one, two or three unspecified words.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\btwo\W+(?:\w+\W+){1,3}?five&quot;)</span>
+<span class="sd">    &#39;two three four five&#39;</span>
+
+<span class="sd">    * Or operator.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;three|two&quot;)</span>
+<span class="sd">    &#39;two&#39;</span>
+
+<span class="sd">    * And operator. One word followed by other at any word distance.</span>
+
+<span class="sd">    &gt;&gt;&gt; extractKeywords( &#39;one two three four five&#39;, r&quot;\btwo\W+(?:\w+\W+)+?five&quot;)</span>
+<span class="sd">    &#39;two three four five&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keywordsList</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">keywordsList</span> <span class="o">=</span> <span class="p">[</span><span class="n">keywordsList</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">keywordsList</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">ignoreCase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fullMatch</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fullMatch</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="findKeywords"><a class="viewcode-back" href="../../keywords.html#techMiner.keywords.findKeywords">[docs]</a><span class="k">def</span> <span class="nf">findKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullMatch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Search expr in string x and returns a Boolean.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (string): A string object.</span>
+<span class="sd">        keywordsList (string, list): string or list of strings searched. Each element of `keywordList` is interpreted as a regular expression.</span>
+<span class="sd">        ignoreCase (bool):  ignore case?</span>
+<span class="sd">        fullMatch (bool): the whole string matches the regular expression in keywordList.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Boolean.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="p">,</span> <span class="n">fullMatch</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="removeKeywords"><a class="viewcode-back" href="../../keywords.html#techMiner.keywords.removeKeywords">[docs]</a><span class="k">def</span> <span class="nf">removeKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullMatch</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate a new list removing the strings that match a </span>
+<span class="sd">    list of keywords</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (string): A string object.</span>
+<span class="sd">        keywordsList (string, list): string or list of strings searched. Each element of `keywordList` is interpreted as a regular expression.</span>
+<span class="sd">        ignoreCase (bool):  ignore case?</span>
+<span class="sd">        fullMatch (bool): the whole string matches the regular expression in keywordList.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        String.</span>
+<span class="sd">             </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="p">,</span> <span class="n">fullMatch</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">y</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+    
+<div class="viewcode-block" id="extractNearbyKeywords"><a class="viewcode-back" href="../../keywords.html#techMiner.keywords.extractNearbyKeywords">[docs]</a><span class="k">def</span> <span class="nf">extractNearbyKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fullMatch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_words</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extracts the words in the proximity of the terms matching</span>
+<span class="sd">    a keywords list. </span>
+
+<span class="sd">     Args:</span>
+<span class="sd">        x (string): A string object.</span>
+<span class="sd">        keywords (list): a list of strings.</span>
+<span class="sd">        n_words (integer): number of words around term. </span>
+<span class="sd">             </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        string.</span>
+
+<span class="sd">    **Examples**</span>
+
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; df = pd.DataFrame({</span>
+<span class="sd">    ...    &#39;f&#39;: [&#39;aaa 1 2 3 4 5&#39;, &#39;1 aaa 2 3 4 5&#39;, &#39;1 2 aaa 3 4 5&#39;, </span>
+<span class="sd">    ...          &#39;1 2 3 aaa 4 5&#39;, &#39;1 2 3 4 aaa 5&#39;, &#39;1 2 3 4 5 aaa&#39;],</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; df</span>
+<span class="sd">                   f</span>
+<span class="sd">    0  aaa 1 2 3 4 5</span>
+<span class="sd">    1  1 aaa 2 3 4 5</span>
+<span class="sd">    2  1 2 aaa 3 4 5</span>
+<span class="sd">    3  1 2 3 aaa 4 5</span>
+<span class="sd">    4  1 2 3 4 aaa 5</span>
+<span class="sd">    5  1 2 3 4 5 aaa</span>
+
+<span class="sd">    &gt;&gt;&gt; df.f.map(lambda x: extractNearbyKeywords(x, keywordsList=&#39;aaa&#39;, n_words=2))</span>
+<span class="sd">    0               </span>
+<span class="sd">    1               </span>
+<span class="sd">    2    1 2 aaa 3 4</span>
+<span class="sd">    3    2 3 aaa 4 5</span>
+<span class="sd">    4               </span>
+<span class="sd">    5               </span>
+<span class="sd">    Name: f, dtype: object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">extractKeywords</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">keywordsList</span><span class="p">,</span> <span class="n">ignoreCase</span><span class="p">,</span> <span class="n">fullMatch</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">ignoreCase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\w+\W+&#39;</span><span class="o">*</span><span class="n">n_words</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s1">&#39;\W+\w+&#39;</span><span class="o">*</span><span class="n">n_words</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\w+\W+&#39;</span><span class="o">*</span><span class="n">n_words</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="s1">&#39;\W+\w+&#39;</span><span class="o">*</span><span class="n">n_words</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fullMatch</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fullMatch</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

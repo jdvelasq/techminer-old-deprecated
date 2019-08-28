@@ -390,7 +390,7 @@ div.rendered_html tbody tr:hover {
 <h1>Step 2: Data merging<a class="headerlink" href="#Step-2:-Data-merging" title="Permalink to this headline">¶</a></h1>
 <p>From previous step, there are three files with the data in the current directory:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -405,12 +405,13 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 demo-citations.csv
 demo-keywords.csv
+demo-merged.csv
 demo-refs.csv
 </pre></div></div>
 </div>
 <p>First, the files are loaded as dataframes.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -423,7 +424,7 @@ demo-refs.csv
 </div>
 <p>Second, column names are listed and reviewed, looking for unwanted columns.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -432,7 +433,7 @@ demo-refs.csv
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -446,7 +447,7 @@ demo-refs.csv
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -455,7 +456,7 @@ demo-refs.csv
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -464,7 +465,7 @@ demo-refs.csv
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -473,7 +474,7 @@ demo-refs.csv
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -483,7 +484,7 @@ demo-refs.csv
 </div>
 <p>For all dataframes, the <code class="docutils literal notranslate"><span class="pre">'Link'</span></code> column can be removed. Also, the column <code class="docutils literal notranslate"><span class="pre">'Authors</span> <span class="pre">with</span> <span class="pre">affiliations'</span></code> in <code class="docutils literal notranslate"><span class="pre">citations</span></code> can be removed.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -495,7 +496,7 @@ demo-refs.csv
 </div>
 <p>Third, the dataframes are concated.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -503,19 +504,9 @@ demo-refs.csv
 </pre></div>
 </div>
 </div>
-<p>At this moment, not all records of the dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> will be included in the analysis. To mark the selected records that will be used in the review, the field <code class="docutils literal notranslate"><span class="pre">'Selected'</span></code> is included in the dataframe with a defaul value of <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Selected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-</pre></div>
-</div>
-</div>
 <p>Finally, the dataframe is saved to disk for further processing.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>

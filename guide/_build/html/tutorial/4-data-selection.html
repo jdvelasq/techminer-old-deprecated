@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="2-data-adquisition.html">Step 1: Data download by the user</a></li>
 <li class="toctree-l2"><a class="reference internal" href="3-data-merging.html">Step 2: Data merging</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Step 3: Record selection</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Group-management">Group management</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Data-exportation-for-manual-review">Data exportation for manual review</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Filtering-of-selected-records">Filtering of selected records</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Removing-of-duplicated-records">Removing of duplicated records</a></li>
@@ -414,12 +415,16 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="section" id="Group-management">
+<h2>Group management<a class="headerlink" href="#Group-management" title="Permalink to this headline">¶</a></h2>
+<p>Not all records in the dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> will be included in the analysis. To mark the registers, a new column called <code class="docutils literal notranslate"><span class="pre">'Selected'</span></code> will be created. This column is Boolean. In this tutorial, we call group to this class of columns.</p>
+<p>In the next code, the new column is created with a default value of <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Selected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div>
@@ -474,6 +479,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="n">full</span> <span class="o">=</span> <span class="n">full</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;selected&#39;</span><span class="p">,</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Title&#39;</span><span class="p">])</span>
 </pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="Data-exportation-for-manual-review">
