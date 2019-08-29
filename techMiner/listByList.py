@@ -561,7 +561,7 @@ def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='
                 else:
                     edge_colour = edge_color
                 graph.add_edge(from_node, to_node, weight=weight, color = edge_colour)
-                         
+                    
     #calculate distance between relationated nodes to avoid overlaping
     path_length = nx.shortest_path_length(graph)
     distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
@@ -582,6 +582,7 @@ def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='
         width = ([(1+x)*2 for x in weights.values()])  
     else:
         width=list(weights.values())
+
     #node sizes
     if not node_size:
         node_sizes=dict(graph.degree())
@@ -598,6 +599,7 @@ def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='
     if save:
         plt.savefig(name, format="PNG", dpi=300, bbox_inches='tight')
     plt.show()
+
 
 
 
