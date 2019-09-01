@@ -18,6 +18,7 @@ Functions in this module
 import pandas as pd
 import string
 import re
+import json
 
 from techMiner.transform import asciify, fingerprint
 
@@ -48,82 +49,55 @@ def displayRecords(df):
     5  e   5
 
     >>> displayRecords(df)   
+    -----------------------------------------------
     Record index: 0
-        f0    a
-        f1    1
-        Name: 0, dtype: object
-    <BLANKLINE>
+    {
+      "f0": "a",
+      "f1": 1
+    }
+    -----------------------------------------------
     Record index: 1
-        f0    b
-        f1    2
-        Name: 1, dtype: object
-    <BLANKLINE>
+    {
+      "f0": "b",
+      "f1": 2
+    }
+    -----------------------------------------------
     Record index: 2
-        f0    a
-        f1    2
-        Name: 2, dtype: object
-    <BLANKLINE>
+    {
+      "f0": "a",
+      "f1": 2
+    }
+    -----------------------------------------------
     Record index: 3
-        f0    c
-        f1    3
-        Name: 3, dtype: object
-    <BLANKLINE>
+    {
+      "f0": "c",
+      "f1": 3
+    }
+    -----------------------------------------------
     Record index: 4
-        f0    a
-        f1    1
-        Name: 4, dtype: object
-    <BLANKLINE>
+    {
+      "f0": "a",
+      "f1": 1
+    }
+    -----------------------------------------------
     Record index: 5
-        f0    e
-        f1    5
-        Name: 5, dtype: object
-    <BLANKLINE>
-    <BLANKLINE>
-
-    >>> displayRecords(df.sort_values(by='f0'))
-    Record index: 0
-        f0    a
-        f1    1
-        Name: 0, dtype: object
-    <BLANKLINE>
-    Record index: 2
-        f0    a
-        f1    2
-        Name: 2, dtype: object
-    <BLANKLINE>
-    Record index: 4
-        f0    a
-        f1    1
-        Name: 4, dtype: object
-    <BLANKLINE>
-    Record index: 1
-        f0    b
-        f1    2
-        Name: 1, dtype: object
-    <BLANKLINE>
-    Record index: 3
-        f0    c
-        f1    3
-        Name: 3, dtype: object
-    <BLANKLINE>
-    Record index: 5
-        f0    e
-        f1    5
-        Name: 5, dtype: object
-    <BLANKLINE>
-    <BLANKLINE>
+    {
+      "f0": "e",
+      "f1": 5
+    }
 
     """
 
-    result = ''
-    for idx in df.index:
-        result += 'Record index: ' + idx.__str__() + '\n'
-        x = df.loc[idx].__str__()
-        x = x.split('\n')
-        for y in x:
-            result += '    ' + y + '\n'
-        result += '\n'
-    print(result)
+    x = df.apply(lambda x: x.to_json(), axis = 1)
+    x = x.sort_index()
+    index = x.index   
+    for idx, y in zip(index, x):
+
+        print('-----------------------------------------------')
+        print('Record index: ' + str(idx))
+        parsed = json.loads(y)
+        print(json.dumps(parsed, indent=2, sort_keys=True))
+
 
 
 def coverage(df):
@@ -247,7 +221,41 @@ def removeDuplicateRecords(df, fields, matchType='strict'):
         pass
 
 
+def merge_fields(fieldA, fieldB, sepA=None, sepB=None, new_sep=';'):
 
+    if sepA is not None:
+        fieldA = [x if x is None else [z.strip() for z in x.split(sepA)] for x in fieldA]
+    else:
+        fieldA = [x for x in fieldA]
+        
+    if sepB is not None:
+        fieldB = [x if x is None else [z.strip() for z in x.split(sepB)] for x in fieldB]
+    else:
+        fieldB = [x for x in fieldB]
+    
+    result = []
+    for a, b in zip(fieldA, fieldB):        
+        if a is None and b is None:
+            result.append(None)
+        elif a is None:    
+            if b is not None and not isinstance(b, list):
+                b = [b]    
+            result.append(b)
+        elif b is None:
+            if a is not None and not isinstance(a, list):
+                a = [a]
+            result.append(a)
+        else:
+            if a is not None and not isinstance(a, list):
+                a = [a]
+            if b is not None and not isinstance(b, list):
+                b = [b]   
+            
+            a.extend(b)
+            a = list(set(a))
+            result.append(a)
 
-
-
+    result = pd.Series([new_sep.join(x) if x is not None else x for x in result])
+    #result = pd.Series(result, index=df.index)
+    
+    return result
