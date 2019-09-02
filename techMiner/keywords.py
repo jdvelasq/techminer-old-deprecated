@@ -1,10 +1,13 @@
 """
-Functions for manipulating lists of keywords
+techMiner.Keywords
 ====================================================
 
 This module contains functions that can be applied to each element of a pandas.Series 
 object using the map function. 
 
+
+Functions in this module
+----------------------------
 
 """
 import pandas as pd
@@ -15,60 +18,80 @@ import json
 
 from techMiner.findstring import find_string
 
-class MyKeywords:
+class Keywords:
+    """Creates a Keywords object used to find, extract or remove terms of interest from a string.
+
+    Args:
+        ignore_case (bool) :  Ignore string case.
+        full_match (bool): match whole word?.
+        use_re (bool): keywords as interpreted as regular expressions.
+
+    Returns:
+        Keywords : Keywords object
+
+    
+
+    """    
     def __init__(self, ignore_case=True, full_match=False, use_re=False):
-        """Creates a MyKeywords object used to find, extract or remove terms of interest from a field.
-
-        Args:
-            ignore_case (bool): Ignore string case.
-            full_match (bool): match whole word?.
-
-        Returns:
-            `MyKeywords` object.
-        """
+        
         self._keywords = None
         self._ignore_case = ignore_case
         self._full_match = full_match
         self._use_re = use_re
 
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """String representation of the object.
 
-    # def fit(self, keywords):
-    #     """Fits model to keywords.
+        >>> Keywords().add_keywords(['Big data', 'neural netoworks'])  # doctest: +NORMALIZE_WHITESPACE
+        [
+          "Big data",
+          "neural netoworks"
+        ]
+        ignore_case=True, full_match=False, use_re=False  
 
-    #     Args:
-    #         keywords (string, list of strings): keyword string or list of string with keywords.
+        """
+        text = json.dumps(self._keywords, indent=2, sort_keys=True)
+        #text = self._keywords.__repr__()
+        text += '\nignore_case={}, full_match={}, use_re={}'.format(
+            self._ignore_case.__repr__(),
+            self._full_match.__repr__(),
+            self._use_re.__repr__()
+        ) 
+        return text
 
-    #     Returns:
-    #         Nothing.
-    #     """
-    #     if isinstance(keywords, str):
-    #         keywords = [keywords]
-    #     self._keywords = list(set(keywords))
-    #     return self
+    #----------------------------------------------------------------------
+    def __str__(self):
+        return self.__repr__()
 
-    # #def add_from_field(self, pattern, x):
-    # #    ## pag 89
-    # #    pass
-
-
+    #----------------------------------------------------------------------
     def add_keywords(self, keywords, sep=None):
-        """Adds keywords to list of current keywords.
+        """Adds new keywords to list of current keywords.
 
         Args:
-            keywords (string, list of strings): keywords to be added.
+            keywords (string, list of strings): new keywords to be added.
         
         Returns:
             Nothing
+
+        >>> kyw = Keywords().add_keywords(['ann', 'deep learning'])
+        >>> kyw.common('Big Data')
+        False
+        >>> kyw = kyw.add_keywords('big data')
+        >>> kyw.common('Big Data')
+        True
 
         """
         if isinstance(keywords, str):
             keywords = [keywords]
         
-        if isinstance(keywords, MyKeywords):
+        if isinstance(keywords, Keywords):
             keywords = keywords._keywords
 
         if isinstance(keywords, pd.Series):
             keywords = keywords.tolist()
+
+        if isinstance(keywords, (list, set)):
             if sep is not None:
                 keywords = [y for x in keywords if x is not None for y in x.split(sep)]    
             else:
@@ -77,14 +100,60 @@ class MyKeywords:
         if self._keywords is None:
             self._keywords = sorted(list(set(keywords)))
         else:
-            self._keywords = sorted(list(set(self._keywords.extend(keywords))))
+            self._keywords.extend(keywords)
+            self._keywords = sorted(set(self._keywords))
 
         return self
 
+    #----------------------------------------------------------------------
+    def common(self, x):
+        """Returns True if x is in keywords list.
+
+        Args:
+            x (string): A string object.
+            
+        Returns:
+            Boolean.
+
+        >>> kyw = Keywords().add_keywords(['ann', 'big data', 'deep learning'])
+        >>> kyw.common('Big Data')
+        True
+        >>> kyw.common('Python')
+        False
+        
+        """
+        if self.extract(x) is None:
+            return False
+        else:
+            return True
+
+    #----------------------------------------------------------------------
+    def complement(self, x):
+        """Returns False if x is not in keywords list.
+
+        Args:
+            x (string): A string object.
+            
+        Returns:
+            Boolean.
+
+        >>> kyw = Keywords().add_keywords(['ann', 'big data', 'deep learning'])
+        >>> kyw.complement('Big Data')
+        True
+        >>> kyw.complement('Python')
+        False
+
+        """
+        if self.extract(x) is None:
+            return False
+        else:
+            return True
+
+    #----------------------------------------------------------------------
     def extract(self, x, sep='|'):
         r"""Returns a string with the keywords in string x matching the list of keywords used to fit the model.
 
-        >>> MyKeywords().add_keywords([r"xxx", r"two", r"yyy"]).extract('one two three four five')
+        >>> Keywords().add_keywords([r"xxx", r"two", r"yyy"]).extract('one two three four five')
         'two'
 
         The funcion allows the extraction of complex patterns using regular expresions (regex). 
@@ -102,71 +171,71 @@ class MyKeywords:
 
         * Partial match.
 
-        >>> MyKeywords().add_keywords('hre').extract('one two three four five')
+        >>> Keywords().add_keywords('hre').extract('one two three four five')
         'hre'
 
 
-        * Word whole only. r'\b' represents white space.
+        * **Word whole only**. `r'\b'` represents white space.
 
-        >>> MyKeywords(use_re=True).add_keywords(r"\btwo\b").extract('one two three four five')
+        >>> Keywords(use_re=True).add_keywords(r"\btwo\b").extract('one two three four five')
         'two'
 
-        >>> MyKeywords(use_re=True).add_keywords(r"\bTWO\b").extract('one two three four five')
+        >>> Keywords(use_re=True).add_keywords(r"\bTWO\b").extract('one two three four five')
         'two'
 
 
-        * Case sensitive.
+        * **Case sensitive**.
 
-        >>> MyKeywords(ignore_case=False, use_re=True).add_keywords(r"\btwo\b").extract('one two three four five')
+        >>> Keywords(ignore_case=False, use_re=True).add_keywords(r"\btwo\b").extract('one two three four five')
         'two'
 
-        >>> MyKeywords(ignore_case=False, use_re=True).add_keywords(r"\bTWO\b").extract('one TWO three four five')
+        >>> Keywords(ignore_case=False, use_re=True).add_keywords(r"\bTWO\b").extract('one TWO three four five')
         'TWO'
 
 
-        * A word followed by other word.
+        * **A word followed by other word**.
 
-        >>> MyKeywords(ignore_case=False, use_re=True).add_keywords(r"\btwo\Wthree\b").extract('one two three four five')
+        >>> Keywords(ignore_case=False, use_re=True).add_keywords(r"\btwo\Wthree\b").extract('one two three four five')
         'two three'
 
 
-        * Multiple white spaces.
+        * **Multiple white spaces**.
 
-        >>> MyKeywords(ignore_case=False, use_re=True).add_keywords(r"two\W+three").extract('one two    three four five')
+        >>> Keywords(ignore_case=False, use_re=True).add_keywords(r"two\W+three").extract('one two    three four five')
         'two    three'
 
-        * A list of keywords.
+        * **A list of keywords**.
 
-        >>> MyKeywords().add_keywords([r"xxx", r"two", r"yyy"]).extract('one two three four five')
+        >>> Keywords().add_keywords([r"xxx", r"two", r"yyy"]).extract('one two three four five')
         'two'
 
 
-        * Adjacent terms but the order is unimportant.
+        * **Adjacent terms but the order is unimportant**.
 
-        >>> MyKeywords(use_re=True).add_keywords(r"\bthree\W+two\b|\btwo\W+three\b").extract('one two three four five')
+        >>> Keywords(use_re=True).add_keywords(r"\bthree\W+two\b|\btwo\W+three\b").extract('one two three four five')
         'two three'
 
-        * Near words.
+        * **Near words**.
 
         Two words (`'two'`, `'four'`) separated by any other.
 
-        >>> MyKeywords(use_re=True).add_keywords(r"\btwo\W+\w+\W+four\b").extract('one two three four five')
+        >>> Keywords(use_re=True).add_keywords(r"\btwo\W+\w+\W+four\b").extract('one two three four five')
         'two three four'
 
 
         Two words (`'two'`, `'five'`) separated by one, two or three unspecified words.
 
-        >>> MyKeywords(use_re=True).add_keywords(r"\btwo\W+(?:\w+\W+){1,3}?five").extract('one two three four five')
+        >>> Keywords(use_re=True).add_keywords(r"\btwo\W+(?:\w+\W+){1,3}?five").extract('one two three four five')
         'two three four five'
 
-        * Or operator.
+        * **Or operator**.
 
-        >>> MyKeywords(use_re=True).add_keywords(r"three|two").extract('one two three four five')
-        'three|two'
+        >>> Keywords(use_re=True).add_keywords(r"123|two").extract('one two three four five')
+        'two'
 
-        * And operator. One word followed by other at any word distance.
+        * **And operator**. One word followed by other at any word distance.
 
-        >>> MyKeywords(use_re=True).add_keywords(r"\btwo\W+(?:\w+\W+)+?five") \
+        >>> Keywords(use_re=True).add_keywords(r"\btwo\W+(?:\w+\W+)+?five") \
         ...    .extract('one two three four five')
         'two three four five'
 
@@ -194,46 +263,74 @@ class MyKeywords:
             
         return None
 
-
-
-    def find(self, x):
-        """Search expr in string x and returns a Boolean.
-
-        Args:
-            x (string): A string object.
-            keywordsList (string, list): string or list of strings searched. Each element of `keywordList` is interpreted as a regular expression.
-            ignoreCase (bool):  ignore case?
-            fullMatch (bool): the whole string matches the regular expression in keywordList.
-            
-        Returns:
-            Boolean.
-
-        """
-        if self.extract(x) is None:
-            return False
-        else:
-            return True
-
-    def remove(self, x):
-        """Returns a string removing the strings that match a 
-        list of keywords from x.
+    #----------------------------------------------------------------------
+    def extractAfterFirst(self, x):
+        """Returns the string from the first ocurrence of the keyword to the end of string x.
 
         Args:
-            x (string): A string object.
-            
-        Returns:
-            String.
-                
-        """
+            x: string
 
+        Returns:
+            String
+
+        >>> Keywords().add_keywords('aaa').extractAfterFirst('1 aaa 4 aaa 5')
+        'aaa 4 aaa 5'
+
+        """        
         y = self.extract(x)
-        if y != '':
-            result = re.sub(y, ' ', x)
-        else:
-            result = x
-        return result
+            
+        if len(y):
 
+            if self._ignore_case is True:
+                c = re.compile(y, re.I)
+            else:
+                c = re.compile( y)
+
+            z = c.search(x)
+
+            if z:
+                return x[z.start():]
+            else:
+                return None
+
+        return None
+
+    #----------------------------------------------------------------------
+    def extractAfterLast(self, x):
+        """Returns the string from last ocurrence of a keyword to the end of string x.
+
+        Args:
+            x: string
+
+        Returns:
+            String
+
+        >>> Keywords().add_keywords('aaa').extractAfterLast('1 aaa 4 aaa 5')
+        'aaa 5'
+
+        """ 
         
+        y = self.extract(x)
+            
+        if len(y):
+
+            if self._ignore_case is True:
+                c = re.compile(y, re.I)
+            else:
+                c = re.compile(y)
+
+            z = c.findall(x)
+            
+            result = x
+            for w in z[:-1]:
+                y = c.search(result)
+                result = result[y.end():]
+            y = c.search(result)
+            return result[y.start():]
+
+        return None
+
+    #----------------------------------------------------------------------
     def extractNearby(self, x, n_words=1):
         """Extracts the words of string x in the proximity of the terms matching
         the keywords list. 
@@ -249,36 +346,34 @@ class MyKeywords:
 
         >>> import pandas as pd
         >>> df = pd.DataFrame({
-        ...    'f': ['aaa 1 2 3 4 5', '1 aaa 2 3 4 5', '1 2 aaa 3 4 5', 
+        ...    'f': ['1 2 3 4 5 6', 'aaa 1 2 3 4 5', '1 aaa 2 3 4 5', '1 2 aaa 3 4 5', 
         ...          '1 2 3 aaa 4 5', '1 2 3 4 aaa 5', '1 2 3 4 5 aaa'],
         ... })
         >>> df
                        f
-        0  aaa 1 2 3 4 5
-        1  1 aaa 2 3 4 5
-        2  1 2 aaa 3 4 5
-        3  1 2 3 aaa 4 5
-        4  1 2 3 4 aaa 5
-        5  1 2 3 4 5 aaa
-
-        >>> df.f.map(lambda x: MyKeywords().add_keywords('aaa').extractNearby(x, n_words=2))
-        0               
-        1               
-        2    1 2 aaa 3 4
-        3    2 3 aaa 4 5
-        4               
-        5               
+        0    1 2 3 4 5 6
+        1  aaa 1 2 3 4 5
+        2  1 aaa 2 3 4 5
+        3  1 2 aaa 3 4 5
+        4  1 2 3 aaa 4 5
+        5  1 2 3 4 aaa 5
+        6  1 2 3 4 5 aaa
+        >>> df.f.map(lambda x: Keywords().add_keywords('aaa').extractNearby(x, n_words=2)) # doctest: +NORMALIZE_WHITESPACE
+        0           None
+        1        aaa 1 2
+        2      1 aaa 2 3
+        3    1 2 aaa 3 4
+        4    2 3 aaa 4 5
+        5      3 4 aaa 5
+        6        4 5 aaa             
         Name: f, dtype: object
         """
-
-        y = self.extract(x)
+        def check(pattern):
             
-        if len(y):
-
             if self._ignore_case is True:
-                c = re.compile('\w+\W+'*n_words + y + '\W+\w+'*n_words, re.I)
+                c = re.compile(pattern, re.I)
             else:
-                c = re.compile('\w+\W+'*n_words + y + '\W+\w+'*n_words)
+                c = re.compile(pattern)
 
             if self._full_match is True:
                 result = c.fullMatch(x)
@@ -288,7 +383,137 @@ class MyKeywords:
             if len(result):
                 return result[0]
             else:
-                return ''
+                return None
 
-        return ''
+
+        y = self.extract(x)
+            
+        if y is not None:
+            
+            pattern = '\w\W' * n_words + y + '\W\w' * n_words
+            result = check(pattern)
+            
+            if result is not None:
+                return result
+            else:
+                for i in range(n_words, -1, -1):
+
+                    ## Checks at the beginning
+                    pattern = '^' + '\w\W' * i + y + '\W\w'*n_words
+                    result = check(pattern)
+                    if result is not None:
+                        return result
+
+                for j in range(n_words, -1, -1):
+                    ## Checks at the end
+                    pattern = '\w\W' * n_words + y + '\W\w' * j +'$'
+                    result = check(pattern)
+                    if result is not None:
+                        return result
+
+                for i in range(n_words, -1, -1):
+                    for j in range(n_words, -1, -1):
+                        pattern = '^' + '\w\W' * i + y + '\W\w' * j +'$'
+                        result = check(pattern)
+                        if result is not None:
+                            return result[0]
+
+        return None
+
+    #----------------------------------------------------------------------
+    def extractUntilFirst(self, x):
+        """Returns the string from begining of x to the first ocurrence of a keyword.
+
+        Args:
+            x: string
+
+        Returns:
+            String
+
+        >>> Keywords().add_keywords('aaa').extractUntilFirst('1 aaa 4 aaa 5')
+        '1 aaa'
+
+        """
+        y = self.extract(x)
+            
+        if len(y):
+
+            if self._ignore_case is True:
+                c = re.compile(y, re.I)
+            else:
+                c = re.compile( y)
+
+            z = c.search(x)
+
+            if z:
+                return x[:z.end()]
+            else:
+                return None
+
+        return None        
+
+    #----------------------------------------------------------------------
+    def extractUntilLast(self, x):
+        """Returns the string from begining of x to the last ocurrence of a keyword.
+
+        Args:
+            x: string
+
+        Returns:
+            String
+
+        >>> Keywords().add_keywords('aaa').extractUntilLast('1 aaa 4 aaa 5')
+        '1 aaa 4 aaa'
+
+        """
+        y = self.extract(x)
+            
+        if len(y):
+
+            if self._ignore_case is True:
+                c = re.compile('[\w+\W+]+' + y, re.I)
+            else:
+                c = re.compile('[\w+\W+]+' +  y)
+
+            z = c.search(x)
+
+            if z:
+                return x[:z.end()]
+            else:
+                return None
+
+        return None         
+
+    #----------------------------------------------------------------------
+    def remove(self, x):
+        """Returns a string removing the strings that match a 
+        list of keywords from x.
+
+        Args:
+            x (string): A string object.
+            
+        Returns:
+            String.
+
+
+        >>> Keywords().add_keywords('aaa').remove('1 aaa 4 aaa 5')
+        '1   4   5'
+
+        """
+
+        y = self.extract(x)
+        if y != '':
+            result = re.sub(y, ' ', x)
+        else:
+            result = x
+        return result
+
+        
+
+
+
+
+
+    
+
 

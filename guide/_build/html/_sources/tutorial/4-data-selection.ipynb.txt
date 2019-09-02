@@ -16,7 +16,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -25,11 +25,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [],
    "source": [
     "df = pd.read_csv('demo-merged.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from techMiner import nan2none\n",
+    "df = nan2none(df)"
    ]
   },
   {
@@ -43,9 +53,211 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Not all records in the dataframe `df` will be included in the analysis. To mark the registers, a new column called `'Selected'` will be created. This column is Boolean. In this tutorial, we call group to this class of columns.  \n",
+    "Record selection is based in the presence or ausence of terms in each row of a dataframe.\n",
     "\n",
-    "In the next code, the new column is created with a default value of `False`. "
+    "To mark the registers, two new columns called `'INCLUDE'` and `'EXCLUDE'` will be created. Each of them is Boolean. In this tutorial, we call group to this class of columns.  \n",
+    "\n",
+    "In the next code, both columns are created with a default value of `None`. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['SELECTED'] = None"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Record visualization"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**techMiner** implements the `displayRecords()` to visualize a portion of a dataframe in json format."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "-----------------------------------------------\n",
+      "Record index: 0\n",
+      "{\n",
+      "  \"Author Keywords\": null,\n",
+      "  \"Index Keywords\": \"Algorithmic trading; Experimental demonstrations; Fibre-optic communication; Signal transmission; State-of-the-art technology; Transmission bandwidth; Wavelength division multiplexed; Wide bandwidth; Bandwidth; Data communication systems; Fibers; Glass fibers; Light transmission; Light velocity; Optical fibers; Supercomputers; Vacuum; Wave transmission\",\n",
+      "  \"Title\": \"Towards high-capacity fibre-optic communications at the speed of light in vacuum\"\n",
+      "}\n",
+      "-----------------------------------------------\n",
+      "Record index: 1\n",
+      "{\n",
+      "  \"Author Keywords\": \"High-frequency trading; Limit order markets; Liquidity; Market quality; NASDAQ; Order placement strategies\",\n",
+      "  \"Index Keywords\": null,\n",
+      "  \"Title\": \"Low-latency trading\"\n",
+      "}\n",
+      "-----------------------------------------------\n",
+      "Record index: 2\n",
+      "{\n",
+      "  \"Author Keywords\": null,\n",
+      "  \"Index Keywords\": null,\n",
+      "  \"Title\": \"Rise of the machines: Algorithmic trading in the foreign exchange market\"\n",
+      "}\n",
+      "-----------------------------------------------\n",
+      "Record index: 3\n",
+      "{\n",
+      "  \"Author Keywords\": null,\n",
+      "  \"Index Keywords\": \"competition (economics); financial market; market system; price dynamics; time series; trade\",\n",
+      "  \"Title\": \"The high-frequency trading arms race: Frequent batch auctions as a market design response\"\n",
+      "}\n",
+      "-----------------------------------------------\n",
+      "Record index: 4\n",
+      "{\n",
+      "  \"Author Keywords\": \"High-frequency trading; Market making; Market quality; Volatility\",\n",
+      "  \"Index Keywords\": null,\n",
+      "  \"Title\": \"The diversity of high-frequency traders\"\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "from techMiner import displayRecords\n",
+    "\n",
+    "displayRecords(df[['Title', 'Author Keywords', 'Index Keywords']].head(5))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Keywords completation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This step aims to create a column (field) in the dataframe containing key terms for document selection. First, the columns `'Author Keywords'` and `'Index Keywords'` are joined using the `'merge_fields'` function. The new column is called `'keywords'`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0    Algorithmic trading;Experimental demonstration...\n",
+       "1    High-frequency trading;Limit order markets;Liq...\n",
+       "2                                                 None\n",
+       "3    competition (economics);financial market;marke...\n",
+       "4    High-frequency trading;Market making;Market qu...\n",
+       "5    Financial disclosure;Individual characteristic...\n",
+       "6                                                 None\n",
+       "7    Profitability;Automated social engineering;Soc...\n",
+       "8                                                 None\n",
+       "9                                                 None\n",
+       "dtype: object"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from techMiner import merge_fields\n",
+    "merge_fields(df['Author Keywords'], df['Index Keywords'], sepA=';', sepB=';')[0:10]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['keywords'] = merge_fields(df['Author Keywords'], df['Index Keywords'], sepA=';', sepB=';')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "However, there are 51 records without `'Author Keywords'` and `'Index Keywords'`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "51"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "len(df[df['keywords'].map(lambda x: x is None)])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['(location-based) publish/subscribe',\n",
+       " '10-fold cross-validation',\n",
+       " '?-stable processes',\n",
+       " 'ABM',\n",
+       " 'ACE',\n",
+       " 'ADALINE',\n",
+       " 'ADCC-GARCH',\n",
+       " 'AI techniques',\n",
+       " 'ANFIS',\n",
+       " 'ANFIS ensemble']"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from techMiner.keywords import Keywords\n",
+    "kyw = Keywords()\n",
+    "kyw.add_keywords(df['keywords'], sep=';')\n",
+    "kyw._keywords[0:10]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## remove copyright\n",
+    "import numpy as np\n",
+    "df['Abstract'] = df['Abstract'].map(lambda x: x[0:x.find('\\u00a9')] if isinstance(x, str) and x.find('\\u00a9')!= -1 else x)"
    ]
   },
   {
@@ -54,7 +266,112 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "df['Selected'] = False"
+    "title_abstract =  merge_fields(df['Title'], df['Abstract'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## se extrae del titulo y del abstract\n",
+    "keywords_title_abstract = title_abstract.map(lambda x: kyw.extract(x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "idx = df['keywords'].map(lambda x: x is None)\n",
+    "df.loc[idx, 'keywords'] = keywords_title_abstract[idx]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "len(df[df['keywords'].map(lambda x: x is None)])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "##\n",
+    "## Eliminación de conferencias"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "conf = Keywords()\n",
+    "conf.add_keywords(['Conferce', 'Proceeding', 'Workshop'], sep=';')\n",
+    "df['SELECTED'] = df['Title'].map(lambda x: False if conf.find(x) is True else None)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "ICSIT 2019 - 10th International Conference on Society and Information Technologies, Proceedings\n",
+      "ACM International Conference Proceeding Series\n",
+      "Proceedings - 23rd IEEE International Conference on High Performance Computing Workshops, HiPCW 2016\n",
+      "Workshop on Logistik und Echtzeit, Echtzeit 2017\n",
+      "4th Workshop on Engineering Applications, WEA 2017\n",
+      "SISY 2015 - IEEE 13th International Symposium on Intelligent Systems and Informatics, Proceedings\n",
+      "Proceedings - 2013 Tools and Methods of Program Analysis, TMPA 2013\n",
+      "International Workshops on Business Information Systems, BIS 2015\n",
+      "7th European Workshop on Probabilistic Graphical Models, PGM 2014\n",
+      "Self-Organizing Systems - 7th IFIP TC 6 International Workshop, IWSOS 2013, Revised Selected Papers\n",
+      "Modeling Decisions for Artificial Intelligence - 8th International Conference, MDAI 2011, Proceedings\n",
+      "Advances in Artificial Intelligence, SBIA 2010 - 20th Brazilian Symposium on Artificial Intelligence, Proceedings\n"
+     ]
+    }
+   ],
+   "source": [
+    "for x in df[df['Conference']]['Title']:\n",
+    "    print(x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "##\n",
+    "## Limpieza de palabras clave\n",
+    "##\n",
+    "from techMiner import Thesaurus\n",
+    "th = Thesaurus()\n",
+    "th.fit(df.keywords, sep=';')\n",
+    "df['keywords (cleaned)'] = df['keywords'].map(lambda x: th.transform(x, sep=';'))"
    ]
   },
   {
@@ -63,6 +380,379 @@
    "metadata": {},
    "outputs": [],
    "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Ciclo de edicion manual"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[df.SELECTED.map(lambda x: x is not False)][['Title', 'keywords (cleaned)', 'Abstract', 'SELECTED']].to_json(\n",
+    "    'demo-records.json', \n",
+    "    orient='records', \n",
+    "    lines=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['keywords'] = merge_fields(df['keywords'], keywords_title_abstract, sepA=';', sepB='|', new_sep=';')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df['keywords'][0:10]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "len(df[df['keywords'].map(lambda x: x is None)])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "##\n",
+    "## writing to disk for manual review\n",
+    "##"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[['Title', 'Abstract', 'Author Keywords', 'Index Keywords', 'SELECTED']].to_json(\n",
+    "    'demo-records.json', \n",
+    "    orient='records', \n",
+    "    lines=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df0 = pd.read_json(\n",
+    "    'demo-records-edited.json', \n",
+    "    orient='records',\n",
+    "    lines=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Manual review using external software"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It is possible to save the dataframe to disk for manual review using, for example, an external editor. In the following code, the columns `'Title'`, `'Author Keywords'`, `'Index Keywords'`, `'Abstract'`, `'INCLUDE'` and `'EXCLUDE'` are saved in json format."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df[['Title', 'Author Keywords', 'Index Keywords', 'Abstract', 'SELECTED']].to_json(\n",
+    "    'demo-records.json', \n",
+    "    orient='records', \n",
+    "    lines=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the following figure, a partial view of the file is presented. Note that the use of json format allows the user to identify easily each field. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "![screen_capture_4.jpg](screen_capture_4.jpg)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Record selection based on keywords"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A common strategy for record selection is a manual review of all records and change the value of the field `'Selected'` from `'null'` to `'true'` or `'false'`(here, both Boolean constants are writen in json standard and not in the Python language). However, this strategy is overwhelming for the user, even for a moderate number of records. Moreover, this strategy not is scalable when new records are added to the dataframe."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "A first strategy consists in build two sets of rules; the first is based on conditions to include records in the final dataset; the second is based on rules for excluding records of the final dataset. Both sets of rules are based in the presence of specific words in the fields of each record. Finally it is possible to obtain a small set of records that must be filtered manually."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In our example, we are interested in documents about algorithmic trading in the context of machine learning. We will use a first strategy based on keywords lists. The steps are the following:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "1. A new field composed fr"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In our example, we are interested in documents about algorithmic trading in the context of machine learning. Thus, it is possible to say that documents including the term *algorithmic trading* in the title will be selected as default; however, this is not true in all cases: for example, the rule does not apply to the document *Efficient event processing through reconfigurable hardware for algorithmic trading*. Thus, it is necessary to build complex rules to avoid the selection of incorrect documents. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In other cases, it is possible to discart records based on its title, for example, the document entitled "
+   ]
   },
   {
    "cell_type": "code",
@@ -94,7 +784,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -124,7 +814,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -147,7 +837,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -163,7 +853,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -186,7 +876,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -218,7 +908,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -227,7 +917,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -251,7 +941,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -269,224 +959,9 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "{\n",
-      "  \"Algorithmic trading\": [\n",
-      "    \"Algorithmic Trading\",\n",
-      "    \"Algorithmic trading\",\n",
-      "    \"algorithmic trading\"\n",
-      "  ],\n",
-      "  \"Algorithmic trading systems\": [\n",
-      "    \"Algorithmic Trading Systems\",\n",
-      "    \"Algorithmic trading system\",\n",
-      "    \"Algorithmic trading systems\"\n",
-      "  ],\n",
-      "  \"Algorithmic trading, trading strategy\": [\n",
-      "    \"Algorithmic trading strategy\",\n",
-      "    \"Algorithmic trading, trading strategy\"\n",
-      "  ],\n",
-      "  \"Artificial intelligence\": [\n",
-      "    \"Artificial Intelligence\",\n",
-      "    \"Artificial intelligence\"\n",
-      "  ],\n",
-      "  \"Artificial neural networks\": [\n",
-      "    \"Artificial Neural Networks\",\n",
-      "    \"Artificial neural network\",\n",
-      "    \"Artificial neural networks\"\n",
-      "  ],\n",
-      "  \"Automated trading\": [\n",
-      "    \"Automated Trading\",\n",
-      "    \"Automated trading\",\n",
-      "    \"automated trading\"\n",
-      "  ],\n",
-      "  \"Automated trading system\": [\n",
-      "    \"Automated trading system\",\n",
-      "    \"Automated trading systems\",\n",
-      "    \"automated trading system\"\n",
-      "  ],\n",
-      "  \"Big data\": [\n",
-      "    \"Big Data\",\n",
-      "    \"Big data\"\n",
-      "  ],\n",
-      "  \"Data mining\": [\n",
-      "    \"Data Mining\",\n",
-      "    \"Data mining\"\n",
-      "  ],\n",
-      "  \"Decision support system\": [\n",
-      "    \"Decision support system\",\n",
-      "    \"decision support systems\"\n",
-      "  ],\n",
-      "  \"Deep learning\": [\n",
-      "    \"Deep Learning\",\n",
-      "    \"Deep learning\"\n",
-      "  ],\n",
-      "  \"Deep neural networks\": [\n",
-      "    \"Deep Neural Networks\",\n",
-      "    \"Deep neural networks\"\n",
-      "  ],\n",
-      "  \"Efficient market hypothesis\": [\n",
-      "    \"Efficient Market Hypothesis\",\n",
-      "    \"Efficient market hypothesis\"\n",
-      "  ],\n",
-      "  \"Financial Markets\": [\n",
-      "    \"Financial Markets\",\n",
-      "    \"Financial market\"\n",
-      "  ],\n",
-      "  \"Financial forecasting\": [\n",
-      "    \"Financial forecasting\",\n",
-      "    \"financial forecasting\"\n",
-      "  ],\n",
-      "  \"Genetic algorithm\": [\n",
-      "    \"Genetic algorithm\",\n",
-      "    \"Genetic algorithms\"\n",
-      "  ],\n",
-      "  \"High frequency trading\": [\n",
-      "    \"High Frequency Trading\",\n",
-      "    \"High frequency trading\",\n",
-      "    \"high frequency trading\"\n",
-      "  ],\n",
-      "  \"High-frequency trading\": [\n",
-      "    \"High-frequency trading\",\n",
-      "    \"high-frequency trading\"\n",
-      "  ],\n",
-      "  \"Holonic systems\": [\n",
-      "    \"Holonic Systems\",\n",
-      "    \"Holonic systems\"\n",
-      "  ],\n",
-      "  \"Intelligent agents\": [\n",
-      "    \"Intelligent Agents\",\n",
-      "    \"Intelligent agents\"\n",
-      "  ],\n",
-      "  \"Limit order book\": [\n",
-      "    \"Limit order book\",\n",
-      "    \"limit order book\"\n",
-      "  ],\n",
-      "  \"Machine learning\": [\n",
-      "    \"Machine Learning\",\n",
-      "    \"Machine learning\",\n",
-      "    \"machine learning\"\n",
-      "  ],\n",
-      "  \"Portfolio optimization\": [\n",
-      "    \"Portfolio optimization\",\n",
-      "    \"portfolio optimization\"\n",
-      "  ],\n",
-      "  \"Random forests\": [\n",
-      "    \"Random forest\",\n",
-      "    \"Random forests\"\n",
-      "  ],\n",
-      "  \"Recurrent neural networks\": [\n",
-      "    \"Recurrent neural network\",\n",
-      "    \"Recurrent neural networks\"\n",
-      "  ],\n",
-      "  \"Sentiment analysis\": [\n",
-      "    \"Sentiment Analysis\",\n",
-      "    \"Sentiment analysis\"\n",
-      "  ],\n",
-      "  \"Stock market\": [\n",
-      "    \"Stock Markets\",\n",
-      "    \"Stock market\"\n",
-      "  ],\n",
-      "  \"Technical analysis\": [\n",
-      "    \"Technical Analysis\",\n",
-      "    \"Technical analysis\",\n",
-      "    \"technical analysis\"\n",
-      "  ],\n",
-      "  \"Trading strategy\": [\n",
-      "    \"Trading strategies\",\n",
-      "    \"Trading strategy\"\n",
-      "  ],\n",
-      "  \"agent-based modeling\": [\n",
-      "    \"Agent-based modeling\",\n",
-      "    \"agent-based model\",\n",
-      "    \"agent-based modeling\"\n",
-      "  ],\n",
-      "  \"classification\": [\n",
-      "    \"Classification\",\n",
-      "    \"classification\"\n",
-      "  ],\n",
-      "  \"complex event processing\": [\n",
-      "    \"Complex event processing\",\n",
-      "    \"complex event processing\"\n",
-      "  ],\n",
-      "  \"complexity\": [\n",
-      "    \"Complexity\",\n",
-      "    \"complexity\"\n",
-      "  ],\n",
-      "  \"convolutional neural networks\": [\n",
-      "    \"Convolutional neural network\",\n",
-      "    \"Convolutional neural networks\",\n",
-      "    \"convolutional neural networks\"\n",
-      "  ],\n",
-      "  \"cryptocurrency\": [\n",
-      "    \"Cryptocurrency\",\n",
-      "    \"cryptocurrency\"\n",
-      "  ],\n",
-      "  \"directional change\": [\n",
-      "    \"Directional changes\",\n",
-      "    \"directional change\"\n",
-      "  ],\n",
-      "  \"e-Finance\": [\n",
-      "    \"E-finance\",\n",
-      "    \"e-Finance\"\n",
-      "  ],\n",
-      "  \"multiagent systems\": [\n",
-      "    \"Multi-agent systems\",\n",
-      "    \"MultiAgent Systems\",\n",
-      "    \"Multiagent systems\",\n",
-      "    \"multiagent systems\"\n",
-      "  ],\n",
-      "  \"neural network\": [\n",
-      "    \"Neural network\",\n",
-      "    \"Neural networks\",\n",
-      "    \"neural network\"\n",
-      "  ],\n",
-      "  \"pattern recognition\": [\n",
-      "    \"Pattern recognition\",\n",
-      "    \"pattern recognition\"\n",
-      "  ],\n",
-      "  \"portfolio management\": [\n",
-      "    \"Portfolio management\",\n",
-      "    \"portfolio management\"\n",
-      "  ],\n",
-      "  \"quantitative finance\": [\n",
-      "    \"Quantitative finance\",\n",
-      "    \"quantitative finance\"\n",
-      "  ],\n",
-      "  \"regularization\": [\n",
-      "    \"Regularization\",\n",
-      "    \"regularization\"\n",
-      "  ],\n",
-      "  \"sample size\": [\n",
-      "    \"Sample size\",\n",
-      "    \"sample size\"\n",
-      "  ],\n",
-      "  \"simulation\": [\n",
-      "    \"Simulation\",\n",
-      "    \"simulation\"\n",
-      "  ],\n",
-      "  \"stock price\": [\n",
-      "    \"Stock price\",\n",
-      "    \"stock price\"\n",
-      "  ],\n",
-      "  \"technical indicators\": [\n",
-      "    \"Technical Indicators\",\n",
-      "    \"Technical indicators\",\n",
-      "    \"technical indicators\"\n",
-      "  ],\n",
-      "  \"trading\": [\n",
-      "    \"Trading\",\n",
-      "    \"trading\"\n",
-      "  ]\n",
-      "}\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "import json\n",
     "print(json.dumps(d, indent=2, sort_keys=True))"
@@ -501,7 +976,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -722,7 +1197,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -738,7 +1213,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -748,38 +1223,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": null,
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "6                                                   None\n",
-       "8      Decision support system;Intelligent agents;Sec...\n",
-       "9      Fibonacci geometry;Price patterns;Technical an...\n",
-       "10                                                  None\n",
-       "13                                                  None\n",
-       "                             ...                        \n",
-       "518    Back testing optimization algorithms;d-BackTes...\n",
-       "519                                                 None\n",
-       "522    Algorithmic trading;Evolutionary algorithms;Mu...\n",
-       "523    Algorithmic trading;Financial time series;Inde...\n",
-       "524    Algorithmic trading systems;Artificial intelli...\n",
-       "Name: Keywords, Length: 156, dtype: object"
-      ]
-     },
-     "execution_count": 17,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "records['Keywords']"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [

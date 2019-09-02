@@ -3,9 +3,12 @@ Modules
 
 .. toctree::
     :maxdepth: 1
+    
+    keywords
+    thesaurus 
 
     transform
-    keywords
+   
     list
     listByList
     records

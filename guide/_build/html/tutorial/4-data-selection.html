@@ -1,176 +1,46 @@
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Step 3: Record selection &mdash; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
-  
 
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Step 3: Record selection &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Direct queries over data" href="5-direct-queries.html" />
     <link rel="prev" title="Step 2: Data merging" href="3-data-merging.html" /> 
-</head>
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="5-direct-queries.html" title="Direct queries over data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="3-data-merging.html" title="Step 2: Data merging"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Tutorial</a> &#187;</li> 
+      </ul>
+    </div>  
 
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home"> techMiner - A Package for Bibliographical Analysis using Python
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="1-introduction.html">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-data-adquisition.html">Step 1: Data download by the user</a></li>
-<li class="toctree-l2"><a class="reference internal" href="3-data-merging.html">Step 2: Data merging</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Step 3: Record selection</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Group-management">Group management</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Data-exportation-for-manual-review">Data exportation for manual review</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Filtering-of-selected-records">Filtering of selected records</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Removing-of-duplicated-records">Removing of duplicated records</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Column-edition">Column edition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Keywords-review">Keywords review</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="5-direct-queries.html">Direct queries over data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6-basic-analysis.html">Basic Analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="7-matrix-analysis.html">Matrix Analysis</a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">techMiner - A Package for Bibliographical Analysis using Python</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="index.html">Tutorial</a> &raquo;</li>
-        
-      <li>Step 3: Record selection</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-            <a href="../_sources/tutorial/4-data-selection.ipynb.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
   
 <style>
@@ -371,34 +241,12 @@ div.rendered_html tbody tr:nth-child(odd) {
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
-
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast + .nbinput {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
 </style>
 <div class="section" id="Step-3:-Record-selection">
 <h1>Step 3: Record selection<a class="headerlink" href="#Step-3:-Record-selection" title="Permalink to this headline">¶</a></h1>
 <p>In this step, the records for the study are selected. The previous file is loaded with:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -407,7 +255,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -415,16 +263,298 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">nan2none</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">nan2none</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="Group-management">
 <h2>Group management<a class="headerlink" href="#Group-management" title="Permalink to this headline">¶</a></h2>
-<p>Not all records in the dataframe <code class="docutils literal notranslate"><span class="pre">df</span></code> will be included in the analysis. To mark the registers, a new column called <code class="docutils literal notranslate"><span class="pre">'Selected'</span></code> will be created. This column is Boolean. In this tutorial, we call group to this class of columns.</p>
-<p>In the next code, the new column is created with a default value of <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>Record selection is based in the presence or ausence of terms in each row of a dataframe.</p>
+<p>To mark the registers, two new columns called <code class="docutils literal notranslate"><span class="pre">'INCLUDE'</span></code> and <code class="docutils literal notranslate"><span class="pre">'EXCLUDE'</span></code> will be created. Each of them is Boolean. In this tutorial, we call group to this class of columns.</p>
+<p>In the next code, both columns are created with a default value of <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;SELECTED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Record-visualization">
+<h2>Record visualization<a class="headerlink" href="#Record-visualization" title="Permalink to this headline">¶</a></h2>
+<p><strong>techMiner</strong> implements the <code class="docutils literal notranslate"><span class="pre">displayRecords()</span></code> to visualize a portion of a dataframe in json format.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">displayRecords</span>
+
+<span class="n">displayRecords</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Title&#39;</span><span class="p">,</span> <span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span> <span class="s1">&#39;Index Keywords&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-----------------------------------------------
+Record index: 0
+{
+  &#34;Author Keywords&#34;: null,
+  &#34;Index Keywords&#34;: &#34;Algorithmic trading; Experimental demonstrations; Fibre-optic communication; Signal transmission; State-of-the-art technology; Transmission bandwidth; Wavelength division multiplexed; Wide bandwidth; Bandwidth; Data communication systems; Fibers; Glass fibers; Light transmission; Light velocity; Optical fibers; Supercomputers; Vacuum; Wave transmission&#34;,
+  &#34;Title&#34;: &#34;Towards high-capacity fibre-optic communications at the speed of light in vacuum&#34;
+}
+-----------------------------------------------
+Record index: 1
+{
+  &#34;Author Keywords&#34;: &#34;High-frequency trading; Limit order markets; Liquidity; Market quality; NASDAQ; Order placement strategies&#34;,
+  &#34;Index Keywords&#34;: null,
+  &#34;Title&#34;: &#34;Low-latency trading&#34;
+}
+-----------------------------------------------
+Record index: 2
+{
+  &#34;Author Keywords&#34;: null,
+  &#34;Index Keywords&#34;: null,
+  &#34;Title&#34;: &#34;Rise of the machines: Algorithmic trading in the foreign exchange market&#34;
+}
+-----------------------------------------------
+Record index: 3
+{
+  &#34;Author Keywords&#34;: null,
+  &#34;Index Keywords&#34;: &#34;competition (economics); financial market; market system; price dynamics; time series; trade&#34;,
+  &#34;Title&#34;: &#34;The high-frequency trading arms race: Frequent batch auctions as a market design response&#34;
+}
+-----------------------------------------------
+Record index: 4
+{
+  &#34;Author Keywords&#34;: &#34;High-frequency trading; Market making; Market quality; Volatility&#34;,
+  &#34;Index Keywords&#34;: null,
+  &#34;Title&#34;: &#34;The diversity of high-frequency traders&#34;
+}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Keywords-completation">
+<h2>Keywords completation<a class="headerlink" href="#Keywords-completation" title="Permalink to this headline">¶</a></h2>
+<p>This step aims to create a column (field) in the dataframe containing key terms for document selection. First, the columns <code class="docutils literal notranslate"><span class="pre">'Author</span> <span class="pre">Keywords'</span></code> and <code class="docutils literal notranslate"><span class="pre">'Index</span> <span class="pre">Keywords'</span></code> are joined using the <code class="docutils literal notranslate"><span class="pre">'merge_fields'</span></code> function. The new column is called <code class="docutils literal notranslate"><span class="pre">'keywords'</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">merge_fields</span>
+<span class="n">merge_fields</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Index Keywords&#39;</span><span class="p">],</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>0    Algorithmic trading;Experimental demonstration...
+1    High-frequency trading;Limit order markets;Liq...
+2                                                 None
+3    competition (economics);financial market;marke...
+4    High-frequency trading;Market making;Market qu...
+5    Financial disclosure;Individual characteristic...
+6                                                 None
+7    Profitability;Automated social engineering;Soc...
+8                                                 None
+9                                                 None
+dtype: object
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge_fields</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Index Keywords&#39;</span><span class="p">],</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>However, there are 51 records without <code class="docutils literal notranslate"><span class="pre">'Author</span> <span class="pre">Keywords'</span></code> and <code class="docutils literal notranslate"><span class="pre">'Index</span> <span class="pre">Keywords'</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>51
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">techMiner.keywords</span> <span class="k">import</span> <span class="n">Keywords</span>
+<span class="n">kyw</span> <span class="o">=</span> <span class="n">Keywords</span><span class="p">()</span>
+<span class="n">kyw</span><span class="o">.</span><span class="n">add_keywords</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+<span class="n">kyw</span><span class="o">.</span><span class="n">_keywords</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>[&#39;(location-based) publish/subscribe&#39;,
+ &#39;10-fold cross-validation&#39;,
+ &#39;?-stable processes&#39;,
+ &#39;ABM&#39;,
+ &#39;ACE&#39;,
+ &#39;ADALINE&#39;,
+ &#39;ADCC-GARCH&#39;,
+ &#39;AI techniques&#39;,
+ &#39;ANFIS&#39;,
+ &#39;ANFIS ensemble&#39;]
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">## remove copyright</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Abstract&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Abstract&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u00a9</span><span class="s1">&#39;</span><span class="p">)]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u00a9</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Selected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span></span><span class="n">title_abstract</span> <span class="o">=</span>  <span class="n">merge_fields</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Title&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Abstract&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">## se extrae del titulo y del abstract</span>
+<span class="n">keywords_title_abstract</span> <span class="o">=</span> <span class="n">title_abstract</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">kyw</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">idx</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;keywords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keywords_title_abstract</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>0
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##</span>
+<span class="c1">## Eliminación de conferencias</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">conf</span> <span class="o">=</span> <span class="n">Keywords</span><span class="p">()</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">add_keywords</span><span class="p">([</span><span class="s1">&#39;Conferce&#39;</span><span class="p">,</span> <span class="s1">&#39;Proceeding&#39;</span><span class="p">,</span> <span class="s1">&#39;Workshop&#39;</span><span class="p">],</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;SELECTED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">conf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Conference&#39;</span><span class="p">]][</span><span class="s1">&#39;Title&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ICSIT 2019 - 10th International Conference on Society and Information Technologies, Proceedings
+ACM International Conference Proceeding Series
+Proceedings - 23rd IEEE International Conference on High Performance Computing Workshops, HiPCW 2016
+Workshop on Logistik und Echtzeit, Echtzeit 2017
+4th Workshop on Engineering Applications, WEA 2017
+SISY 2015 - IEEE 13th International Symposium on Intelligent Systems and Informatics, Proceedings
+Proceedings - 2013 Tools and Methods of Program Analysis, TMPA 2013
+International Workshops on Business Information Systems, BIS 2015
+7th European Workshop on Probabilistic Graphical Models, PGM 2014
+Self-Organizing Systems - 7th IFIP TC 6 International Workshop, IWSOS 2013, Revised Selected Papers
+Modeling Decisions for Artificial Intelligence - 8th International Conference, MDAI 2011, Proceedings
+Advances in Artificial Intelligence, SBIA 2010 - 20th Brazilian Symposium on Artificial Intelligence, Proceedings
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##</span>
+<span class="c1">## Limpieza de palabras clave</span>
+<span class="c1">##</span>
+<span class="kn">from</span> <span class="nn">techMiner</span> <span class="k">import</span> <span class="n">Thesaurus</span>
+<span class="n">th</span> <span class="o">=</span> <span class="n">Thesaurus</span><span class="p">()</span>
+<span class="n">th</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">keywords</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords (cleaned)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">th</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -437,6 +567,372 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<p>Ciclo de edicion manual</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">SELECTED</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">)][[</span><span class="s1">&#39;Title&#39;</span><span class="p">,</span> <span class="s1">&#39;keywords (cleaned)&#39;</span><span class="p">,</span> <span class="s1">&#39;Abstract&#39;</span><span class="p">,</span> <span class="s1">&#39;SELECTED&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span>
+    <span class="s1">&#39;demo-records.json&#39;</span><span class="p">,</span>
+    <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span>
+    <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge_fields</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">],</span> <span class="n">keywords_title_abstract</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">new_sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##</span>
+<span class="c1">## writing to disk for manual review</span>
+<span class="c1">##</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Title&#39;</span><span class="p">,</span> <span class="s1">&#39;Abstract&#39;</span><span class="p">,</span> <span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span> <span class="s1">&#39;Index Keywords&#39;</span><span class="p">,</span> <span class="s1">&#39;SELECTED&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span>
+    <span class="s1">&#39;demo-records.json&#39;</span><span class="p">,</span>
+    <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span>
+    <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df0</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span>
+    <span class="s1">&#39;demo-records-edited.json&#39;</span><span class="p">,</span>
+    <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span>
+    <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Manual-review-using-external-software">
+<h2>Manual review using external software<a class="headerlink" href="#Manual-review-using-external-software" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to save the dataframe to disk for manual review using, for example, an external editor. In the following code, the columns <code class="docutils literal notranslate"><span class="pre">'Title'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Author</span> <span class="pre">Keywords'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Index</span> <span class="pre">Keywords'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Abstract'</span></code>, <code class="docutils literal notranslate"><span class="pre">'INCLUDE'</span></code> and <code class="docutils literal notranslate"><span class="pre">'EXCLUDE'</span></code> are saved in json format.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Title&#39;</span><span class="p">,</span> <span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span> <span class="s1">&#39;Index Keywords&#39;</span><span class="p">,</span> <span class="s1">&#39;Abstract&#39;</span><span class="p">,</span> <span class="s1">&#39;SELECTED&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span>
+    <span class="s1">&#39;demo-records.json&#39;</span><span class="p">,</span>
+    <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span>
+    <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>In the following figure, a partial view of the file is presented. Note that the use of json format allows the user to identify easily each field.</p>
+<p><a href="#id1"><span class="problematic" id="id2">|screen\_capture\_4.jpg|</span></a></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Record-selection-based-on-keywords">
+<h2>Record selection based on keywords<a class="headerlink" href="#Record-selection-based-on-keywords" title="Permalink to this headline">¶</a></h2>
+<p>A common strategy for record selection is a manual review of all records and change the value of the field <code class="docutils literal notranslate"><span class="pre">'Selected'</span></code> from <code class="docutils literal notranslate"><span class="pre">'null'</span></code> to <code class="docutils literal notranslate"><span class="pre">'true'</span></code> or <code class="docutils literal notranslate"><span class="pre">'false'</span></code>(here, both Boolean constants are writen in json standard and not in the Python language). However, this strategy is overwhelming for the user, even for a moderate number of records. Moreover, this strategy not is scalable when new records are added to the dataframe.</p>
+<p>A first strategy consists in build two sets of rules; the first is based on conditions to include records in the final dataset; the second is based on rules for excluding records of the final dataset. Both sets of rules are based in the presence of specific words in the fields of each record. Finally it is possible to obtain a small set of records that must be filtered manually.</p>
+<p>In our example, we are interested in documents about algorithmic trading in the context of machine learning. We will use a first strategy based on keywords lists. The steps are the following:</p>
+<ol class="arabic simple">
+<li><p>A new field composed fr</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<p>In our example, we are interested in documents about algorithmic trading in the context of machine learning. Thus, it is possible to say that documents including the term <em>algorithmic trading</em> in the title will be selected as default; however, this is not true in all cases: for example, the rule does not apply to the document <em>Efficient event processing through reconfigurable hardware for algorithmic trading</em>. Thus, it is necessary to build complex rules to avoid the selection of incorrect
+documents.</p>
+<p>In other cases, it is possible to discart records based on its title, for example, the document entitled</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -466,7 +962,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>In the next code fragment, the column <code class="docutils literal notranslate"><span class="pre">'selected'</span></code> is created and the order of columns in the dataframe is modified.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -486,7 +982,7 @@ div.rendered_html tbody tr:hover {
 <h2>Data exportation for manual review<a class="headerlink" href="#Data-exportation-for-manual-review" title="Permalink to this headline">¶</a></h2>
 <p>The dataframe is exported in json format. This file is usually edited by the analyst by applying inclusion and exclusion criteria.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -499,7 +995,7 @@ div.rendered_html tbody tr:hover {
 <h2>Filtering of selected records<a class="headerlink" href="#Filtering-of-selected-records" title="Permalink to this headline">¶</a></h2>
 <p>We recommend to modify a copy of the file in the previous step. Now, the reviewed file is readed.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -509,7 +1005,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>In this fragment of code, a filter is applied for obtaining only the selected records.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -522,7 +1018,7 @@ div.rendered_html tbody tr:hover {
 <h2>Removing of duplicated records<a class="headerlink" href="#Removing-of-duplicated-records" title="Permalink to this headline">¶</a></h2>
 <p>Records with the same title are removed.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -538,7 +1034,7 @@ div.rendered_html tbody tr:hover {
 <p>Since the bibliographical information is stored as a pandas.DataFrame, the user can apply common techniques for selecting, sorting and modifying the dataframe.</p>
 <p>Information exported by Scopus need to be modifyed: first, zero citations are coded as NaN, and must be replaced by zero. Second, several lists end with a ‘;’ that must be deleted.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -547,7 +1043,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -561,7 +1057,7 @@ div.rendered_html tbody tr:hover {
 <h2>Keywords review<a class="headerlink" href="#Keywords-review" title="Permalink to this headline">¶</a></h2>
 <p>In this step, the column <code class="docutils literal notranslate"><span class="pre">'Author</span> <span class="pre">Keywords'</span></code> is review and edited. The aim of this step is to unify strings refering to the same concept.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -572,8 +1068,8 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>The dictionary is printed in json format for manual editing.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -582,224 +1078,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{
-  &#34;Algorithmic trading&#34;: [
-    &#34;Algorithmic Trading&#34;,
-    &#34;Algorithmic trading&#34;,
-    &#34;algorithmic trading&#34;
-  ],
-  &#34;Algorithmic trading systems&#34;: [
-    &#34;Algorithmic Trading Systems&#34;,
-    &#34;Algorithmic trading system&#34;,
-    &#34;Algorithmic trading systems&#34;
-  ],
-  &#34;Algorithmic trading, trading strategy&#34;: [
-    &#34;Algorithmic trading strategy&#34;,
-    &#34;Algorithmic trading, trading strategy&#34;
-  ],
-  &#34;Artificial intelligence&#34;: [
-    &#34;Artificial Intelligence&#34;,
-    &#34;Artificial intelligence&#34;
-  ],
-  &#34;Artificial neural networks&#34;: [
-    &#34;Artificial Neural Networks&#34;,
-    &#34;Artificial neural network&#34;,
-    &#34;Artificial neural networks&#34;
-  ],
-  &#34;Automated trading&#34;: [
-    &#34;Automated Trading&#34;,
-    &#34;Automated trading&#34;,
-    &#34;automated trading&#34;
-  ],
-  &#34;Automated trading system&#34;: [
-    &#34;Automated trading system&#34;,
-    &#34;Automated trading systems&#34;,
-    &#34;automated trading system&#34;
-  ],
-  &#34;Big data&#34;: [
-    &#34;Big Data&#34;,
-    &#34;Big data&#34;
-  ],
-  &#34;Data mining&#34;: [
-    &#34;Data Mining&#34;,
-    &#34;Data mining&#34;
-  ],
-  &#34;Decision support system&#34;: [
-    &#34;Decision support system&#34;,
-    &#34;decision support systems&#34;
-  ],
-  &#34;Deep learning&#34;: [
-    &#34;Deep Learning&#34;,
-    &#34;Deep learning&#34;
-  ],
-  &#34;Deep neural networks&#34;: [
-    &#34;Deep Neural Networks&#34;,
-    &#34;Deep neural networks&#34;
-  ],
-  &#34;Efficient market hypothesis&#34;: [
-    &#34;Efficient Market Hypothesis&#34;,
-    &#34;Efficient market hypothesis&#34;
-  ],
-  &#34;Financial Markets&#34;: [
-    &#34;Financial Markets&#34;,
-    &#34;Financial market&#34;
-  ],
-  &#34;Financial forecasting&#34;: [
-    &#34;Financial forecasting&#34;,
-    &#34;financial forecasting&#34;
-  ],
-  &#34;Genetic algorithm&#34;: [
-    &#34;Genetic algorithm&#34;,
-    &#34;Genetic algorithms&#34;
-  ],
-  &#34;High frequency trading&#34;: [
-    &#34;High Frequency Trading&#34;,
-    &#34;High frequency trading&#34;,
-    &#34;high frequency trading&#34;
-  ],
-  &#34;High-frequency trading&#34;: [
-    &#34;High-frequency trading&#34;,
-    &#34;high-frequency trading&#34;
-  ],
-  &#34;Holonic systems&#34;: [
-    &#34;Holonic Systems&#34;,
-    &#34;Holonic systems&#34;
-  ],
-  &#34;Intelligent agents&#34;: [
-    &#34;Intelligent Agents&#34;,
-    &#34;Intelligent agents&#34;
-  ],
-  &#34;Limit order book&#34;: [
-    &#34;Limit order book&#34;,
-    &#34;limit order book&#34;
-  ],
-  &#34;Machine learning&#34;: [
-    &#34;Machine Learning&#34;,
-    &#34;Machine learning&#34;,
-    &#34;machine learning&#34;
-  ],
-  &#34;Portfolio optimization&#34;: [
-    &#34;Portfolio optimization&#34;,
-    &#34;portfolio optimization&#34;
-  ],
-  &#34;Random forests&#34;: [
-    &#34;Random forest&#34;,
-    &#34;Random forests&#34;
-  ],
-  &#34;Recurrent neural networks&#34;: [
-    &#34;Recurrent neural network&#34;,
-    &#34;Recurrent neural networks&#34;
-  ],
-  &#34;Sentiment analysis&#34;: [
-    &#34;Sentiment Analysis&#34;,
-    &#34;Sentiment analysis&#34;
-  ],
-  &#34;Stock market&#34;: [
-    &#34;Stock Markets&#34;,
-    &#34;Stock market&#34;
-  ],
-  &#34;Technical analysis&#34;: [
-    &#34;Technical Analysis&#34;,
-    &#34;Technical analysis&#34;,
-    &#34;technical analysis&#34;
-  ],
-  &#34;Trading strategy&#34;: [
-    &#34;Trading strategies&#34;,
-    &#34;Trading strategy&#34;
-  ],
-  &#34;agent-based modeling&#34;: [
-    &#34;Agent-based modeling&#34;,
-    &#34;agent-based model&#34;,
-    &#34;agent-based modeling&#34;
-  ],
-  &#34;classification&#34;: [
-    &#34;Classification&#34;,
-    &#34;classification&#34;
-  ],
-  &#34;complex event processing&#34;: [
-    &#34;Complex event processing&#34;,
-    &#34;complex event processing&#34;
-  ],
-  &#34;complexity&#34;: [
-    &#34;Complexity&#34;,
-    &#34;complexity&#34;
-  ],
-  &#34;convolutional neural networks&#34;: [
-    &#34;Convolutional neural network&#34;,
-    &#34;Convolutional neural networks&#34;,
-    &#34;convolutional neural networks&#34;
-  ],
-  &#34;cryptocurrency&#34;: [
-    &#34;Cryptocurrency&#34;,
-    &#34;cryptocurrency&#34;
-  ],
-  &#34;directional change&#34;: [
-    &#34;Directional changes&#34;,
-    &#34;directional change&#34;
-  ],
-  &#34;e-Finance&#34;: [
-    &#34;E-finance&#34;,
-    &#34;e-Finance&#34;
-  ],
-  &#34;multiagent systems&#34;: [
-    &#34;Multi-agent systems&#34;,
-    &#34;MultiAgent Systems&#34;,
-    &#34;Multiagent systems&#34;,
-    &#34;multiagent systems&#34;
-  ],
-  &#34;neural network&#34;: [
-    &#34;Neural network&#34;,
-    &#34;Neural networks&#34;,
-    &#34;neural network&#34;
-  ],
-  &#34;pattern recognition&#34;: [
-    &#34;Pattern recognition&#34;,
-    &#34;pattern recognition&#34;
-  ],
-  &#34;portfolio management&#34;: [
-    &#34;Portfolio management&#34;,
-    &#34;portfolio management&#34;
-  ],
-  &#34;quantitative finance&#34;: [
-    &#34;Quantitative finance&#34;,
-    &#34;quantitative finance&#34;
-  ],
-  &#34;regularization&#34;: [
-    &#34;Regularization&#34;,
-    &#34;regularization&#34;
-  ],
-  &#34;sample size&#34;: [
-    &#34;Sample size&#34;,
-    &#34;sample size&#34;
-  ],
-  &#34;simulation&#34;: [
-    &#34;Simulation&#34;,
-    &#34;simulation&#34;
-  ],
-  &#34;stock price&#34;: [
-    &#34;Stock price&#34;,
-    &#34;stock price&#34;
-  ],
-  &#34;technical indicators&#34;: [
-    &#34;Technical Indicators&#34;,
-    &#34;Technical indicators&#34;,
-    &#34;technical indicators&#34;
-  ],
-  &#34;trading&#34;: [
-    &#34;Trading&#34;,
-    &#34;trading&#34;
-  ]
-}
-</pre></div></div>
-</div>
 <p>Previous output was copyed and edited directly from cell output.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1014,7 +1295,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>In the next cell, json is converted to Python object.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1024,7 +1305,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Then, the dictionary is applyed to the list of <code class="docutils literal notranslate"><span class="pre">Author</span> <span class="pre">Keywords</span></code> to unify words and phrases.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1033,8 +1314,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1042,28 +1323,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>6                                                   None
-8      Decision support system;Intelligent agents;Sec...
-9      Fibonacci geometry;Price patterns;Technical an...
-10                                                  None
-13                                                  None
-                             ...
-518    Back testing optimization algorithms;d-BackTes...
-519                                                 None
-522    Algorithmic trading;Evolutionary algorithms;Mu...
-523    Algorithmic trading;Financial time series;Inde...
-524    Algorithmic trading systems;Artificial intelli...
-Name: Keywords, Length: 156, dtype: object
-</pre></div>
-</div>
-</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1076,52 +1337,77 @@ Name: Keywords, Length: 156, dtype: object
 </div>
 
 
-           </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="5-direct-queries.html" class="btn btn-neutral float-right" title="Direct queries over data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="3-data-merging.html" class="btn btn-neutral float-left" title="Step 2: Data merging" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Step 3: Record selection</a><ul>
+<li><a class="reference internal" href="#Group-management">Group management</a></li>
+<li><a class="reference internal" href="#Record-visualization">Record visualization</a></li>
+<li><a class="reference internal" href="#Keywords-completation">Keywords completation</a></li>
+<li><a class="reference internal" href="#Manual-review-using-external-software">Manual review using external software</a></li>
+<li><a class="reference internal" href="#Record-selection-based-on-keywords">Record selection based on keywords</a></li>
+<li><a class="reference internal" href="#Data-exportation-for-manual-review">Data exportation for manual review</a></li>
+<li><a class="reference internal" href="#Filtering-of-selected-records">Filtering of selected records</a></li>
+<li><a class="reference internal" href="#Removing-of-duplicated-records">Removing of duplicated records</a></li>
+<li><a class="reference internal" href="#Column-edition">Column edition</a></li>
+<li><a class="reference internal" href="#Keywords-review">Keywords review</a></li>
+</ul>
+</li>
+</ul>
 
-    </section>
-
-  </div>
-  
-
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="3-data-merging.html"
+                        title="previous chapter">Step 2: Data merging</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="5-direct-queries.html"
+                        title="next chapter">Direct queries over data</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorial/4-data-selection.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="5-direct-queries.html" title="Direct queries over data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="3-data-merging.html" title="Step 2: Data merging"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
 </html>
