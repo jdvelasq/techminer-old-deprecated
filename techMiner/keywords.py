@@ -16,7 +16,7 @@ import re
 import geopandas
 import json
 
-from techMiner.findstring import find_string
+from techMiner.strings import find_string
 
 class Keywords:
     """Creates a Keywords object used to find, extract or remove terms of interest from a string.
@@ -52,7 +52,6 @@ class Keywords:
 
         """
         text = json.dumps(self._keywords, indent=2, sort_keys=True)
-        #text = self._keywords.__repr__()
         text += '\nignore_case={}, full_match={}, use_re={}'.format(
             self._ignore_case.__repr__(),
             self._full_match.__repr__(),
@@ -75,11 +74,12 @@ class Keywords:
             Nothing
 
         >>> kyw = Keywords().add_keywords(['ann', 'deep learning'])
-        >>> kyw.common('Big Data')
-        False
-        >>> kyw = kyw.add_keywords('big data')
-        >>> kyw.common('Big Data')
-        True
+        >>> kyw
+        [
+          "ann",
+          "deep learning"
+        ]
+        ignore_case=True, full_match=False, use_re=False
 
         """
         if isinstance(keywords, str):
@@ -91,11 +91,10 @@ class Keywords:
         if isinstance(keywords, pd.Series):
             keywords = keywords.tolist()
 
-        if isinstance(keywords, (list, set)):
-            if sep is not None:
-                keywords = [y for x in keywords if x is not None for y in x.split(sep)]    
-            else:
-                keywords = [x for x in keywords if x is not None]
+        if sep is not None:
+            keywords = [y for x in keywords if x is not None for y in x.split(sep)]    
+        else:
+            keywords = [x for x in keywords if x is not None]
 
         if self._keywords is None:
             self._keywords = sorted(list(set(keywords)))
@@ -106,7 +105,7 @@ class Keywords:
         return self
 
     #----------------------------------------------------------------------
-    def common(self, x):
+    def common(self, x, sep=None):
         """Returns True if x is in keywords list.
 
         Args:
@@ -115,20 +114,30 @@ class Keywords:
         Returns:
             Boolean.
 
-        >>> kyw = Keywords().add_keywords(['ann', 'big data', 'deep learning'])
-        >>> kyw.common('Big Data')
+        >>> kw = Keywords().add_keywords(['ann', 'big data', 'deep learning'])
+        >>> kw.common('Big Data')
         True
-        >>> kyw.common('Python')
+        >>> kw.common('Python')
         False
-        
+        >>> kw.common('Python|R', sep='|')
+        False
+        >>> kw.common('Python|big data', sep='|')
+        True
+
         """
-        if self.extract(x) is None:
-            return False
-        else:
-            return True
+        def _common(x):
+            if self.extract(x) is None:
+                return False
+            else:
+                return True
+
+        if sep is None:
+            return _common(x)
+
+        return any([_common(y) for y in x.split(sep)])
 
     #----------------------------------------------------------------------
-    def complement(self, x):
+    def complement(self, x, sep=None):
         """Returns False if x is not in keywords list.
 
         Args:
@@ -139,15 +148,25 @@ class Keywords:
 
         >>> kyw = Keywords().add_keywords(['ann', 'big data', 'deep learning'])
         >>> kyw.complement('Big Data')
-        True
+        False
         >>> kyw.complement('Python')
+        True
+        >>> kyw.complement('Python|R')
+        True
+        >>> kyw.complement('Python|big data')
         False
 
         """
-        if self.extract(x) is None:
-            return False
-        else:
-            return True
+        def _complement(x):
+            if self.extract(x) is None:
+                return True
+            else:
+                return False
+
+        if sep is None:
+            return _complement(x)
+
+        return any([_complement(y) for y in x.split(sep)])        
 
     #----------------------------------------------------------------------
     def extract(self, x, sep='|'):
@@ -168,6 +187,9 @@ class Keywords:
         **Recipes**
 
         The following code exemplify some common cases using regular expressions.
+
+        >>> Keywords().add_keywords('111').extract('one two three four five') is None
+        True
 
         * Partial match.
 
@@ -255,8 +277,8 @@ class Keywords:
                 use_re = self._use_re
             )
 
-            if len(y):                
-                result.extend(y)
+            if y is not None:                
+                result.extend([y])
         
         if len(result):
             return sep.join(set(result))
@@ -485,7 +507,7 @@ class Keywords:
         return None         
 
     #----------------------------------------------------------------------
-    def remove(self, x):
+    def remove(self, x, sep=None):
         """Returns a string removing the strings that match a 
         list of keywords from x.
 
@@ -496,17 +518,36 @@ class Keywords:
             String.
 
 
-        >>> Keywords().add_keywords('aaa').remove('1 aaa 4 aaa 5')
-        '1   4   5'
+        >>> Keywords().add_keywords('aaa').remove('1 aaa 2') is None
+        True
+
+        >>> Keywords().add_keywords('aaa').remove('1 2')
+        '1 2'
+
+        >>> Keywords().add_keywords('aaa').remove('1 aaa 2|1 2', sep='|')
+        '1 2'
+
+        >>> Keywords().add_keywords('aaa').remove('1 aaa 2|1 aaa 2', sep='|') is None
+        True
 
         """
 
-        y = self.extract(x)
-        if y != '':
-            result = re.sub(y, ' ', x)
-        else:
-            result = x
-        return result
+        def _remove(z):
+            y = self.extract(z)
+            if y is not None:
+                return None
+            else:
+                result = z
+            return result    
+
+        if sep is None:
+            return _remove(x)
+        
+        result = [_remove(z) for z in x.split(sep) ]
+        result = [z for z in result if z is not None]
+        if len(result):
+            return sep.join(result)
+        return None
 
         
 

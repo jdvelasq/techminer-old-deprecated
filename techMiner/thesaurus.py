@@ -6,7 +6,7 @@ techMiner.Thesaurus
 import pandas as pd
 import json
 from techMiner.transform import fingerprint
-from techMiner.findstring import find_string, replace_string
+from techMiner.strings import find_string, replace_string
 
 def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprint', sep=None):
     """Builds a thesaurus by clustering a list of strings.
@@ -250,29 +250,6 @@ class Thesaurus:
         """
 
         return self.apply(x, sep=sep)
-
-        if x is None:
-            return None
-
-        if sep is None:
-            for k in self._thesaurus.keys():
-                if x in self._thesaurus[k]:
-                    return k
-            return x
-        else:
-            result = []
-            for z in x.split(sep):
-                z = z.strip()
-                found = False
-                for k in self._thesaurus.keys():
-                    if z in self._thesaurus[k]:
-                        result += [k]
-                        found = True
-                        break
-                if found is False:    
-                    result += [z]
-            return sep.join(result)
-
 
 
     def apply(self, x, sep=None):
