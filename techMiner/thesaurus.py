@@ -54,11 +54,11 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
 
     >>> print(text_clustering(df.f).to_json()) # doctest: +NORMALIZE_WHITESPACE
     {
-        "a b": [
+      "a b": [
         "a B",
         "a b"
         ],
-        "a b c a b": [
+      "a b c a b": [
         "A C b",
         "a b c a b",
         "a b c a b a",
@@ -115,7 +115,6 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
     6     a, b, c, a
     7            a B
 
-    >>> import json
     >>> print(text_clustering(df.f, sep=',', name_strategy='longest').to_json()) # doctest: +NORMALIZE_WHITESPACE
     {
       "A C": [
@@ -172,7 +171,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
         if len(z) > 1:
             result[groupName] = z
 
-    return Thesaurus(result)
+    return Thesaurus(result, ignore_case=False, full_match=True)
 
 
 class Thesaurus:
@@ -187,39 +186,40 @@ class Thesaurus:
 
         >>> import pandas as pd
         >>> df = pd.DataFrame({
-        ...    'f': [0, 1, 2, 3, None, 4, 5, 6, 7, 8, 9],
+        ...    'f': ['0', '1', '2', '3', None, '4', '5', '6', '7', '8', '9'],
         ... })
-        >>> df
-              f
-        0   0.0
-        1   1.0
-        2   2.0
-        3   3.0
-        4   NaN
-        5   4.0
-        6   5.0
-        7   6.0
-        8   7.0
-        9   8.0
-        10  9.0
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+               f
+        0      0
+        1      1
+        2      2
+        3      3
+        4   None
+        5      4
+        6      5
+        7      6
+        8      7
+        9      8
+        10     9
         
-        >>> d = {'a':[0, 1, 2],
-        ...      'b':[4, 5, 6],
-        ...      'c':[7, 8, 9]}
+        >>> d = {'a':['0', '1', '2'],
+        ...      'b':['4', '5', '6'],
+        ...      'c':['7', '8', '9']}
 
-        >>> df.f.map(lambda x: Thesaurus(d).cleanup(x))
-        0       a
-        1       a
-        2       a
-        3       3
-        4     NaN
-        5       b
-        6       b
-        7       b
-        8       c
-        9       c
-        10      c
+        >>> df.f.map(lambda x: Thesaurus(d, ignore_case=False, full_match=True).apply(x)) # doctest: +NORMALIZE_WHITESPACE
+        0        a
+        1        a
+        2        a
+        3        3
+        4     None
+        5        b
+        6        b
+        7        b
+        8        c
+        9        c
+        10       c
         Name: f, dtype: object
+        
 
         >>> df = pd.DataFrame({
         ...    'f': ['a b, A B', 'A b, A B', None, 'b c', 'b, B A', 'b, a, c', 'A, B'],
@@ -236,7 +236,7 @@ class Thesaurus:
         >>> d = {'0':['a b', 'A B', 'B A'],
         ...      '1':['b c'],
         ...      '2':['a', 'b']}
-        >>> df.f.map(lambda x: Thesaurus(d).cleanup(x, sep=','))
+        >>> df.f.map(lambda x: Thesaurus(d, ignore_case=False, full_match=True).apply(x, sep=','))
         0      0,0
         1    A b,0
         2     None
@@ -248,6 +248,8 @@ class Thesaurus:
 
 
         """
+
+        return self.apply(x, sep=sep)
 
         if x is None:
             return None
@@ -288,10 +290,10 @@ class Thesaurus:
         >>> d = {'0':['AAA'],
         ...      '1':['BBB']}
         >>> df.f.map(lambda x: Thesaurus(d).apply(x, sep=','))
-        0     0,0
+        0     0,1
         1       1
         2    None
-        3    None
+        3     DDD
         Name: f, dtype: object
 
     """
@@ -307,14 +309,14 @@ class Thesaurus:
 
                     y = find_string(
                         pattern = pattern,
-                        x = x,
+                        x = x.strip(),
                         ignore_case = self._ignore_case,
                         full_match = self._full_match,
                         use_re = self._use_re
                     )
 
-                if len(y):
-                    return key
+                    if y is not None and len(y):
+                        return key
 
             return x
 
@@ -328,19 +330,22 @@ class Thesaurus:
 
                         y = find_string(
                             pattern = pattern,
-                            x = x,
+                            x = z,
                             ignore_case = self._ignore_case,
                             full_match = self._full_match,
                             use_re = self._use_re
                         )
 
-                        if len(y):
+                        if y is not None and len(y):
                             result += [key]
                             found = True
                             break
 
                     if found:
                         break
+
+                if not found:
+                    result += [z]
 
             if len(result):
                 return sep.join(result)

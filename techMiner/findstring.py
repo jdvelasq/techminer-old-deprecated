@@ -17,7 +17,9 @@ def find_string(pattern, x, ignore_case=True, full_match=False, use_re=False):
         c = re.compile(pattern)
 
     if full_match is True:
-        result = c.fullMatch(x)
+        result = c.fullmatch(x)
+        if result is not None:
+            result = c.findall(x)
     else:
         result = c.findall(x)
 
