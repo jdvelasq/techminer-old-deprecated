@@ -16,8 +16,7 @@ import re
 import geopandas
 import json
 
-from techMiner.strings import find_string
-from techMiner.transform import fingerprint
+from techMiner.strings import find_string, fingerprint
 
 class Keywords:
     """Creates a Keywords object used to find, extract or remove terms of interest from a string.

@@ -4,6 +4,7 @@ from techMiner.listByList import *
 from techMiner.records import *
 from techMiner.keywords import *
 from techMiner.thesaurus import *
+from techMiner.strings import *
 
 
 

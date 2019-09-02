@@ -5,8 +5,10 @@ techMiner.Thesaurus
 """ 
 import pandas as pd
 import json
-from techMiner.transform import fingerprint
-from techMiner.strings import find_string, replace_string
+from techMiner.strings import (
+    find_string, 
+    replace_string,
+    fingerprint)
 
 def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprint', sep=None):
     """Builds a thesaurus by clustering a list of strings.

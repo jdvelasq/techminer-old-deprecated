@@ -20,7 +20,7 @@ import string
 import re
 import json
 
-from techMiner.transform import asciify, fingerprint
+from techMiner.strings import asciify, fingerprint
 
 def displayRecords(df):
     """Show one or more records of dataframe at a time. User can use standard
