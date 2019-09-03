@@ -29,7 +29,7 @@ from scipy.optimize import minimize
 from collections import OrderedDict 
 from sklearn.decomposition import PCA
 
-from techMiner import documentsByTerm
+from techMiner import documents_by_term
 
 
 from sklearn.cluster import KMeans
@@ -64,7 +64,7 @@ def pca2heatmap(x, figsize=(10, 10)):
 
 def pca(df, term, sep=None, n_components=2, N=10):
 
-    x = documentsByTerm(df, term, sep=sep)
+    x = documents_by_term(df, term, sep=sep)
     terms = x.loc[:, term].tolist()
     if N is None or len(terms) <= N:
         N = len(terms)
@@ -226,7 +226,7 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=20):
         termB = None
 
 
-    x = documentsByTerm(df, termA, sep=sepA)
+    x = documents_by_term(df, termA, sep=sepA)
     termsA = x.loc[:, termA].tolist()
     if N is None or len(termsA) <= N:
         termsA = sorted(termsA)
@@ -234,7 +234,7 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=20):
         termsA = sorted(termsA[0:N])
 
     if termB is not None:
-        x = documentsByTerm(df, termB, sep=sepB)
+        x = documents_by_term(df, termB, sep=sepB)
         termsB = x.loc[:, termB].tolist()
         if N is None or len(termsB) <= N:
             termsB = sorted(termsB)
@@ -310,7 +310,7 @@ def correlation(df, termA, termB=None, sepA=None, sepB=None, N=20):
 
 
 
-def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
+def term_by_term(df, termA, termB, sepA=None, sepB=None, minmax=None):
     """
 
     >>> import pandas as pd
@@ -328,7 +328,7 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
     5  0  a
     6  1  b    
 
-    >>> termByTerm(df, 'A', 'B')
+    >>> term_by_term(df, 'A', 'B')
        A  B  Num Documents
     0  0  a              2
     1  1  b              2
@@ -336,7 +336,7 @@ def termByTerm(df, termA, termB, sepA=None, sepB=None, minmax=None):
     3  3  d              1
     4  4  e              1
 
-    >>> termByTerm(df, 'A', 'B', minmax=(2,8))
+    >>> term_by_term(df, 'A', 'B', minmax=(2,8))
        A  B  Num Documents
     0  0  a              2
     1  1  b              2
@@ -416,7 +416,7 @@ def matrix(df, ascendingA=None, ascendingB=None):
     5  0  a
     6  1  b    
 
-    >>> x = termByTerm(df, 'a', 'b')
+    >>> x = term_by_term(df, 'a', 'b')
     >>> x # doctest: +NORMALIZE_WHITESPACE
        a  b  Num Documents
     0  0  a              2
@@ -672,7 +672,7 @@ def network_graph(matrix, save=True,name='network.png',corr_min=0.7,node_color='
 
 
 
-# def termByTerm0(df, termA, termB, sepA=None, sepB=None, 
+# def term_by_term0(df, termA, termB, sepA=None, sepB=None, 
 #                ascendingA=None, ascendingB=None, minmax=None):
     
 #     df = df[[termA, termB]].dropna()
