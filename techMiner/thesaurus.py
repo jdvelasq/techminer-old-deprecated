@@ -186,8 +186,58 @@ class Thesaurus:
         self._use_re = use_re
 
     #-------------------------------------------------------------------------------------------
-    def cleanup(self, x, sep=None):
-        """
+    def apply(self, x, sep=None):
+        """Apply a thesaurus to a string x.
+
+        >>> df = pd.DataFrame({
+        ...    'f': ['aaa', 'bbb', 'ccc aaa', 'ccc bbb', 'ddd eee', 'ddd fff',  None, 'zzz'],
+        ... })
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+                 f
+        0      aaa
+        1      bbb
+        2  ccc aaa
+        3  ccc bbb
+        4  ddd eee
+        5  ddd fff
+        6     None
+        7      zzz        
+
+        >>> d = {'aaa':['aaa', 'bbb', 'eee', 'fff'],  '1':['000']}
+        >>> df.f.map(lambda x: Thesaurus(d).apply(x))
+        0     aaa
+        1     aaa
+        2     aaa
+        3     aaa
+        4     aaa
+        5     aaa
+        6    None
+        7     zzz
+        Name: f, dtype: object
+
+        >>> df = pd.DataFrame({
+        ...    'f': ['aaa|ccc aaa', 'bbb|ccc bbb', 'ccc aaa', 'ccc bbb', 'ddd eee', 'ddd fff',  None, 'zzz'],
+        ... })
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+                     f
+        0  aaa|ccc aaa
+        1  bbb|ccc bbb
+        2      ccc aaa
+        3      ccc bbb
+        4      ddd eee
+        5      ddd fff
+        6         None
+        7          zzz      
+        >>> df.f.map(lambda x: Thesaurus(d).apply(x, sep='|'))
+        0    aaa|aaa
+        1    aaa|aaa
+        2        aaa
+        3        aaa
+        4        aaa
+        5        aaa
+        6       None
+        7        zzz
+        Name: f, dtype: object
 
         >>> import pandas as pd
         >>> df = pd.DataFrame({
@@ -252,63 +302,7 @@ class Thesaurus:
         Name: f, dtype: object
 
 
-        """
 
-        return self.apply(x, sep=sep)
-
-    #-------------------------------------------------------------------------------------------
-    def apply(self, x, sep=None):
-        """Apply a thesaurus to a string x.
-
-        >>> df = pd.DataFrame({
-        ...    'f': ['aaa', 'bbb', 'ccc aaa', 'ccc bbb', 'ddd eee', 'ddd fff',  None, 'zzz'],
-        ... })
-        >>> df # doctest: +NORMALIZE_WHITESPACE
-                 f
-        0      aaa
-        1      bbb
-        2  ccc aaa
-        3  ccc bbb
-        4  ddd eee
-        5  ddd fff
-        6     None
-        7      zzz        
-
-        >>> d = {'aaa':['aaa', 'bbb', 'eee', 'fff'],  '1':['000']}
-        >>> df.f.map(lambda x: Thesaurus(d).apply(x))
-        0     aaa
-        1     aaa
-        2     aaa
-        3     aaa
-        4     aaa
-        5     aaa
-        6    None
-        7     zzz
-        Name: f, dtype: object
-
-        >>> df = pd.DataFrame({
-        ...    'f': ['aaa|ccc aaa', 'bbb|ccc bbb', 'ccc aaa', 'ccc bbb', 'ddd eee', 'ddd fff',  None, 'zzz'],
-        ... })
-        >>> df # doctest: +NORMALIZE_WHITESPACE
-                     f
-        0  aaa|ccc aaa
-        1  bbb|ccc bbb
-        2      ccc aaa
-        3      ccc bbb
-        4      ddd eee
-        5      ddd fff
-        6         None
-        7          zzz      
-        >>> df.f.map(lambda x: Thesaurus(d).apply(x, sep='|'))
-        0    aaa|aaa
-        1    aaa|aaa
-        2        aaa
-        3        aaa
-        4        aaa
-        5        aaa
-        6       None
-        7        zzz
-        Name: f, dtype: object
         """
         def _apply(z):
             """Transform the string z using the thesaurus. Returns when there is a match.
