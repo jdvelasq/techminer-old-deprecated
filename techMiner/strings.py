@@ -41,8 +41,6 @@ def find_string(pattern, x, ignore_case=True, full_match=False, use_re=False):
     >>> find_string(r'\btwo\Wthree\b', 'one two three four five', ignore_case=False, use_re=True)
     'two three'
 
-
-
     """
 
     if use_re is False:
@@ -313,7 +311,7 @@ def extract_until_last(pattern, x, ignore_case=True, full_match=False, use_re=Fa
 
     return None 
 
-#-------------------------------------------------------------------------------------------        
+#-------------------------------------------------------------------------------------------
 def extract_country(x, sep=';'):
     """
 
@@ -375,6 +373,54 @@ def extract_country(x, sep=';'):
         return None
     else:
         return countries
+
+#-------------------------------------------------------------------------------------------
+def _steamming(pattern, text):
+    
+    text = asciify(text)
+    pattern = asciify(pattern)
+
+    text = text.strip().lower()
+    pattern = pattern.strip().lower()
+
+    porter = PorterStemmer()
+
+    pattern = [porter.stem(w) for w in pattern.split()]
+    text = [porter.stem(w) for w in text.split()]
+
+    return [m in text for m in pattern]
+
+#-------------------------------------------------------------------------------------------
+def steamming_all(pattern, text):
+    """
+
+    >>> steamming_all('computers cars', 'car computing') 
+    True
+    
+    >>> steamming_all('computers cars', 'car houses') 
+    False
+
+    """
+    return all(_steamming(pattern, text))
+
+#-------------------------------------------------------------------------------------------
+def steamming_any(pattern, text):
+    """
+
+    >>> steamming_any('computers cars', 'car computing') 
+    True
+
+    >>> steamming_any('computers cars', 'computing house') 
+    True
+    
+    >>> steamming_all('computers cars', 'tree houses') 
+    False
+
+    """
+    return any(_steamming(pattern, text))
+
+    
+
 
 #-------------------------------------------------------------------------------------------
 def asciify(text):
