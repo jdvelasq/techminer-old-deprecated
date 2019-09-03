@@ -10,6 +10,7 @@ from techMiner.strings import (
     replace_string,
     fingerprint)
 
+#-------------------------------------------------------------------------------------------------
 def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprint', sep=None):
     """Builds a thesaurus by clustering a list of strings.
     
@@ -54,7 +55,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
     5   a, b, c, a
     6          a B
 
-    >>> print(text_clustering(df.f).to_json()) # doctest: +NORMALIZE_WHITESPACE
+    >>> text_clustering(df.f) # doctest: +NORMALIZE_WHITESPACE
     {
       "a b": [
         "a B",
@@ -68,7 +69,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
         ]
     }
 
-    >>> print(text_clustering(df.f, name_strategy='shortest').to_json()) # doctest: +NORMALIZE_WHITESPACE
+    >>> text_clustering(df.f, name_strategy='shortest') # doctest: +NORMALIZE_WHITESPACE
     {
       "A C b": [
         "A C b",
@@ -82,7 +83,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
         ]
     }
 
-    >>> print(text_clustering(df.f, name_strategy='longest').to_json()) # doctest: +NORMALIZE_WHITESPACE
+    >>> text_clustering(df.f, name_strategy='longest') # doctest: +NORMALIZE_WHITESPACE
     {
       "a B": [
         "a B",
@@ -117,7 +118,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
     6     a, b, c, a
     7            a B
 
-    >>> print(text_clustering(df.f, sep=',', name_strategy='longest').to_json()) # doctest: +NORMALIZE_WHITESPACE
+    >>> text_clustering(df.f, sep=',', name_strategy='longest') # doctest: +NORMALIZE_WHITESPACE
     {
       "A C": [
         "A C",
@@ -175,14 +176,16 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
 
     return Thesaurus(result, ignore_case=False, full_match=True)
 
-
+#-----------------------------------------------------------------------------------------------
 class Thesaurus:
+
     def __init__(self, x={}, ignore_case=True, full_match=False, use_re=False):
         self._thesaurus = x
         self._ignore_case = ignore_case
         self._full_match = full_match
         self._use_re = use_re
 
+    #-------------------------------------------------------------------------------------------
     def cleanup(self, x, sep=None):
         """
 
@@ -253,160 +256,202 @@ class Thesaurus:
 
         return self.apply(x, sep=sep)
 
-
+    #-------------------------------------------------------------------------------------------
     def apply(self, x, sep=None):
-        """
+        """Apply a thesaurus to a string x.
 
         >>> df = pd.DataFrame({
-        ...    'f': ['- AAA -, - BBB -', '- BBBB - CCC -', None, 'DDD'],
+        ...    'f': ['aaa', 'bbb', 'ccc aaa', 'ccc bbb', 'ddd eee', 'ddd fff',  None, 'zzz'],
         ... })
-        >>> df
-                          f
-        0  - AAA -, - BBB -
-        1    - BBBB - CCC -
-        2              None
-        3               DDD
-        >>> d = {'0':['AAA'],
-        ...      '1':['BBB']}
-        >>> df.f.map(lambda x: Thesaurus(d).apply(x, sep=','))
-        0     0,1
-        1       1
-        2    None
-        3     DDD
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+                 f
+        0      aaa
+        1      bbb
+        2  ccc aaa
+        3  ccc bbb
+        4  ddd eee
+        5  ddd fff
+        6     None
+        7      zzz        
+
+        >>> d = {'aaa':['aaa', 'bbb', 'eee', 'fff'],  '1':['000']}
+        >>> df.f.map(lambda x: Thesaurus(d).apply(x))
+        0     aaa
+        1     aaa
+        2     aaa
+        3     aaa
+        4     aaa
+        5     aaa
+        6    None
+        7     zzz
         Name: f, dtype: object
 
-    """
-
-        if x is None:
-            return None
-
-        if sep is None:
+        >>> df = pd.DataFrame({
+        ...    'f': ['aaa|ccc aaa', 'bbb|ccc bbb', 'ccc aaa', 'ccc bbb', 'ddd eee', 'ddd fff',  None, 'zzz'],
+        ... })
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+                     f
+        0  aaa|ccc aaa
+        1  bbb|ccc bbb
+        2      ccc aaa
+        3      ccc bbb
+        4      ddd eee
+        5      ddd fff
+        6         None
+        7          zzz      
+        >>> df.f.map(lambda x: Thesaurus(d).apply(x, sep='|'))
+        0    aaa|aaa
+        1    aaa|aaa
+        2        aaa
+        3        aaa
+        4        aaa
+        5        aaa
+        6       None
+        7        zzz
+        Name: f, dtype: object
+        """
+        def _apply(z):
+            """Transform the string z using the thesaurus. Returns when there is a match.
+            """
+            
+            z = z.strip()
 
             for key in self._thesaurus.keys():
-
                 for pattern in self._thesaurus[key]:
 
                     y = find_string(
                         pattern = pattern,
-                        x = x.strip(),
+                        x = z,
                         ignore_case = self._ignore_case,
                         full_match = self._full_match,
                         use_re = self._use_re
                     )
 
-                    if y is not None and len(y):
+                    if y is not None:
                         return key
-
-            return x
-
-        else:
-            result = []
-            for z in x.split(sep):
-                z = z.strip()
-                for key in self._thesaurus.keys():
-                    found = False
-                    for pattern in self._thesaurus[key]:
-
-                        y = find_string(
-                            pattern = pattern,
-                            x = z,
-                            ignore_case = self._ignore_case,
-                            full_match = self._full_match,
-                            use_re = self._use_re
-                        )
-
-                        if y is not None and len(y):
-                            result += [key]
-                            found = True
-                            break
-
-                    if found:
-                        break
-
-                if not found:
-                    result += [z]
-
-            if len(result):
-                return sep.join(result)
-            
-        return None
-
-    def findAndReplace(self, x, sep=None):
-        """Applies a thesaurus to a string, reemplacing the portion of string
-        matching the current pattern with the key.
-
-        >>> df = pd.DataFrame({
-        ...    'f': ['- AAA -, - BBB -', '- BBBB - CCC -', None, 'DDD'],
-        ... })
-        >>> df
-                          f
-        0  - AAA -, - BBB -
-        1    - BBBB - CCC -
-        2              None
-        3               DDD
-        >>> d = {'0':['AAA'],
-        ...      '1':['BBB']}
-        >>> df.f.map(lambda x: Thesaurus(d).findAndReplace(x, sep=','))
-        0     - 0 -,- 1 -
-        1    - 1B - CCC -
-        2            None
-        3             DDD
-        Name: f, dtype: object
-
-        """
+            return z
+        ##
+        ## main body
+        ##
 
         if x is None:
             return None
 
         if sep is None:
+            x = [x]
+        else:
+            x = x.split(sep)
+
+        result = [_apply(z) for z in x]
+
+        if sep is None:
+            return result[0]
+
+        return sep.join(result)
+
+
+    #-------------------------------------------------------------------------------------------
+    def find_and_replace(self, x, sep=None):
+        """Applies a thesaurus to a string, reemplacing the portion of string
+        matching the current pattern with the key.
+
+        >>> df = pd.DataFrame({
+        ...    'f': ['AAA', 'BBB', 'ccc AAA', 'ccc BBB', 'ddd EEE', 'ddd FFF',  None, 'zzz'],
+        ... })
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+                 f
+        0      AAA
+        1      BBB
+        2  ccc AAA
+        3  ccc BBB
+        4  ddd EEE
+        5  ddd FFF
+        6     None
+        7      zzz
+        >>> d = {'aaa':['AAA', 'BBB', 'EEE', 'FFF'],  '1':['000']}
+        >>> df.f.map(lambda x: Thesaurus(d).find_and_replace(x))
+        0        aaa
+        1        aaa
+        2    ccc aaa
+        3    ccc aaa
+        4    ddd aaa
+        5    ddd aaa
+        6       None
+        7        zzz
+        Name: f, dtype: object
+
+        >>> df = pd.DataFrame({
+        ...    'f': ['AAA|ccc AAA', 'BBB ccc|ccc', 'ccc AAA', 'ccc BBB', 'ddd EEE', 'ddd FFF',  None, 'zzz'],
+        ... })
+        >>> df # doctest: +NORMALIZE_WHITESPACE
+                     f
+        0  AAA|ccc AAA
+        1  BBB ccc|ccc
+        2      ccc AAA
+        3      ccc BBB
+        4      ddd EEE
+        5      ddd FFF
+        6         None
+        7          zzz
+        >>> df.f.map(lambda x: Thesaurus(d).find_and_replace(x, sep='|'))
+        0    aaa|ccc aaa
+        1    aaa ccc|ccc
+        2        ccc aaa
+        3        ccc aaa
+        4        ddd aaa
+        5        ddd aaa
+        6           None
+        7            zzz
+        Name: f, dtype: object
+        """
+        def _apply_and_replace(z):
+
+            z = z.strip()
 
             for key in self._thesaurus.keys():
 
                 for pattern in self._thesaurus[key]:
 
-                    x = replace_string(
+                    w = replace_string(
                         pattern = pattern,
-                        x = x,
+                        x = z,
                         repl = key,
                         ignore_case = self._ignore_case,
                         full_match = self._full_match,
-                        use_re = self._use_re
-                    )
+                        use_re = self._use_re)
 
-            return x
+                    if z != w:
+                        return w
 
+            return z
+
+        if x is None:
+            return None
+
+        if sep is None:
+            x = [x]
         else:
-            result = []
-            for z in x.split(sep):
-                z = z.strip()
-                for key in self._thesaurus.keys():
-                    found = False
-                    for pattern in self._thesaurus[key]:
+            x = x.split(sep)
 
-                        z = replace_string(
-                            pattern = pattern,
-                            x = z,
-                            repl = key,
-                            ignore_case = self._ignore_case,
-                            full_match = self._full_match,
-                            use_re = self._use_re
-                        )
+        result = [_apply_and_replace(z) for z in x]
 
-                result += [z]
-                            
-            return sep.join(result)
-            
-        return None
+        if sep is None:
+            return result[0]
+
+        return sep.join(result)
 
 
-
-
-    def to_json(self):
+    #-------------------------------------------------------------------------------------------
+    def __repr__(self):
         """Returns a json representation of the Thesaurus.
         """
         return json.dumps(self._thesaurus, indent=2, sort_keys=True)
 
+    #--------------------------------------------------------------------------------------------------------
+    def __str__(self):
+        return self.__repr__()
 
+    #-------------------------------------------------------------------------------------------
     def merge_keys(self, key, popkey):
         """Adds the strings associated to popkey to key and delete popkey.
         """
@@ -418,11 +463,13 @@ class Thesaurus:
             self._thesaurus[key] = self._thesaurus[key] + self._thesaurus[popkey]
             self._thesaurus.pop(popkey)
 
+    #-------------------------------------------------------------------------------------------
     def pop_key(self, key):
         """Deletes key from thesaurus.
         """
         self._thesaurus.pop(key)
         
+    #-------------------------------------------------------------------------------------------
     def change_key(self, current_key, new_key):
         self._thesaurus[new_key] = self._thesaurus[current_key]
         self._thesaurus.popkey(current_key)

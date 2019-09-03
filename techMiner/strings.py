@@ -376,7 +376,7 @@ def extract_country(x, sep=';'):
     else:
         return countries
 
-#-------------------------------------------------------------------------------------------        
+#-------------------------------------------------------------------------------------------
 def asciify(text):
     """Translate non-ascii charaters to ascii equivalent.
 
