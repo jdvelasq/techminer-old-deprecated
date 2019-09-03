@@ -22,7 +22,7 @@ import json
 
 from techMiner.strings import asciify, fingerprint
 
-def displayRecords(df):
+def display_records(df):
     """Show one or more records of dataframe at a time. User can use standard
     pandas.DataFrame funcions to select and order specific records or a dataframe.
 
@@ -48,7 +48,7 @@ def displayRecords(df):
     4  a   1
     5  e   5
 
-    >>> displayRecords(df)   
+    >>> display_records(df)   
     -----------------------------------------------
     Record index: 0
     {
@@ -133,7 +133,7 @@ def coverage(df):
     return result
         
 
-def removeDuplicateRecords(df, fields, matchType='strict'):
+def remove_duplicate_records(df, fields, matchType='strict'):
     """Remove duplicate records in a dataframe based in the velue of one 
     or more fields.
 
@@ -151,21 +151,21 @@ def removeDuplicateRecords(df, fields, matchType='strict'):
     4  a   1
     5  e   5
 
-    >>> removeDuplicateRecords(df, fields='f0')
+    >>> remove_duplicate_records(df, fields='f0')
       f0  f1
     0  a   1
     1  b   2
     3  c   3
     5  e   5
 
-    >>> removeDuplicateRecords(df, fields=['f0'])
+    >>> remove_duplicate_records(df, fields=['f0'])
       f0  f1
     0  a   1
     1  b   2
     3  c   3
     5  e   5
 
-    >>> removeDuplicateRecords(df, fields=['f0', 'f1'])
+    >>> remove_duplicate_records(df, fields=['f0', 'f1'])
       f0  f1
     0  a   1
     1  b   2
@@ -186,7 +186,7 @@ def removeDuplicateRecords(df, fields, matchType='strict'):
     4   a   1
     5   e   5
 
-    >>> removeDuplicateRecords(df, fields='f0', matchType='fingerprint')
+    >>> remove_duplicate_records(df, fields='f0', matchType='fingerprint')
        f0  f1
     0  A;   1
     1   b   2
