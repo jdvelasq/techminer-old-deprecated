@@ -98,7 +98,7 @@ import re
 import geopandas
 import json
 
-from techMiner.strings import (
+from techminer.strings import (
     find_string, 
     replace_string,
     fingerprint

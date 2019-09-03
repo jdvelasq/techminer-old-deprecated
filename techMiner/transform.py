@@ -10,11 +10,6 @@ object using the map function.
 import pandas as pd
 import numpy as np
 
-
-
-
-
-
 def nan2none(df):
     """Replace np.nan by None in a pandas.DataFrame.
     

@@ -8,13 +8,13 @@ from paver.tasks import task, needs
 @task
 def nosetests():
     """unit testing"""
-    sh('nosetests --cover-package=techMiner --cover-tests '
-       ' --with-doctest --rednose  ./techMiner/')
+    sh('nosetests --cover-package=techminer --cover-tests '
+       ' --with-doctest --rednose  ./techminer/')
 
 @task
 def pylint():
     """pyltin"""
-    sh('pylint ./techMiner/')
+    sh('pylint ./techminer/')
 
 @task
 def pypi():
@@ -25,7 +25,7 @@ def pypi():
 @task
 def local():
     """local install"""
-    sh("pip3 uninstall techMiner")
+    sh("pip3 uninstall techminer")
     sh("python3 setup.py install develop")
 
 

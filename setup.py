@@ -4,7 +4,7 @@ def readme():
     with open('README.md') as f:
         return f.read()
 
-setup(name='techMiner',
+setup(name='techminer',
       version='0.0.0',
       description='Tech mining of bibliograpy',
       long_description='Tech mining of bibliograpy',
@@ -15,10 +15,10 @@ setup(name='techMiner',
       ],
       keywords='bibliograpy',
       url='http://github.com/jdvelasq/techMiner',
-      author='Ivanohe J. Garces & Juan D. Velasquez',
+      author='Juan D. Velasquez & Ivanohe J. Garces',
       author_email='jdvelasq@unal.edu.co',
       license='MIT',
-      packages=['techMiner'],
+      packages=['techminer'],
       test_suite='nose.collector',
       tests_require=['nose'],
       include_package_data=True,
