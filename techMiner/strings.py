@@ -17,7 +17,7 @@ from nltk.stem import PorterStemmer
 
 #-------------------------------------------------------------------------------------------
 def find_string(pattern, x, ignore_case=True, full_match=False, use_re=False):
-    """Find pattern in string.
+    r"""Find pattern in string.
 
     Args:
         pattern (string) 
@@ -27,7 +27,21 @@ def find_string(pattern, x, ignore_case=True, full_match=False, use_re=False):
         use_re (bool)
 
     Returns:
-        string or []
+        string or None
+
+    >>> find_string(r'\btwo\b', 'one two three four five', use_re=True)
+    'two'
+
+    >>> find_string(r'\bTWO\b', 'one two three four five', use_re=True)
+    'two'
+
+    >>> find_string(r'\btwo\b', 'one TWO three four five', ignore_case=False, use_re=True) is None
+    True
+
+    >>> find_string(r'\btwo\Wthree\b', 'one two three four five', ignore_case=False, use_re=True)
+    'two three'
+
+
 
     """
 
@@ -39,7 +53,7 @@ def find_string(pattern, x, ignore_case=True, full_match=False, use_re=False):
 
     if ignore_case is True:
         result = re.findall(pattern, x, re.I)
-    else:
+    else: 
         result = re.findall(pattern, x)
 
     if len(result):
