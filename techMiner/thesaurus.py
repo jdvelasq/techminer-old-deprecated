@@ -174,7 +174,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
         if len(z) > 1:
             result[groupName] = z
 
-    return Thesaurus(result, ignore_case=False, full_match=True)
+    return Thesaurus(result, ignore_case=False, full_match=True, use_re=False)
 
 #-----------------------------------------------------------------------------------------------
 class Thesaurus:

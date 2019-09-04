@@ -23,6 +23,24 @@ class RecordsDataFrame(pd.DataFrame):
         return self
 
     #--------------------------------------------------------------------------------------------------------
+    @property
+    def num_of_sources(self):
+        return len(self['Source title'].unique())
+
+    #--------------------------------------------------------------------------------------------------------
+    def most_cited_documents(self, N=10):
+        """ Returns the top N most cited documents.
+        Args:
+            N (int) : number of documents to be returned.
+
+        Results:
+            pandas.DataFrame
+        """
+        result = self.sort_values(by='Cited by', ascending=False)
+        return result[['Title', 'Authors', 'Year', 'Cited by']][0:N]
+
+
+    #--------------------------------------------------------------------------------------------------------
     def documents_by_term(self, term, sep=None):
         """Computes the number of documents per term.
 
@@ -53,14 +71,16 @@ class RecordsDataFrame(pd.DataFrame):
             })
 
         result = pdf.groupby(term, as_index=False).size()
-        result = FirstLevelResult({
+        result = pd.DataFrame({
             term : result.index,
             'Num Documents': result.tolist()
         })
-        return result.sort_values(by='Num Documents', ascending=False)
+        result = result.sort_values(by='Num Documents', ascending=False)
 
+        return FirstLevelResult(result)
+    
     #--------------------------------------------------------------------------------------------------------
-    def documents_by_year(self, cumulative=False, colname='Year'):
+    def documents_by_year(self, cumulative=False):
         """Computes the number of documents per year.
 
         >>> rdf = RecordsDataFrame({'Year': [2014, 2014, 2016, 2017, None, 2019]})
@@ -82,21 +102,21 @@ class RecordsDataFrame(pd.DataFrame):
         5  2019              5
 
         """
-        yearsdf = self[[colname]]
-        yearsdf[colname] = yearsdf[colname].map(lambda x: None if np.isnan(x) else x)
+        yearsdf = self[['Year']].copy()
+        yearsdf['Year'] = yearsdf['Year'].map(lambda x: None if np.isnan(x) else x)
         yearsdf = yearsdf.dropna()
-        yearsdf[colname] = yearsdf[colname].map(int)
+        yearsdf['Year'] = yearsdf['Year'].map(int)
         
-        minyear = min(yearsdf[colname])
-        maxyear = max(yearsdf[colname]) + 1
+        minyear = min(yearsdf.Year)
+        maxyear = max(yearsdf.Year) + 1
         docs_per_year = pd.Series(0, index=range(minyear, maxyear))
         
-        count_per_year = yearsdf.groupby(colname, )[[colname]].count()
-        docs_per_year[count_per_year.index] = count_per_year[colname]
+        count_per_year = yearsdf.groupby('Year')[['Year']].count()
+        docs_per_year[count_per_year.index] = count_per_year['Year']
         docs_per_year = docs_per_year.to_frame()
-        docs_per_year[colname] = docs_per_year.index
-        docs_per_year.columns = ['Num Documents', colname]
-        docs_per_year = docs_per_year[[colname, 'Num Documents']]
+        docs_per_year['Year'] = docs_per_year.index
+        docs_per_year.columns = ['Num Documents', 'Year']
+        docs_per_year = docs_per_year[['Year', 'Num Documents']]
         docs_per_year.index = range(len(docs_per_year))
         
         if cumulative is True:
@@ -123,7 +143,7 @@ class RecordsDataFrame(pd.DataFrame):
         5  2019         7
 
         """
-        yearsdf = self[[yearcol]]
+        yearsdf = self[[yearcol]].copy()
         yearsdf[yearcol] = yearsdf[yearcol].map(lambda x: None if np.isnan(x) else x)
         yearsdf = yearsdf.dropna()
         yearsdf[yearcol] = yearsdf[yearcol].map(int)
@@ -236,7 +256,7 @@ class RecordsDataFrame(pd.DataFrame):
         return SecondLevelResult(df)
 
     #--------------------------------------------------------------------------------------------------------
-    def factor_matrix(self, term, sep=None, n_components=2, N=10):
+    def factor(self, term, sep=None, n_components=2, N=10):
 
         x = self.documents_by_term(term, sep=sep)
         terms = x.loc[:, term].tolist()
@@ -245,7 +265,7 @@ class RecordsDataFrame(pd.DataFrame):
         terms = sorted(terms[0:N])
 
         x = pd.DataFrame(
-            data = np.zeros((len(df), len(terms))),
+            data = np.zeros((len(self), len(terms))),
             columns = terms,
             index = self.index)
 
@@ -267,15 +287,15 @@ class RecordsDataFrame(pd.DataFrame):
         
         values = np.transpose(pca.fit(X=x.values).components_)
 
-        result = SecondLevelResult(
-            values,
-            columns = ['F'+str(i) for i in range(n_components)],
-            index = terms )
-
-        return result
+        return SecondLevelResult(
+            pd.DataFrame(
+                values,
+                columns = ['F'+str(i) for i in range(n_components)],
+                index = terms),
+            isfactor = True)
 
     #--------------------------------------------------------------------------------------------------------
-    def crosscorrelation_matrix(self, termA, termB=None, sepA=None, sepB=None, N=20):
+    def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
         """Computes autocorrelation and crosscorrelation.
 
 
@@ -297,7 +317,7 @@ class RecordsDataFrame(pd.DataFrame):
         9    None    B;E
         10   None   None
 
-        >>> rdf.crosscorrelation_matrix(termA='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.crosscorrelation(termA='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            c1 c2  Crosscorrelation
         0   a  A          0.258199
         1   a  B          0.676123
@@ -325,7 +345,7 @@ class RecordsDataFrame(pd.DataFrame):
         23  e  D          0.000000
         24  e  E          0.000000
 
-        >>> rdf.crosscorrelation_matrix(termA='c1', termB='c2', sepA=';', sepB=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.crosscorrelation(termA='c1', termB='c2', sepA=';', sepB=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         c1 c2  Crosscorrelation
         0  a  A          0.258199
         1  a  B          0.676123
@@ -404,7 +424,7 @@ class RecordsDataFrame(pd.DataFrame):
             col1 = termA + ' (col)'
             col2 = 'Autocorrelation'
 
-        result =  SecondLevelResult(
+        result =  pd.DataFrame(
             data = np.zeros((len(termsA) * len(termsB), 3)),
             columns = [col0, col1, col2]
         )
@@ -424,10 +444,10 @@ class RecordsDataFrame(pd.DataFrame):
 
                 idx += 1
 
-        return result       
+        return SecondLevelResult(result)
 
 
-    def autocorrelation_matrix(self, term, sep=None, N=20):
+    def autocorrelation(self, term, sep=None, N=20):
         """
 
             
@@ -447,7 +467,7 @@ class RecordsDataFrame(pd.DataFrame):
         8    e;a  
         9   None
 
-        >>> rdf.autocorrelation_matrix(term='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.autocorrelation(term='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            A (row) A (col)  Autocorrelation
         0        a       a         1.000000
         1        a       b         0.670820
@@ -475,7 +495,7 @@ class RecordsDataFrame(pd.DataFrame):
         23       e       d         0.000000
         24       e       e         1.000000
 
-        >>> rdf.autocorrelation_matrix(term='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.autocorrelation(term='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
           A (row) A (col)  Autocorrelation
         0       a       a         1.000000
         1       a       b         0.670820
@@ -488,4 +508,4 @@ class RecordsDataFrame(pd.DataFrame):
         8       c       c         1.000000
 
         """
-        return self.crosscorrelation_matrix(termA=term, termB=term, sepA=sep, sepB=sep, N=N)
+        return self.crosscorrelation(termA=term, termB=term, sepA=sep, sepB=sep, N=N)

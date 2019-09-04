@@ -1,5 +1,5 @@
 """
-techMiner.Matrix
+techMiner.SecondLevelResult
 ==================================================================================================
 
 
@@ -7,6 +7,9 @@ techMiner.Matrix
 """
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import altair as alt
 import seaborn as sns
 from sklearn.cluster import KMeans
 from scipy.optimize import minimize
@@ -16,18 +19,27 @@ import itertools
 class SecondLevelResult(pd.DataFrame):
     """Class to represent a matrix of analysis of bibliographic records.
     """
-    #--------------------------------------------------------------------------------------------------------
-    def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False, isfactor=False):
+    #---------------------------------------------------------------------------------------------
+    def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False, isfactor=False,
+        transform=True):
         super().__init__(data, index, columns, dtype, copy)
         self._isfactor = isfactor
+        self._transform = transform
         
-    #--------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------
     @property
     def _constructor_expanddim(self):
         self._constructor_expanddim()
 
-    #--------------------------------------------------------------------------------------------------------
-    def _to_matrix(self, ascendingA=None, ascendingB=None):
+    #---------------------------------------------------------------------------------------------
+    def transpose(self, *args, **kwargs):
+        result = SecondLevelResult(super().transpose())
+        result._isfactor = self._isfactor
+        result._transform = self._transform
+        return result
+
+    #---------------------------------------------------------------------------------------------
+    def to_matrix(self, ascendingA=None, ascendingB=None):
         """Displays a term by term dataframe as a matrix.
 
         >>> mtx = SecondLevelResult({
@@ -44,13 +56,15 @@ class SecondLevelResult(pd.DataFrame):
         4   r1   c0   5.0
         5   r2   c1   6.0
 
-        >>> mtx._to_matrix() # doctest: +NORMALIZE_WHITESPACE
+        >>> mtx.to_matrix() # doctest: +NORMALIZE_WHITESPACE
              c0   c1
         r0  1.0  4.0
         r1  5.0  2.0
         r2  3.0  6.0    
 
         """
+        if self._transform is False:
+            return pd.DataFrame(self)
 
         if self.columns[0] == 'Year':
             termA_unique = range(min(self.Year), max(self.Year)+1)
@@ -81,67 +95,107 @@ class SecondLevelResult(pd.DataFrame):
             val = r[2]
             result.loc[row, col] = val
             
-        return result
+        return SecondLevelResult(result, transform = False)
 
 
-    #--------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------
     def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10)):
         
         if self._isfactor is True:
             x = self.apply(lambda x: abs(x))
         else:
-            x = self._to_matrix(ascendingA, ascendingB)
+            if self._transform is True:
+                x = self.to_matrix(ascendingA, ascendingB)
+            else:
+                x = self
 
         plt.figure(figsize=figsize)
-        plt.pcolor(x.values, cmap='Greys')
-        plt.xticks(np.arange(len(x.columns))+0.5, x.columns, rotation='vertical')
-        plt.yticks(np.arange(len(x.index))+0.5, x.index)
+        plt.pcolor(np.transpose(x.values), cmap='Greys')
+        plt.xticks(np.arange(len(x.index))+0.5, x.index, rotation='vertical')
+        plt.yticks(np.arange(len(x.columns))+0.5, x.columns)
         plt.gca().set_aspect('equal', 'box')
         plt.gca().invert_yaxis()
     
-    #--------------------------------------------------------------------------------------------------------
-    def heatmap_in_altair(self):
+    #---------------------------------------------------------------------------------------------
+    def heatmap_in_altair(self, ascendingA=None, ascendingB=None):
+
+        if ascendingA is None or ascendingA is True:
+            sort_X = 'ascending'
+        else:
+            sort_X = 'descending'
+
+        if ascendingB is None or ascendingB is True:
+            sort_Y = 'ascending'
+        else:
+            sort_Y = 'descending'
 
         return alt.Chart(self).mark_rect().encode(
-            x=self.columns[0] + ':O',
-            y=self.columns[1] + ':O',
+            alt.X(self.columns[0] + ':O', sort=sort_X),
+            alt.Y(self.columns[1] + ':O', sort=sort_Y),
             color=self.columns[2] + ':Q')
-    
-    #--------------------------------------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------------------------
     def heatmap_in_seaborn(self):
         return sns.heatmap(self)
 
-    #--------------------------------------------------------------------------------------------------------
-    def circleplot_in_altair(self):
+    #---------------------------------------------------------------------------------------------
+    def circleplot_in_altair(self, ascendingA=None, ascendingB=None):
+
+        if ascendingA is None or ascendingA is True:
+            sort_X = 'ascending'
+        else:
+            sort_X = 'descending'
+
+        if ascendingB is None or ascendingB is True:
+            sort_Y = 'ascending'
+        else:
+            sort_Y = 'descending'
 
         return alt.Chart(self).mark_circle().encode(
             alt.X(self.columns[0] + ':N',
-                axis=alt.Axis(labelAngle=270)),
-            alt.Y(self.columns[1] + ':N'),
+                axis=alt.Axis(labelAngle=270), 
+                sort=sort_X),
+            alt.Y(self.columns[1] + ':N',
+                sort=sort_Y),
             size=self.columns[2],
             color=self.columns[2])
 
-    #--------------------------------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------------------
     def kmeans(self, n_clusters=2):
         """Apply KMeans to a pandas dataframe.
         """
 
+        if self._isfactor is True:
+            x = self.copy()
+        else:
+            x = self.to_matrix()
+
         m = KMeans(n_clusters)
-        m.fit(self.values)
-        centers = pd.DataFrame(
-            m.cluster_centers_,
-            columns = self.columns,
-            index = ['Cluster ' + str(i) for i in range(n_clusters)])
+        m.fit(x.values)
+        # centers = pd.DataFrame(
+        #     m.cluster_centers_,
+        #     columns = x.columns,
+        #     index = ['Cluster ' + str(i) for i in range(n_clusters)])
+
+
+
+        centers = SecondLevelResult(
+            np.transpose(m.cluster_centers_),
+            columns = ['Cluster ' + str(i) for i in range(n_clusters)],
+            index = x.columns,
+            transform = False)
+
+
 
         clusters = pd.DataFrame(
-            {'cluster': m.predict(self.values)},
-            index = self.index)
+            {'cluster': m.predict(x.values)},
+            index = x.index)
 
         return centers, clusters
 
-
+    #---------------------------------------------------------------------------------------------
     def network_graph(self, save=True, name='network.png', corr_min=0.7, node_color='lightblue',
-                  edge_color='lightgrey', edge_color2='lightcoral', node_size=None,fond_size=4):
+                  edge_color='lightgrey', edge_color2='lightcoral', node_size=None, fond_size=4):
         """
         This function generates network graph for matrix.
 
@@ -159,6 +213,7 @@ class SecondLevelResult(pd.DataFrame):
                             to the weights of edges that arrive and leave each one of them.
                             If numeric value, all nodes will be plotted with this given size
             fond_size (int): Node label fond size
+
         Returns:
             None
         

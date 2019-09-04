@@ -237,7 +237,7 @@ class Keywords():
             self._keywords = sorted(list(set(x)))
 
     #--------------------------------------------------------------------------------------------------------
-    def extract_from(self, x, sep='|'):
+    def extract_from(self, x, sep=';'):
         r"""Returns a new string with the keywords in string x matching the list of keywords used to fit the model.
 
         >>> Keywords([r"xxx", r"two", r"yyy"]).extract_from('one two three four five')
@@ -408,9 +408,9 @@ class Keywords():
 
 
     #--------------------------------------------------------------------------------------------------------
-    def _stemming(self, x):
-        x = fingerprint(x)
-        return [self.extract(z) for z in x.split()]
+    # def _stemming(self, x):
+    #     x = fingerprint(x)
+    #     return [self.extract(z) for z in x.split()]
     #--------------------------------------------------------------------------------------------------------
 
     # def stemming_and(self, x):
