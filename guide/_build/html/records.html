@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TechMiner.records &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TechMiner.SecondLevelResult" href="second_level.html" />
+    <link rel="prev" title="TechMiner.Keywords" href="keywords.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="second_level.html" title="TechMiner.SecondLevelResult"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keywords.html" title="TechMiner.Keywords"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-techminer.records"></span><div class="section" id="techminer-records">
+<h1>TechMiner.records<a class="headerlink" href="#techminer-records" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The functions in this module allows the user to manipualte the current dataframe
+in order to group, delete, modify and add new information to the current dataframe
+of bibliographical information.</p>
+</div>
+<div class="section" id="functions-in-this-module">
+<h2>Functions in this module<a class="headerlink" href="#functions-in-this-module" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="techminer.records.coverage">
+<code class="sig-prename descclassname">techminer.records.</code><code class="sig-name descname">coverage</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/records.html#coverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.records.coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts the number of None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Generic pandas.DataFrame.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;f0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>    <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="p">[</span>  <span class="mi">1</span><span class="p">,</span>    <span class="mi">2</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>    <span class="mi">3</span><span class="p">,</span>   <span class="kc">None</span><span class="p">,</span>   <span class="mi">5</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coverage</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">  Field  Number of items  Coverage</span>
+<span class="go">0    f0                4  0.666667</span>
+<span class="go">1    f1                5  0.833333</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="techminer.records.display_records">
+<code class="sig-prename descclassname">techminer.records.</code><code class="sig-name descname">display_records</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/records.html#display_records"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.records.display_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show one or more records of dataframe at a time. User can use standard
+pandas.DataFrame funcions to select and order specific records or a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Generic pandas.DataFrame.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;f0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="p">[</span>  <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span>   <span class="mi">5</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">  f0  f1</span>
+<span class="go">0  a   1</span>
+<span class="go">1  b   2</span>
+<span class="go">2  a   2</span>
+<span class="go">3  c   3</span>
+<span class="go">4  a   1</span>
+<span class="go">5  e   5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">display_records</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">Record index: 0</span>
+<span class="go">{</span>
+<span class="go">  &quot;f0&quot;: &quot;a&quot;,</span>
+<span class="go">  &quot;f1&quot;: 1</span>
+<span class="go">}</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">Record index: 1</span>
+<span class="go">{</span>
+<span class="go">  &quot;f0&quot;: &quot;b&quot;,</span>
+<span class="go">  &quot;f1&quot;: 2</span>
+<span class="go">}</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">Record index: 2</span>
+<span class="go">{</span>
+<span class="go">  &quot;f0&quot;: &quot;a&quot;,</span>
+<span class="go">  &quot;f1&quot;: 2</span>
+<span class="go">}</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">Record index: 3</span>
+<span class="go">{</span>
+<span class="go">  &quot;f0&quot;: &quot;c&quot;,</span>
+<span class="go">  &quot;f1&quot;: 3</span>
+<span class="go">}</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">Record index: 4</span>
+<span class="go">{</span>
+<span class="go">  &quot;f0&quot;: &quot;a&quot;,</span>
+<span class="go">  &quot;f1&quot;: 1</span>
+<span class="go">}</span>
+<span class="go">-----------------------------------------------</span>
+<span class="go">Record index: 5</span>
+<span class="go">{</span>
+<span class="go">  &quot;f0&quot;: &quot;e&quot;,</span>
+<span class="go">  &quot;f1&quot;: 5</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="techminer.records.merge_fields">
+<code class="sig-prename descclassname">techminer.records.</code><code class="sig-name descname">merge_fields</code><span class="sig-paren">(</span><em class="sig-param">fieldA</em>, <em class="sig-param">fieldB</em>, <em class="sig-param">sepA=None</em>, <em class="sig-param">sepB=None</em>, <em class="sig-param">new_sep=';'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/records.html#merge_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.records.merge_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="techminer.records.remove_duplicate_records">
+<code class="sig-prename descclassname">techminer.records.</code><code class="sig-name descname">remove_duplicate_records</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">fields</em>, <em class="sig-param">match_type='strict'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/records.html#remove_duplicate_records"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.records.remove_duplicate_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove duplicate records in a dataframe based in the velue of one
+or more fields.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;f0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="p">[</span>  <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span>   <span class="mi">5</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">  f0  f1</span>
+<span class="go">0  a   1</span>
+<span class="go">1  b   2</span>
+<span class="go">2  a   2</span>
+<span class="go">3  c   3</span>
+<span class="go">4  a   1</span>
+<span class="go">5  e   5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">remove_duplicate_records</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">&#39;f0&#39;</span><span class="p">)</span>
+<span class="go">  f0  f1</span>
+<span class="go">0  a   1</span>
+<span class="go">1  b   2</span>
+<span class="go">3  c   3</span>
+<span class="go">5  e   5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">remove_duplicate_records</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">])</span>
+<span class="go">  f0  f1</span>
+<span class="go">0  a   1</span>
+<span class="go">1  b   2</span>
+<span class="go">3  c   3</span>
+<span class="go">5  e   5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">remove_duplicate_records</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">])</span>
+<span class="go">  f0  f1</span>
+<span class="go">0  a   1</span>
+<span class="go">1  b   2</span>
+<span class="go">2  a   2</span>
+<span class="go">3  c   3</span>
+<span class="go">5  e   5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;f0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A;&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;A,&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="p">[</span>  <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span>   <span class="mi">5</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">   f0  f1</span>
+<span class="go">0  A;   1</span>
+<span class="go">1   b   2</span>
+<span class="go">2  A,   2</span>
+<span class="go">3   c   3</span>
+<span class="go">4   a   1</span>
+<span class="go">5   e   5</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">remove_duplicate_records</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">&#39;f0&#39;</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="s1">&#39;fingerprint&#39;</span><span class="p">)</span>
+<span class="go">   f0  f1</span>
+<span class="go">0  A;   1</span>
+<span class="go">1   b   2</span>
+<span class="go">3   c   3</span>
+<span class="go">5   e   5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TechMiner.records</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#functions-in-this-module">Functions in this module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="keywords.html"
+                        title="previous chapter">TechMiner.Keywords</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="second_level.html"
+                        title="next chapter">TechMiner.SecondLevelResult</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/records.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="second_level.html" title="TechMiner.SecondLevelResult"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keywords.html" title="TechMiner.Keywords"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Modules</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

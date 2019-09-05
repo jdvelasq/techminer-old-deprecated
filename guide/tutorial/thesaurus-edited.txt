@@ -1,0 +1,2146 @@
+{
+  "Academic research": [
+    "Academic research",
+    "academic research"
+  ],
+  "Adaptive filters": [
+    "Adaptive filter",
+    "Adaptive filtering",
+    "Adaptive filters"
+  ],
+  "Adaptive neuro-fuzzy inference system": [
+    "Adaptive Neuro-fuzzy Inference system",
+    "Adaptive neuro-fuzzy inference system"
+  ],
+  "Agent-based computational economics": [
+    "Agent-based Computational Economics",
+    "Agent-based computational economics"
+  ],
+  "Agent-based model": [
+    "Agent-based model",
+    "Agent-based modeling",
+    "Agent-based modelling",
+    "Agents-based modelling",
+    "agent-based model",
+    "agent-based modeling"
+  ],
+  "Agent-based simulation": [
+    "Agent based simulation",
+    "Agent-based simulation",
+    "agent-based simulation"
+  ],
+  "Algorithmic trading": [
+    "Algorithm trading",
+    "Algorithmic Trading",
+    "Algorithmic trading",
+    "Trading algorithms",
+    "algorithmic trading",
+    "trading algorithms"
+  ],
+  "Algorithmic trading system": [
+    "Algorithmic Trading Systems",
+    "Algorithmic trading system",
+    "Algorithmic trading systems",
+    "algorithmic trading system",
+    "algorithmic trading systems"
+  ],
+  "Algorithmic trading, trading strategy": [
+    "Algorithmic trading strategy",
+    "Algorithmic trading, trading strategy"
+  ],
+  "Algorithms": [
+    "Algorithm",
+    "Algorithms",
+    "algorithm",
+    "algorithms"
+  ],
+  "Artificial intelligence": [
+    "Artificial Intelligence",
+    "Artificial intelligence",
+    "artificial intelligence"
+  ],
+  "Asian options": [
+    "Asian Options",
+    "Asian options"
+  ],
+  "Asset allocation": [
+    "Asset allocation",
+    "asset allocation"
+  ],
+  "Asymmetric distributions": [
+    "Asymmetric distribution",
+    "Asymmetric distributions"
+  ],
+  "Asymmetry": [
+    "Asymmetry",
+    "asymmetry"
+  ],
+  "Auction": [
+    "Auction",
+    "Auctions",
+    "auction"
+  ],
+  "Auto-regressive": [
+    "Auto regression",
+    "Auto-regressive"
+  ],
+  "Automated trading": [
+    "Automated Trading",
+    "Automated trades",
+    "Automated trading",
+    "automated trading"
+  ],
+  "Automated trading systems": [
+    "Automated trading system",
+    "Automated trading systems",
+    "automated trading system",
+    "automated trading systems"
+  ],
+  "Automation": [
+    "Automation",
+    "automation"
+  ],
+  "Autonomous agents": [
+    "Autonomous agents",
+    "autonomous agents"
+  ],
+  "Behavioral finance": [
+    "Behavioral Finance",
+    "Behavioral finance"
+  ],
+  "Behaviour models": [
+    "Behaviour Modeling",
+    "Behaviour models"
+  ],
+  "Big data": [
+    "Big Data",
+    "Big data",
+    "big data"
+  ],
+  "Big data analytics": [
+    "Big Data Analytics",
+    "Big data analytics",
+    "big data analytics"
+  ],
+  "C++ (programming language)": [
+    "C (programming language)",
+    "C++ (programming language)"
+  ],
+  "Capital markets": [
+    "Capital markets",
+    "Market capitalization"
+  ],
+  "Chaos theory": [
+    "Chaos Theory",
+    "Chaos theory"
+  ],
+  "Closed-form models": [
+    "Closed form modeling",
+    "Closed-form models"
+  ],
+  "Cluster analysis": [
+    "Cluster analysis",
+    "cluster analysis"
+  ],
+  "Code Generation": [
+    "Code Generation",
+    "code generation"
+  ],
+  "Cointegration": [
+    "Cointegration",
+    "cointegration"
+  ],
+  "Collaborative networks": [
+    "Collaborative network",
+    "Collaborative networks"
+  ],
+  "Colocation": [
+    "Colocation",
+    "colocation"
+  ],
+  "Commerce": [
+    "Commerce",
+    "commerce"
+  ],
+  "Commodity": [
+    "Commodities",
+    "Commodity"
+  ],
+  "Commodity hardware": [
+    "Commodity hardware",
+    "commodity hardware"
+  ],
+  "Complex event processing": [
+    "Complex Event Processing",
+    "Complex event processing",
+    "complex event processing"
+  ],
+  "Computer architecture": [
+    "Computer architecture",
+    "Computing architecture"
+  ],
+  "Computer simulation": [
+    "Computer simulation",
+    "computer simulation"
+  ],
+  "Computing power": [
+    "Computational power",
+    "Computing power"
+  ],
+  "Conditional probability": [
+    "Conditional probabilities",
+    "Conditional probability"
+  ],
+  "Continuous double auction": [
+    "Continuous Double Auction",
+    "Continuous double auction"
+  ],
+  "Convolutional neural network": [
+    "Convolutional neural network",
+    "Convolutional neural networks",
+    "convolutional neural networks"
+  ],
+  "Copula functions": [
+    "Copula function",
+    "Copula functions"
+  ],
+  "Costs": [
+    "Costs",
+    "costs"
+  ],
+  "Covariance matrix": [
+    "Covariance matrix",
+    "covariance matrix"
+  ],
+  "Currency markets": [
+    "Currency markets",
+    "currency markets"
+  ],
+  "Dark pools": [
+    "Dark Pools",
+    "Dark pools"
+  ],
+  "Data analytics": [
+    "Data Analytics",
+    "Data analytics"
+  ],
+  "Data centers": [
+    "Data centers",
+    "data centers"
+  ],
+  "Data mining": [
+    "Data Mining",
+    "Data mining",
+    "data mining"
+  ],
+  "Data processing": [
+    "Data processing",
+    "data processing"
+  ],
+  "Data sets": [
+    "Data sets",
+    "data set",
+    "data sets"
+  ],
+  "Data stream management systems": [
+    "Data stream management system",
+    "Data stream management systems"
+  ],
+  "Data stream mining": [
+    "Data stream mining",
+    "Data stream minings"
+  ],
+  "Data stream processing": [
+    "Data Stream Processing",
+    "Data stream processing",
+    "data stream processing"
+  ],
+  "Data structures": [
+    "Data structures",
+    "data structures"
+  ],
+  "Data visualization": [
+    "Data visualization",
+    "data visualization"
+  ],
+  "Decision making": [
+    "Decision making",
+    "decision making"
+  ],
+  "Decision support systems": [
+    "Decision support system",
+    "Decision support systems",
+    "decision support systems"
+  ],
+  "Decision supports": [
+    "Decision support",
+    "Decision supports"
+  ],
+  "Deep learning": [
+    "Deep Learning",
+    "Deep learning"
+  ],
+  "Deep neural networks": [
+    "Deep Neural Networks",
+    "Deep neural networks"
+  ],
+  "Differential evolution algorithms": [
+    "Differential evolution algorithm",
+    "Differential evolution algorithms"
+  ],
+  "Directional changes": [
+    "Directional Changes",
+    "Directional changes",
+    "directional change"
+  ],
+  "Domain specific languages": [
+    "Domain Specific Language",
+    "Domain specific language",
+    "Domain specific languages"
+  ],
+  "Economic analysis": [
+    "Economic analysis",
+    "economic analysis"
+  ],
+  "Economics": [
+    "Economics",
+    "economics"
+  ],
+  "Efficiency": [
+    "Efficiency",
+    "efficiency"
+  ],
+  "Efficient market hypothesis": [
+    "Efficient Market Hypothesis",
+    "Efficient market hypothesis",
+    "Efficient-market hypothesis",
+    "efficient market hypothesis"
+  ],
+  "Electronic data interchange": [
+    "Electronic data interchange",
+    "electronic data interchange"
+  ],
+  "Electronic market": [
+    "Electronic Market",
+    "Electronic Markets",
+    "Electronic market",
+    "Electronic markets",
+    "electronic market",
+    "electronic markets"
+  ],
+  "Electronic trading": [
+    "Electronic Trading",
+    "Electronic trading",
+    "electronic trading"
+  ],
+  "Emerging markets": [
+    "Emerging markets",
+    "emerging markets"
+  ],
+  "End-to-end latency": [
+    "End to end latencies",
+    "End-to-end latency"
+  ],
+  "Engines": [
+    "Engineering",
+    "Engines"
+  ],
+  "Ensemble classifiers": [
+    "Ensemble classifier",
+    "Ensemble classifiers"
+  ],
+  "Ensemble learning": [
+    "Ensemble learning",
+    "ensemble learning"
+  ],
+  "Equity trading": [
+    "Equity Trading",
+    "Equity trading"
+  ],
+  "Estimation": [
+    "Estimation",
+    "estimation"
+  ],
+  "Event Processing": [
+    "Event Processing",
+    "Event processing"
+  ],
+  "Event studies": [
+    "Event Study",
+    "Event studies"
+  ],
+  "Evolutionary algorithms": [
+    "Evolutionary algorithms",
+    "evolutionary algorithms"
+  ],
+  "Evolutionary approaches": [
+    "Evolutionary approach",
+    "Evolutionary approaches"
+  ],
+  "Evolutionary computation": [
+    "Evolutionary computation",
+    "Evolutionary computing",
+    "evolutionary computation"
+  ],
+  "Evolutionary optimizations": [
+    "Evolutionary optimization",
+    "Evolutionary optimizations"
+  ],
+  "Exchange rates": [
+    "Exchange rate",
+    "Exchange rates",
+    "exchange rate"
+  ],
+  "Execution strategies": [
+    "Execution strategies",
+    "execution strategies"
+  ],
+  "Experimental economics": [
+    "Experimental Economics",
+    "Experimental economics"
+  ],
+  "Exponentially weighted moving average": [
+    "Exponentially Weighted Moving Average",
+    "Exponentially weighted moving average"
+  ],
+  "FIX": [
+    "FIX",
+    "fix"
+  ],
+  "FPGA": [
+    "FPGA",
+    "fpga"
+  ],
+  "Fastflow": [
+    "FastFlow",
+    "Fastflow"
+  ],
+  "Feature extraction": [
+    "Feature extraction",
+    "feature extraction"
+  ],
+  "Features vector": [
+    "Feature vectors",
+    "Features vector"
+  ],
+  "Feedforward neural networks": [
+    "Feedforward neural networks",
+    "feedforward neural network"
+  ],
+  "Finance": [
+    "Finance",
+    "finance"
+  ],
+  "Financial data": [
+    "Financial Data",
+    "Financial data",
+    "financial data"
+  ],
+  "Financial decision support systems": [
+    "Financial decision support system",
+    "Financial decision support systems"
+  ],
+  "Financial engineering": [
+    "Financial Engineering",
+    "Financial engineering"
+  ],
+  "Financial forecasting": [
+    "Financial Forecasting",
+    "Financial forecasting",
+    "financial forecasting"
+  ],
+  "Financial markets": [
+    "Financial Markets",
+    "Financial market",
+    "Financial markets",
+    "financial market",
+    "financial markets"
+  ],
+  "Financial services": [
+    "Financial service",
+    "Financial services"
+  ],
+  "Financial time series": [
+    "Financial time series",
+    "Financial time-series",
+    "financial time series"
+  ],
+  "Flash crash": [
+    "Flash Crash",
+    "Flash crash",
+    "flash crash"
+  ],
+  "Forecasting": [
+    "Forecasting",
+    "forecasting"
+  ],
+  "Forecasting methods": [
+    "Forecasting methods",
+    "forecasting method"
+  ],
+  "Forex": [
+    "Forex",
+    "forex"
+  ],
+  "Frequency-scaling": [
+    "Frequency scaling",
+    "Frequency-scaling"
+  ],
+  "Fundamental analysis": [
+    "Fundamental Analysis",
+    "Fundamental analysis"
+  ],
+  "Futures": [
+    "Futures",
+    "futures"
+  ],
+  "Futures contract": [
+    "Futures contract",
+    "Futures contracts"
+  ],
+  "Futures market": [
+    "Futures Market",
+    "Futures market",
+    "Futures markets",
+    "futures market"
+  ],
+  "Fuzzy systems": [
+    "Fuzzy systems",
+    "fuzzy system"
+  ],
+  "Gaussian Processes": [
+    "Gaussian Process",
+    "Gaussian Processes",
+    "Gaussian process"
+  ],
+  "Genetic algorithms": [
+    "Genetic Algorithm",
+    "Genetic algorithm",
+    "Genetic algorithms",
+    "genetic algorithm"
+  ],
+  "Genetic programming": [
+    "Genetic Programming",
+    "Genetic programming",
+    "genetic programming"
+  ],
+  "HFT": [
+    "HFT",
+    "HFTs"
+  ],
+  "Hardware": [
+    "Hardware",
+    "hardware"
+  ],
+  "Hardware and software": [
+    "Hardware and software",
+    "Software and hardwares"
+  ],
+  "Hardware-accelerated": [
+    "Hardware acceleration",
+    "Hardware-accelerated",
+    "hardware acceleration",
+    "hardware-accelerated"
+  ],
+  "Hawkes processes": [
+    "Hawkes process",
+    "Hawkes processes"
+  ],
+  "Hidden Markov models": [
+    "Hidden Markov Model",
+    "Hidden Markov model",
+    "Hidden Markov models",
+    "hidden Markov model"
+  ],
+  "High frequency": [
+    "High Frequency",
+    "High frequencies",
+    "High frequency",
+    "High-Frequency",
+    "High-frequency",
+    "high frequency",
+    "high-frequency"
+  ],
+  "High frequency data": [
+    "High Frequency Data",
+    "High frequency data",
+    "High-frequency data",
+    "high frequency data",
+    "high-frequency data"
+  ],
+  "High performance computing": [
+    "High performance computing",
+    "High-performance computing",
+    "high performance computing"
+  ],
+  "High throughput": [
+    "High throughput",
+    "High throughputs"
+  ],
+  "High-frequency trading": [
+    "High Frequency Trading",
+    "High frequency trading",
+    "High-Frequency Trading",
+    "High-frequency trading",
+    "high frequency trading",
+    "high-frequency trading"
+  ],
+  "High-frequency trading data": [
+    "High frequency trading data",
+    "High-frequency trading data"
+  ],
+  "Historical data": [
+    "Historical data",
+    "historical data"
+  ],
+  "Holonic systems": [
+    "Holonic Systems",
+    "Holonic systems"
+  ],
+  "Human-computer interaction": [
+    "Human computer interaction",
+    "Human-computer interaction"
+  ],
+  "IT investments": [
+    "IT investment",
+    "IT investments"
+  ],
+  "Independent component analysis": [
+    "Independent component analysis",
+    "independent components analysis"
+  ],
+  "Indicator selections": [
+    "Indicator selection",
+    "Indicator selections"
+  ],
+  "Information providing": [
+    "Information providers",
+    "Information providing"
+  ],
+  "Information systems": [
+    "Information systems",
+    "information system"
+  ],
+  "Intelligent agents": [
+    "Intelligent Agents",
+    "Intelligent agents"
+  ],
+  "Intermediate languages": [
+    "Intermediate language",
+    "Intermediate languages"
+  ],
+  "Inverse reinforcement learning": [
+    "Inverse Reinforcement Learning",
+    "Inverse reinforcement learning"
+  ],
+  "Investment decision making": [
+    "Investment decision making",
+    "investment decision making"
+  ],
+  "Investments": [
+    "Investments",
+    "investment"
+  ],
+  "Learning algorithms": [
+    "Learning algorithms",
+    "learning algorithm"
+  ],
+  "Leverage effects": [
+    "Leverage effect",
+    "Leverage effects"
+  ],
+  "Limit order book": [
+    "Limit order book",
+    "Limit order books",
+    "limit order book"
+  ],
+  "Liquidity": [
+    "Liquidation",
+    "Liquidity",
+    "liquidity"
+  ],
+  "Liquidity provisions": [
+    "Liquidity provision",
+    "Liquidity provisions"
+  ],
+  "Literature reviews": [
+    "Literature review",
+    "Literature reviews"
+  ],
+  "Logistic regressions": [
+    "Logistic regressions",
+    "logistic regression",
+    "logistic regressions"
+  ],
+  "Low latency": [
+    "Low latencies",
+    "Low latency",
+    "Low-latency",
+    "low-latency"
+  ],
+  "MATLAB": [
+    "MATLAB",
+    "Matlab"
+  ],
+  "Machine learning": [
+    "Machine Learning",
+    "Machine learning",
+    "machine learning"
+  ],
+  "Machine learning techniques": [
+    "Machine learning techniques",
+    "machine learning techniques"
+  ],
+  "Market activity": [
+    "Market activities",
+    "Market activity"
+  ],
+  "Market data": [
+    "Market data",
+    "market data"
+  ],
+  "Market data processing": [
+    "Market data processing",
+    "market data processing"
+  ],
+  "Market efficiency": [
+    "Market efficiency",
+    "market efficiency"
+  ],
+  "Market impact costs": [
+    "Market Impact Cost",
+    "Market impact costs"
+  ],
+  "Market microstructure": [
+    "Market Microstructure",
+    "Market microstructure",
+    "Market microstructures",
+    "market microstructure"
+  ],
+  "Market quality": [
+    "Market quality",
+    "market quality"
+  ],
+  "Market regulation": [
+    "Market regulation",
+    "market regulation"
+  ],
+  "Market simulation": [
+    "Market simulation",
+    "Market simulators",
+    "market simulation"
+  ],
+  "Market trends": [
+    "Market trends",
+    "market trends"
+  ],
+  "Market-maker": [
+    "Market maker",
+    "Market-maker"
+  ],
+  "Markov chain": [
+    "Markov Chain",
+    "Markov chain"
+  ],
+  "Markov decision process": [
+    "Markov Decision Process",
+    "Markov Decision Processes",
+    "Markov decision process"
+  ],
+  "Markov models": [
+    "Markov Model",
+    "Markov model",
+    "Markov models"
+  ],
+  "Mathematical models": [
+    "Mathematical models",
+    "mathematical model"
+  ],
+  "Matrix norms": [
+    "Matrix norm",
+    "Matrix norms"
+  ],
+  "Mean reversion": [
+    "Mean reverse",
+    "Mean reversion",
+    "mean reversion"
+  ],
+  "Mean-variance": [
+    "Mean variance",
+    "Mean-variance"
+  ],
+  "MiFID II": [
+    "MIFiD II",
+    "MiFID II"
+  ],
+  "Micro patterns": [
+    "Micro pattern",
+    "Micro patterns"
+  ],
+  "Microstructure": [
+    "Microstructure",
+    "microstructure"
+  ],
+  "Model predictive control": [
+    "Model Predictive Control",
+    "Model predictive control"
+  ],
+  "Models, Economic": [
+    "Models, Economic",
+    "economic model"
+  ],
+  "Moving averages": [
+    "Moving Average",
+    "Moving averages"
+  ],
+  "Multi agent systems": [
+    "Multi agent system",
+    "Multi agent systems",
+    "Multi-agent system",
+    "Multi-agent systems"
+  ],
+  "Multi-Agent": [
+    "Multi agent",
+    "Multi-Agent"
+  ],
+  "Multi-objective": [
+    "Multi objective",
+    "Multi-objective"
+  ],
+  "Multiagent architecture": [
+    "Multiagent architecture",
+    "Multiagent architectures"
+  ],
+  "Multiagent systems": [
+    "MultiAgent Systems",
+    "Multiagent systems",
+    "multiagent systems"
+  ],
+  "Multicore programming": [
+    "Multicore Programming",
+    "Multicore programming",
+    "multicore programming"
+  ],
+  "Multiplicative error models": [
+    "Multiplicative error model",
+    "Multiplicative error models"
+  ],
+  "Near-duplicate detection": [
+    "Near duplicate detection",
+    "Near-duplicate detection"
+  ],
+  "Negotiations": [
+    "Negotiation",
+    "Negotiations"
+  ],
+  "Neural networks": [
+    "Neural network",
+    "Neural networks",
+    "neural network",
+    "neural networks"
+  ],
+  "Neural networks (NNS)": [
+    "Neural Networks (NNs)",
+    "Neural network (nn)",
+    "Neural networks (NNS)"
+  ],
+  "Neuro-fuzzy inference systems": [
+    "Neuro-fuzzy inference system",
+    "Neuro-fuzzy inference systems"
+  ],
+  "Online learning": [
+    "Online learning",
+    "online learning"
+  ],
+  "Online prediction": [
+    "Online prediction",
+    "online prediction"
+  ],
+  "Ontology": [
+    "Ontologies",
+    "Ontology"
+  ],
+  "Optical fibers": [
+    "Fiber optics",
+    "Optical fibers"
+  ],
+  "Optimal execution": [
+    "Optimal execution",
+    "optimal execution"
+  ],
+  "Optimization": [
+    "Optimization",
+    "optimization"
+  ],
+  "Optimization algorithms": [
+    "Algorithmic optimization",
+    "Optimal algorithm",
+    "Optimization algorithms",
+    "Optimized algorithms"
+  ],
+  "Option pricing": [
+    "Option Pricing",
+    "Option pricing",
+    "option pricing"
+  ],
+  "Order imbalance": [
+    "Order imbalance",
+    "order imbalance"
+  ],
+  "Order routing": [
+    "Order Routing",
+    "Order routing"
+  ],
+  "Outlier detection": [
+    "Outlier Detection",
+    "Outlier detection"
+  ],
+  "Pairs trading": [
+    "Pair trading",
+    "Pairs trading",
+    "pairs trading"
+  ],
+  "Panel data": [
+    "Panel Data",
+    "Panel data"
+  ],
+  "Parallel computing": [
+    "Parallel Computing",
+    "Parallel computing"
+  ],
+  "Parallel patterns": [
+    "Parallel Patterns",
+    "Parallel patterns"
+  ],
+  "Parallel programming": [
+    "Parallel programming",
+    "parallel programming"
+  ],
+  "Passive measurements": [
+    "Passive measurement",
+    "Passive measurements"
+  ],
+  "Pattern mining": [
+    "Pattern Mining",
+    "Pattern mining"
+  ],
+  "Pattern recognition": [
+    "Pattern recognition",
+    "pattern recognition"
+  ],
+  "Performance evaluation": [
+    "Performance Evaluation",
+    "Performance evaluation"
+  ],
+  "Performance optimizations": [
+    "Performance optimizations",
+    "performance optimizations"
+  ],
+  "Portfolio": [
+    "Portfolio",
+    "Portfolios",
+    "portfolio"
+  ],
+  "Portfolio construction": [
+    "Portfolio construction",
+    "portfolio construction"
+  ],
+  "Portfolio decisions": [
+    "Portfolio decision",
+    "Portfolio decisions"
+  ],
+  "Portfolio managements": [
+    "Portfolio Management",
+    "Portfolio management",
+    "Portfolio managements",
+    "Portfolio managers",
+    "portfolio management"
+  ],
+  "Portfolio optimization": [
+    "Portfolio optimization",
+    "portfolio optimization"
+  ],
+  "Portfolio selection": [
+    "Portfolio selection",
+    "portfolio selection"
+  ],
+  "Prediction markets": [
+    "Market prediction",
+    "Prediction market",
+    "Prediction markets"
+  ],
+  "Predictive analytic": [
+    "Predictive Analytic",
+    "Predictive analytic"
+  ],
+  "Predictive models": [
+    "Predictive modeling",
+    "Predictive models"
+  ],
+  "Price movement": [
+    "Price movement",
+    "price movement"
+  ],
+  "Price prediction": [
+    "Price Prediction",
+    "Price prediction"
+  ],
+  "Probability": [
+    "Probability",
+    "probability"
+  ],
+  "Profitability": [
+    "Profitability",
+    "profit",
+    "profitability"
+  ],
+  "Publish/subscribe": [
+    "Publish/Subscribe",
+    "Publish/subscribe",
+    "publish/subscribe"
+  ],
+  "Quadratic variations": [
+    "Quadratic variation",
+    "Quadratic variations"
+  ],
+  "Quantitative investment": [
+    "Quantitative investment",
+    "quantitative investment"
+  ],
+  "Random forests": [
+    "Random forest",
+    "Random forests"
+  ],
+  "Real time": [
+    "Real time",
+    "real time"
+  ],
+  "Reconfigurable hardware": [
+    "Reconfigurable hardware",
+    "reconfigurable hardware"
+  ],
+  "Recurrent neural network (RNNs)": [
+    "Recurrent neural network (RNN)",
+    "Recurrent neural network (RNNs)"
+  ],
+  "Recurrent neural networks": [
+    "Recurrent neural network",
+    "Recurrent neural networks"
+  ],
+  "Recurrent reinforcement learning": [
+    "Recurrent reinforcement learning",
+    "recurrent reinforcement learning"
+  ],
+  "Regime-switching models": [
+    "Regime-switching model",
+    "Regime-switching models"
+  ],
+  "Regulation": [
+    "Regulation",
+    "regulation"
+  ],
+  "Regulation nms": [
+    "Regulation NMS",
+    "Regulation nms"
+  ],
+  "Reinforcement": [
+    "Reinforcement",
+    "reinforcement"
+  ],
+  "Reinforcement learning": [
+    "Reinforcement learning",
+    "reinforcement learning"
+  ],
+  "Resource allocation": [
+    "Resource allocation",
+    "Resources allocation"
+  ],
+  "Risk analysis": [
+    "Risk analysis",
+    "risk analysis"
+  ],
+  "Risk assessment": [
+    "Risk assessment",
+    "risk assessment"
+  ],
+  "Risk management": [
+    "Risk management",
+    "risk management"
+  ],
+  "Risk measures": [
+    "Risk measurement",
+    "Risk measures"
+  ],
+  "Robots": [
+    "Robotics",
+    "Robots"
+  ],
+  "Routers": [
+    "Router",
+    "Routers"
+  ],
+  "Sample sizes": [
+    "Sample size",
+    "Sample sizes",
+    "sample size"
+  ],
+  "Scale-up": [
+    "Scale-up",
+    "Scaling-up"
+  ],
+  "Securities trading": [
+    "Securities trading",
+    "securities trading"
+  ],
+  "Semantic Web": [
+    "Semantic Web",
+    "Semantic web"
+  ],
+  "Semantics": [
+    "Semantics",
+    "semantics"
+  ],
+  "Semimartingales": [
+    "Semimartingale",
+    "Semimartingales"
+  ],
+  "Sentiment analysis": [
+    "Sentiment Analysis",
+    "Sentiment analysis"
+  ],
+  "Sequential-pattern mining": [
+    "Sequential pattern mining",
+    "Sequential-pattern mining"
+  ],
+  "Sharpe ratio": [
+    "Sharpe ratio",
+    "Sharpe ratios"
+  ],
+  "Signals generation": [
+    "Signal generation",
+    "Signal generators",
+    "Signals generation"
+  ],
+  "Simulation": [
+    "Simulation",
+    "Simulators",
+    "simulation"
+  ],
+  "Social network security": [
+    "Social network securities",
+    "Social network security"
+  ],
+  "Social networking (online)": [
+    "Online social networks",
+    "Social networking (online)"
+  ],
+  "Standard deviation": [
+    "Standard deviation",
+    "standard deviation"
+  ],
+  "Statistical arbitrage": [
+    "Statistical arbitrage",
+    "statistical arbitrage"
+  ],
+  "Statistics": [
+    "Statistics",
+    "statistics"
+  ],
+  "Stock exchange": [
+    "Stock Exchange",
+    "Stock exchange",
+    "stock exchange"
+  ],
+  "Stock market": [
+    "Stock Market",
+    "Stock Markets",
+    "Stock market",
+    "Stock markets",
+    "stock market",
+    "stock markets"
+  ],
+  "Stock predictions": [
+    "Stock prediction",
+    "Stock predictions"
+  ],
+  "Stock price": [
+    "Stock price",
+    "stock price"
+  ],
+  "Stock price prediction": [
+    "Stock price prediction",
+    "stock price prediction"
+  ],
+  "Strategy evaluations": [
+    "Evaluation strategies",
+    "Strategy evaluations"
+  ],
+  "Strategy optimization": [
+    "Optimal strategies",
+    "Optimization strategy",
+    "Strategy optimization"
+  ],
+  "Stream processing": [
+    "Stream processing",
+    "stream processing"
+  ],
+  "Streamit": [
+    "StreamIt",
+    "Streamit"
+  ],
+  "Subordinators": [
+    "Subordinator",
+    "Subordinators"
+  ],
+  "Supercomputers": [
+    "Supercomputers",
+    "supercomputers"
+  ],
+  "Support vector machines": [
+    "Support Vector Machine",
+    "Support vector machine",
+    "Support vector machines"
+  ],
+  "System optimizations": [
+    "Optimal systems",
+    "System optimizations"
+  ],
+  "Targeted advertising": [
+    "Targeted advertisements",
+    "Targeted advertising"
+  ],
+  "Technical analysis": [
+    "Technical Analysis",
+    "Technical analysis",
+    "technical analysis"
+  ],
+  "Technical indicator": [
+    "Technical Indicators",
+    "Technical indicator",
+    "Technical indicators",
+    "technical indicator",
+    "technical indicators"
+  ],
+  "Text mining": [
+    "Text mining",
+    "text mining"
+  ],
+  "Time series": [
+    "Time series",
+    "time series"
+  ],
+  "Time series classifications": [
+    "Time series classification",
+    "Time series classifications"
+  ],
+  "Trading agent": [
+    "Trading Agents",
+    "Trading agent",
+    "Trading agents",
+    "trading agent"
+  ],
+  "Trading models": [
+    "Trading models",
+    "trading models"
+  ],
+  "Trading patterns": [
+    "Trading patterns",
+    "trading patterns"
+  ],
+  "Trading strategies": [
+    "Trading strategies",
+    "Trading strategy",
+    "trading strategies",
+    "trading strategy"
+  ],
+  "Trading systems": [
+    "Trading System",
+    "Trading system",
+    "Trading systems",
+    "trading system",
+    "trading systems"
+  ],
+  "Trading volumes": [
+    "Traded volumes",
+    "Trading volume",
+    "Trading volumes",
+    "trading volume"
+  ],
+  "Trend prediction": [
+    "Trend prediction",
+    "trend prediction",
+    "trend's prediction"
+  ],
+  "Type-reduction": [
+    "Type reduction",
+    "Type-reduction"
+  ],
+  "Value-at-risk": [
+    "Value at Risk",
+    "Value-at-Risk",
+    "Value-at-risk"
+  ],
+  "Volatility forecasting": [
+    "Forecast volatility",
+    "Forecasting volatility",
+    "Volatility forecasting"
+  ],
+  "Wavelet transforms": [
+    "Wavelet Transform",
+    "Wavelet transformations",
+    "Wavelet transforms"
+  ],
+  "Web-services": [
+    "Web Services",
+    "Web services",
+    "Web-services"
+  ],
+  "acceleration": [
+    "Acceleration",
+    "acceleration"
+  ],
+  "ace": [
+    "ACE",
+    "ace"
+  ],
+  "acquisition": [
+    "Acquisition",
+    "acquisition"
+  ],
+  "adverse selection": [
+    "Adverse selection",
+    "adverse selection"
+  ],
+  "amount of information": [
+    "Amount of information",
+    "amount of information"
+  ],
+  "and simulation": [
+    "And simulation",
+    "and simulation"
+  ],
+  "ann": [
+    "ANN",
+    "ann"
+  ],
+  "applications": [
+    "Applications",
+    "applications"
+  ],
+  "arch": [
+    "ARCH",
+    "Arches",
+    "arch",
+    "arches"
+  ],
+  "architecture": [
+    "Architecture",
+    "architecture"
+  ],
+  "article": [
+    "Article",
+    "article"
+  ],
+  "artificial neural network": [
+    "Artificial Neural Networks",
+    "Artificial neural network",
+    "Artificial neural networks",
+    "artificial neural network",
+    "artificial neural networks"
+  ],
+  "asset class": [
+    "Asset class",
+    "asset class"
+  ],
+  "asset prices": [
+    "Asset prices",
+    "Asset pricing",
+    "asset prices"
+  ],
+  "automated trading systems (ATS)": [
+    "Automated trading system (ATS)",
+    "automated trading systems (ATS)"
+  ],
+  "backtesting": [
+    "Backtesting",
+    "backtesting"
+  ],
+  "biclustering algorithm": [
+    "Biclustering algorithm",
+    "biclustering algorithm"
+  ],
+  "bid-ask spreads": [
+    "Bid-ask spreads",
+    "bid-ask spreads"
+  ],
+  "black box models": [
+    "Black box models",
+    "black box models"
+  ],
+  "bloom filter": [
+    "Bloom filters",
+    "bloom filter"
+  ],
+  "business ethics": [
+    "Ethics, Business",
+    "business ethics"
+  ],
+  "classification": [
+    "Classification",
+    "classification"
+  ],
+  "clustering": [
+    "Clustering",
+    "clustering"
+  ],
+  "comgen": [
+    "Comgen",
+    "comgen"
+  ],
+  "competition": [
+    "Competition",
+    "competition"
+  ],
+  "complex systems": [
+    "Complex systems",
+    "complex systems"
+  ],
+  "complex variable": [
+    "Complex variable",
+    "complex variable"
+  ],
+  "complexity": [
+    "Complexity",
+    "complexity"
+  ],
+  "computer interface": [
+    "Interfaces (computer)",
+    "computer interface"
+  ],
+  "computers": [
+    "Computers",
+    "computers"
+  ],
+  "concept drift": [
+    "Concept drift",
+    "Concept drifts",
+    "concept drift"
+  ],
+  "configurable hardware": [
+    "Configurable hardware",
+    "configurable hardware"
+  ],
+  "control strategy": [
+    "Control strategies",
+    "control strategy"
+  ],
+  "cryptocurrency": [
+    "Cryptocurrency",
+    "cryptocurrency"
+  ],
+  "cultures": [
+    "culture",
+    "cultures"
+  ],
+  "data acquisition": [
+    "Data acquisition",
+    "data acquisition"
+  ],
+  "data analysis": [
+    "Data analysis",
+    "data analysis"
+  ],
+  "data clouds": [
+    "Data clouds",
+    "data clouds"
+  ],
+  "data feed": [
+    "Data feed",
+    "data feed"
+  ],
+  "data streams": [
+    "Data stream",
+    "Data streams",
+    "Streaming data",
+    "data stream",
+    "data streams"
+  ],
+  "day trading": [
+    "Day trading",
+    "day trading"
+  ],
+  "deep reinforcement learning": [
+    "Deep reinforcement learning",
+    "deep reinforcement learning"
+  ],
+  "delta-hedging": [
+    "Delta-hedging",
+    "delta-hedging"
+  ],
+  "design": [
+    "Design",
+    "design"
+  ],
+  "dynamic Bayesian networks": [
+    "Dynamic Bayesian networks",
+    "dynamic Bayesian networks"
+  ],
+  "dynamics": [
+    "Dynamics",
+    "dynamics"
+  ],
+  "e-Finance": [
+    "E finances",
+    "E-finance",
+    "e-Finance"
+  ],
+  "e-procurement": [
+    "E-procurement",
+    "e-Procurement",
+    "e-procurement"
+  ],
+  "econometrics": [
+    "Econometrics",
+    "econometrics"
+  ],
+  "edi": [
+    "EDI",
+    "edi"
+  ],
+  "efficient frontier": [
+    "Efficient frontier",
+    "efficient frontier"
+  ],
+  "electronic equipment": [
+    "Electronic equipment",
+    "electronic equipment"
+  ],
+  "empirical research": [
+    "Empirical Research",
+    "empirical research"
+  ],
+  "entropy": [
+    "Entropy",
+    "entropy"
+  ],
+  "equities": [
+    "Equities",
+    "equities"
+  ],
+  "ethics": [
+    "Ethics",
+    "ethics"
+  ],
+  "exchange markets": [
+    "Exchange markets",
+    "exchange markets"
+  ],
+  "expo": [
+    "ExPo",
+    "expo"
+  ],
+  "fast": [
+    "FAST",
+    "fast"
+  ],
+  "financial assets": [
+    "Financial assets",
+    "financial assets"
+  ],
+  "financial data analysis": [
+    "Financial Data Analysis",
+    "financial data analysis"
+  ],
+  "financial management": [
+    "Financial Management",
+    "financial management"
+  ],
+  "financial news": [
+    "Financial news",
+    "financial news"
+  ],
+  "financial prices": [
+    "Financial prices",
+    "financial prices"
+  ],
+  "fitness functions": [
+    "Fitness functions",
+    "fitness functions"
+  ],
+  "forecasting problems": [
+    "Forecasting problems",
+    "forecasting problems"
+  ],
+  "foreign exchange": [
+    "Foreign exchange",
+    "foreign exchange"
+  ],
+  "foreign exchange market": [
+    "Foreign exchange market",
+    "Foreign exchange markets",
+    "foreign exchange market",
+    "foreign exchange markets"
+  ],
+  "forward selection": [
+    "Forward selection",
+    "forward selection"
+  ],
+  "fragmentation": [
+    "Fragmentation",
+    "fragmentation"
+  ],
+  "framework": [
+    "Framework",
+    "framework"
+  ],
+  "function evaluation": [
+    "Function evaluation",
+    "function evaluation"
+  ],
+  "fuzzy logic": [
+    "Fuzzy logic",
+    "fuzzy logic"
+  ],
+  "gate": [
+    "Gate",
+    "gate"
+  ],
+  "heterogeneous cluster": [
+    "Heterogeneous cluster",
+    "heterogeneous cluster"
+  ],
+  "high frequency trading (HFT)": [
+    "High frequency trading (HFT)",
+    "High-frequency trading (HFT)",
+    "high frequency trading (HFT)",
+    "high-frequency trading (HFT)"
+  ],
+  "high-frequency traders": [
+    "High-Frequency Traders",
+    "High-frequency traders",
+    "high-frequency traders"
+  ],
+  "hilbert transform": [
+    "Hilbert transform",
+    "hilbert transform"
+  ],
+  "hill climbing": [
+    "Hill climbing",
+    "Hill-climbing",
+    "hill climbing"
+  ],
+  "human": [
+    "Humans",
+    "human"
+  ],
+  "hypothesis testing": [
+    "Hypothesis tests",
+    "hypothesis testing"
+  ],
+  "implementation": [
+    "Implementation",
+    "implementation"
+  ],
+  "index": [
+    "Index",
+    "index"
+  ],
+  "information acquisition": [
+    "Information acquisition",
+    "information acquisition"
+  ],
+  "information processing": [
+    "Information processing",
+    "information processing"
+  ],
+  "information representation": [
+    "Information representation",
+    "information representation"
+  ],
+  "information theory": [
+    "Information theory",
+    "information theory"
+  ],
+  "informed traders": [
+    "Informed trader",
+    "Informed traders",
+    "informed trader",
+    "informed traders"
+  ],
+  "innovation": [
+    "Innovation",
+    "innovation"
+  ],
+  "international trade": [
+    "International trade",
+    "international trade"
+  ],
+  "intraday": [
+    "Intraday",
+    "intraday"
+  ],
+  "intraday trading": [
+    "Intraday trading",
+    "intraday trading"
+  ],
+  "investment bank": [
+    "Investment bank",
+    "investment bank"
+  ],
+  "jump process": [
+    "Jump process",
+    "jump process"
+  ],
+  "lag length selection": [
+    "Lag length selection",
+    "lag length selection"
+  ],
+  "large data": [
+    "Large data",
+    "large data"
+  ],
+  "latency": [
+    "Latency",
+    "latency"
+  ],
+  "learning techniques": [
+    "Learning techniques",
+    "learning techniques"
+  ],
+  "management": [
+    "Management",
+    "Managers",
+    "management"
+  ],
+  "management applications": [
+    "Management applications",
+    "management applications"
+  ],
+  "market": [
+    "Market",
+    "Marketing",
+    "market",
+    "marketing"
+  ],
+  "market conditions": [
+    "Market condition",
+    "market conditions"
+  ],
+  "market cycles": [
+    "Market cycles",
+    "market cycles"
+  ],
+  "market design": [
+    "Market design",
+    "market design"
+  ],
+  "market fragmentation": [
+    "Market fragmentation",
+    "market fragmentation"
+  ],
+  "market impact": [
+    "Market impact",
+    "Market impacts",
+    "market impact"
+  ],
+  "market impact models": [
+    "Market impact models",
+    "market impact models"
+  ],
+  "market making": [
+    "Market making",
+    "market making"
+  ],
+  "market participants": [
+    "Market participants",
+    "market participants"
+  ],
+  "market structure": [
+    "Market structure",
+    "Market structures",
+    "market structure"
+  ],
+  "market studies": [
+    "Market studies",
+    "market studies"
+  ],
+  "massive parallelism": [
+    "Massive parallelism",
+    "massive parallelism"
+  ],
+  "mathematics": [
+    "Mathematics",
+    "mathematics"
+  ],
+  "measurements": [
+    "Measurements",
+    "measurements"
+  ],
+  "mes": [
+    "MES",
+    "mes"
+  ],
+  "microstructure noise": [
+    "Microstructure noise",
+    "microstructure noise"
+  ],
+  "mining": [
+    "Mining",
+    "mining"
+  ],
+  "model synchronization": [
+    "Model synchronization",
+    "model synchronization"
+  ],
+  "models": [
+    "Models",
+    "models"
+  ],
+  "momentum": [
+    "Momentum",
+    "momentum"
+  ],
+  "multi-asset trading": [
+    "Multi-asset trading",
+    "multi-asset trading"
+  ],
+  "multiple kernel learning": [
+    "Multiple Kernel Learning",
+    "multiple kernel learning"
+  ],
+  "news": [
+    "News",
+    "news"
+  ],
+  "nonconvex optimization": [
+    "Nonconvex optimization",
+    "nonconvex optimization"
+  ],
+  "nonlinear filtering": [
+    "Nonlinear filtering",
+    "nonlinear filtering"
+  ],
+  "nse": [
+    "NSE",
+    "nse"
+  ],
+  "order book": [
+    "Order book",
+    "order book"
+  ],
+  "order book information": [
+    "Order Book Information",
+    "order book information"
+  ],
+  "order flow": [
+    "Order flow",
+    "Order-flow",
+    "order flow"
+  ],
+  "particle filter": [
+    "Particle filter",
+    "particle filter"
+  ],
+  "particle swarm optimisation": [
+    "Particle swarm optimisation",
+    "particle swarm optimisation"
+  ],
+  "performance": [
+    "Performance",
+    "performance"
+  ],
+  "performance prediction": [
+    "Performance prediction",
+    "performance prediction"
+  ],
+  "pin": [
+    "PIN",
+    "pin"
+  ],
+  "point process": [
+    "Point process",
+    "point process"
+  ],
+  "portfolio optimisation": [
+    "Portfolio optimisation",
+    "portfolio optimisation"
+  ],
+  "prediction": [
+    "Predictability",
+    "Prediction",
+    "prediction"
+  ],
+  "prediction-based": [
+    "Prediction-based",
+    "prediction-based"
+  ],
+  "price discovery": [
+    "Price discovery",
+    "price discovery"
+  ],
+  "price dynamics": [
+    "Price dynamics",
+    "price dynamics"
+  ],
+  "price impact": [
+    "Price impact",
+    "price impact"
+  ],
+  "price shocks": [
+    "Price shocks",
+    "price shocks"
+  ],
+  "prices": [
+    "Prices",
+    "prices"
+  ],
+  "quality control": [
+    "Quality Control",
+    "quality control"
+  ],
+  "quantitative finance": [
+    "Quantitative finance",
+    "quantitative finance"
+  ],
+  "quantitative trading": [
+    "Quantitative trading",
+    "quantitative trading"
+  ],
+  "r": [
+    "R",
+    "r"
+  ],
+  "real-time market": [
+    "Real-time market",
+    "real-time market"
+  ],
+  "real-time trading": [
+    "Real-time trading",
+    "real-time trading"
+  ],
+  "regime-switching": [
+    "Regime switching",
+    "Regime-switching",
+    "regime-switching"
+  ],
+  "regularization": [
+    "Regularization",
+    "regularization"
+  ],
+  "reliability": [
+    "Reliability",
+    "reliability"
+  ],
+  "research": [
+    "Research",
+    "research"
+  ],
+  "return": [
+    "Return",
+    "return"
+  ],
+  "ridge regression": [
+    "Ridge regression",
+    "ridge regression"
+  ],
+  "risk": [
+    "Risk",
+    "Risks",
+    "risk",
+    "risks"
+  ],
+  "risk averse": [
+    "Risk averse",
+    "risk averse"
+  ],
+  "securities market": [
+    "Securities market",
+    "securities market"
+  ],
+  "sentiment": [
+    "Sentiment",
+    "sentiment"
+  ],
+  "skyline queries": [
+    "Skyline query",
+    "skyline queries"
+  ],
+  "sliding windows": [
+    "Sliding Window",
+    "sliding windows"
+  ],
+  "social media": [
+    "Social media",
+    "social media"
+  ],
+  "sparse optimization": [
+    "Sparse optimizations",
+    "sparse optimization"
+  ],
+  "speed": [
+    "Speed",
+    "speed"
+  ],
+  "spread": [
+    "Spread",
+    "spread"
+  ],
+  "stability": [
+    "Stability",
+    "stability"
+  ],
+  "stochastic control": [
+    "Stochastic control",
+    "stochastic control"
+  ],
+  "stock": [
+    "Stock",
+    "stock"
+  ],
+  "stock index futures": [
+    "Stock index futures",
+    "stock index futures"
+  ],
+  "stock selection": [
+    "Stock selections",
+    "stock selection"
+  ],
+  "strategies": [
+    "Strategies",
+    "strategies"
+  ],
+  "streaming": [
+    "Streaming",
+    "streaming"
+  ],
+  "students": [
+    "Students",
+    "students"
+  ],
+  "stylized facts": [
+    "Stylized facts",
+    "stylized facts"
+  ],
+  "successive convex approximation": [
+    "Successive convex approximations",
+    "successive convex approximation"
+  ],
+  "support vector": [
+    "Support vector",
+    "support vector"
+  ],
+  "switching": [
+    "Switch",
+    "Switches",
+    "Switching",
+    "switch",
+    "switching"
+  ],
+  "system and software architectures": [
+    "system and software architecture",
+    "system and software architectures"
+  ],
+  "systemic risk": [
+    "Systemic Risk",
+    "systemic risk"
+  ],
+  "technological innovation": [
+    "Technological innovation",
+    "technological innovation"
+  ],
+  "technology": [
+    "Technology",
+    "technology"
+  ],
+  "temporal attention": [
+    "Temporal attention",
+    "temporal attention"
+  ],
+  "tick data": [
+    "Tick data",
+    "tick data"
+  ],
+  "tick-by-tick data": [
+    "Tick-by-tick data",
+    "tick-by-tick data"
+  ],
+  "time-series prediction": [
+    "Time series prediction",
+    "time-series prediction"
+  ],
+  "trade execution": [
+    "Trade execution",
+    "trade execution"
+  ],
+  "trade scheduling": [
+    "Trade scheduling",
+    "trade scheduling"
+  ],
+  "trading": [
+    "Trade",
+    "Trading",
+    "trade",
+    "trading"
+  ],
+  "trading platform": [
+    "Trading platform",
+    "trading platform"
+  ],
+  "trading processes": [
+    "Trading Process",
+    "Trading process",
+    "Trading processes",
+    "trading process",
+    "trading processes"
+  ],
+  "trading risks": [
+    "Trading risks",
+    "trading risks"
+  ],
+  "trading rules": [
+    "Trading rule",
+    "Trading rules",
+    "trading rule",
+    "trading rules"
+  ],
+  "traffic flows": [
+    "Traffic flow",
+    "traffic flows"
+  ],
+  "training and testing": [
+    "Training and testing",
+    "training and testing"
+  ],
+  "transaction cost": [
+    "Transaction cost",
+    "Transaction costs",
+    "transaction cost",
+    "transaction costs"
+  ],
+  "triangular arbitrage": [
+    "Triangular arbitrage",
+    "triangular arbitrage"
+  ],
+  "type-2 fuzzy": [
+    "Type-2 fuzzy",
+    "type-2 fuzzy"
+  ],
+  "volatility": [
+    "Volatility",
+    "volatility"
+  ],
+  "volume weight average price": [
+    "Volume Weighted Average Price",
+    "Volume weight average price",
+    "Volume weighted average price",
+    "volume weight average price"
+  ],
+  "wavelet": [
+    "Wavelet",
+    "wavelet"
+  ],
+  "web": [
+    "Web",
+    "web"
+  ]
+}

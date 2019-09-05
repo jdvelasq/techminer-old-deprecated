@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Tutorial &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="01-introduction.html" />
+    <link rel="prev" title="techMiner: A Tool for Analyzing Bibliographic Data using Python" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="01-introduction.html" title="Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="techMiner: A Tool for Analyzing Bibliographic Data using Python"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01-introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-step-01-data-download.html">Step 1: Data download by the user</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-step-02-file-merging.html">Step 2: Data merging and storing on json format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-step-03-keyword-completation.html">Step 3: Keyword completation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04-step-03-keyword-completation.html#Data-loading">Data loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04-step-03-keyword-completation.html#Record-visualization">Record visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04-step-03-keyword-completation.html#Keywords-completation">Keywords completation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05-step-04-data-deleting.html">Step 4: Deleting of records</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05-step-04-data-deleting.html#Deleting-of-abstracts-of-proceedings-and-workshops">Deleting of abstracts of proceedings and workshops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05-step-04-data-deleting.html#Deleting-of-documents-with-the-same-title">Deleting of documents with the same title</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06-step-05-keywords-cleanup.html">Step 5: Keywords cleanup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06-step-05-keywords-cleanup.html#Text-clustering">Text clustering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06-step-05-keywords-cleanup.html#Keywords-cleanup">Keywords cleanup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06-step-05-keywords-cleanup.html#Deleting-based-on-keywords-or-other-text">Deleting based on keywords or other text</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07-step-06-manual-review.html">Step 6: Manual review</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07-step-06-manual-review.html#Group-management">Group management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07-step-06-manual-review.html#Manual-review-using-external-software">Manual review using external software</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="08-step-07-direct-queries.html">Step 7: Direct queries over data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-step-08-basic-analysis.html">First level analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="09-step-08-basic-analysis.html#Documents-by-term">Documents by term</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10-step-09-co_ocurrence.html">Step 9: Co-ocurrence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10-step-09-co_ocurrence.html#Keywords-per-year">Keywords per year</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-step-09-co_ocurrence.html#Document-type-per-year">Document type per year</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-step-09-co_ocurrence.html#Keywords-by-year">Keywords by year</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-step-09-co_ocurrence.html#Authors-per-document-type">Authors per document type</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11-step-10-correlation.html">Step 10: Cross-correlation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11-step-10-correlation.html#Autocorrelation">Autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-step-10-correlation.html#Crosscorrelation">Crosscorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-step-10-correlation.html#Factor-analysis">Factor analysis</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">techMiner: A Tool for Analyzing Bibliographic Data using Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="01-introduction.html"
+                        title="next chapter">Introduction</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorial/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="01-introduction.html" title="Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="techMiner: A Tool for Analyzing Bibliographic Data using Python"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 """
-techMiner.FirstLevelResults
+TechMiner.FirstLevelResults
 ==================================================================================================
 
 """

@@ -1,5 +1,5 @@
 """
-techMiner.Thesaurus
+TechMiner.strings
 ===============================
 
 This module contains functions for manipulating texts. 
@@ -531,6 +531,7 @@ def fingerprint(x):
     if x is None:
         return None
     x = x.strip().lower()
+    x = re.sub('-', ' ', x)
     x = re.sub('['+string.punctuation+']', '', x)
     x = asciify(x)
     x = ' '.join(porter.stem(w) for w in x.split())

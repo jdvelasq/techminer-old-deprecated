@@ -1,5 +1,5 @@
 r"""
-techMiner.Keywords
+TechMiner.Keywords
 ==================================================================================================
 
 This object contains a list of unique keywords (terms of interest).   
@@ -128,6 +128,11 @@ class Keywords():
         self._ignore_case = ignore_case
         self._full_match = full_match
         self._use_re = use_re
+
+    #--------------------------------------------------------------------------------------------------------
+    @property
+    def keywords(self):
+        return self._keywords
 
     #--------------------------------------------------------------------------------------------------------
     def __contains__(self, x):

@@ -1,5 +1,5 @@
 """
-techMiner.Thesaurus
+TechMiner.Thesaurus
 ==================================================================================================
 
 """ 
@@ -184,6 +184,11 @@ class Thesaurus:
         self._ignore_case = ignore_case
         self._full_match = full_match
         self._use_re = use_re
+
+    #-------------------------------------------------------------------------------------------
+    @property
+    def thesaurus(self):
+        return self._thesaurus
 
     #-------------------------------------------------------------------------------------------
     def apply(self, x, sep=None):

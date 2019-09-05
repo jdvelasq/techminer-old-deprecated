@@ -1,6 +1,7 @@
 """
-Transformation functions
-=========================================
+TechMiner.transform
+==================================================================================================
+
 
 This module contains functions that can be applied to each element of a pandas.Series 
 object using the map function. 

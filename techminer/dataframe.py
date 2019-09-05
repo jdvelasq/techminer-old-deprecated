@@ -1,5 +1,5 @@
 """
-techMiner.RecordsDataFrame
+TechMiner.RecordsDataFrame
 ==================================================================================================
 
 
@@ -17,17 +17,17 @@ from techminer.first_level import FirstLevelResult
 class RecordsDataFrame(pd.DataFrame):
     """Class to represent a dataframe of bibliographic records.
     """
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     @property
     def _constructor_expanddim(self):
         return self
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     @property
     def num_of_sources(self):
         return len(self['Source title'].unique())
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def most_cited_documents(self, N=10):
         """ Returns the top N most cited documents.
         Args:
@@ -40,7 +40,7 @@ class RecordsDataFrame(pd.DataFrame):
         return result[['Title', 'Authors', 'Year', 'Cited by']][0:N]
 
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def documents_by_term(self, term, sep=None):
         """Computes the number of documents per term.
 
@@ -79,7 +79,7 @@ class RecordsDataFrame(pd.DataFrame):
 
         return FirstLevelResult(result)
     
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def documents_by_year(self, cumulative=False):
         """Computes the number of documents per year.
 
@@ -125,7 +125,7 @@ class RecordsDataFrame(pd.DataFrame):
 
         return FirstLevelResult(docs_per_year)
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def citations_by_year(self, cumulative=False, yearcol='Year', citedcol='Cited by'):
         """Computes the number of citations to docuement per year.
 
@@ -168,7 +168,7 @@ class RecordsDataFrame(pd.DataFrame):
         citations_per_year.index = range(len(citations_per_year))
         return FirstLevelResult(citations_per_year)
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def term_by_term(self, termA, termB, sepA=None, sepB=None, minmax=None):
         """
 
@@ -255,7 +255,7 @@ class RecordsDataFrame(pd.DataFrame):
 
         return SecondLevelResult(df)
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def factor(self, term, sep=None, n_components=2, N=10):
 
         x = self.documents_by_term(term, sep=sep)
@@ -294,7 +294,7 @@ class RecordsDataFrame(pd.DataFrame):
                 index = terms),
             isfactor = True)
 
-    #--------------------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
         """Computes autocorrelation and crosscorrelation.
 
@@ -446,7 +446,7 @@ class RecordsDataFrame(pd.DataFrame):
 
         return SecondLevelResult(result)
 
-
+    #----------------------------------------------------------------------------------------------
     def autocorrelation(self, term, sep=None, N=20):
         """
 
@@ -509,3 +509,5 @@ class RecordsDataFrame(pd.DataFrame):
 
         """
         return self.crosscorrelation(termA=term, termB=term, sepA=sep, sepB=sep, N=N)
+
+    #----------------------------------------------------------------------------------------------

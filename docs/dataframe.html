@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TechMiner.RecordsDataFrame &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TechMiner.FirstLevelResults" href="first_level.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="first_level.html" title="TechMiner.FirstLevelResults"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-techminer.dataframe"></span><div class="section" id="techminer-recordsdataframe">
+<h1>TechMiner.RecordsDataFrame<a class="headerlink" href="#techminer-recordsdataframe" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="techminer.dataframe.RecordsDataFrame">
+<em class="property">class </em><code class="sig-prename descclassname">techminer.dataframe.</code><code class="sig-name descname">RecordsDataFrame</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">index=None</em>, <em class="sig-param">columns=None</em>, <em class="sig-param">dtype=None</em>, <em class="sig-param">copy=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
+<p>Class to represent a dataframe of bibliographic records.</p>
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.autocorrelation">
+<code class="sig-name descname">autocorrelation</code><span class="sig-paren">(</span><em class="sig-param">term</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">N=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.autocorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.autocorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="s1">&#39;a;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;a;b;c&#39;</span><span class="p">,</span> <span class="s1">&#39;e;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> 
+<span class="go">       A</span>
+<span class="go">0    a;b</span>
+<span class="go">1      b</span>
+<span class="go">2    c;a</span>
+<span class="go">3    b;a</span>
+<span class="go">4      c</span>
+<span class="go">5      d</span>
+<span class="go">6      e</span>
+<span class="go">7  a;b;c</span>
+<span class="go">8    e;a</span>
+<span class="go">9   None</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">autocorrelation</span><span class="p">(</span><span class="n">term</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span> 
+<span class="go">   A (row) A (col)  Autocorrelation</span>
+<span class="go">0        a       a         1.000000</span>
+<span class="go">1        a       b         0.670820</span>
+<span class="go">2        a       c         0.516398</span>
+<span class="go">3        a       d         0.000000</span>
+<span class="go">4        a       e         0.316228</span>
+<span class="go">5        b       a         0.670820</span>
+<span class="go">6        b       b         1.000000</span>
+<span class="go">7        b       c         0.288675</span>
+<span class="go">8        b       d         0.000000</span>
+<span class="go">9        b       e         0.000000</span>
+<span class="go">10       c       a         0.516398</span>
+<span class="go">11       c       b         0.288675</span>
+<span class="go">12       c       c         1.000000</span>
+<span class="go">13       c       d         0.000000</span>
+<span class="go">14       c       e         0.000000</span>
+<span class="go">15       d       a         0.000000</span>
+<span class="go">16       d       b         0.000000</span>
+<span class="go">17       d       c         0.000000</span>
+<span class="go">18       d       d         1.000000</span>
+<span class="go">19       d       e         0.000000</span>
+<span class="go">20       e       a         0.316228</span>
+<span class="go">21       e       b         0.000000</span>
+<span class="go">22       e       c         0.000000</span>
+<span class="go">23       e       d         0.000000</span>
+<span class="go">24       e       e         1.000000</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">autocorrelation</span><span class="p">(</span><span class="n">term</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> 
+<span class="go">  A (row) A (col)  Autocorrelation</span>
+<span class="go">0       a       a         1.000000</span>
+<span class="go">1       a       b         0.670820</span>
+<span class="go">2       a       c         0.516398</span>
+<span class="go">3       b       a         0.670820</span>
+<span class="go">4       b       b         1.000000</span>
+<span class="go">5       b       c         0.288675</span>
+<span class="go">6       c       a         0.516398</span>
+<span class="go">7       c       b         0.288675</span>
+<span class="go">8       c       c         1.000000</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.citations_by_year">
+<code class="sig-name descname">citations_by_year</code><span class="sig-paren">(</span><em class="sig-param">cumulative=False</em>, <em class="sig-param">yearcol='Year'</em>, <em class="sig-param">citedcol='Cited by'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_year" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of citations to docuement per year.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span>
+<span class="gp">... </span>  <span class="s1">&#39;Year&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">2014</span><span class="p">,</span> <span class="mi">2016</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2019</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="s1">&#39;Cited by&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">citations_by_year</span><span class="p">()</span>
+<span class="go">   Year  Cited by</span>
+<span class="go">0  2014         3</span>
+<span class="go">1  2015         0</span>
+<span class="go">2  2016         3</span>
+<span class="go">3  2017         4</span>
+<span class="go">4  2018         0</span>
+<span class="go">5  2019         7</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.crosscorrelation">
+<code class="sig-name descname">crosscorrelation</code><span class="sig-paren">(</span><em class="sig-param">termA</em>, <em class="sig-param">termB=None</em>, <em class="sig-param">sepA=None</em>, <em class="sig-param">sepB=None</em>, <em class="sig-param">N=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.crosscorrelation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.crosscorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes autocorrelation and crosscorrelation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;c1&#39;</span><span class="p">:[</span><span class="s1">&#39;a;b&#39;</span><span class="p">,</span>   <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>   <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;a;b;c&#39;</span><span class="p">,</span> <span class="s1">&#39;e;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;c2&#39;</span><span class="p">:[</span><span class="s1">&#39;A;B;C&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;B;D&#39;</span><span class="p">,</span> <span class="s1">&#39;B;C&#39;</span><span class="p">,</span> <span class="s1">&#39;C;B&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B;C&#39;</span><span class="p">,</span>    <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;B;E&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> 
+<span class="go">       c1     c2</span>
+<span class="go">0     a;b  A;B;C</span>
+<span class="go">1       b      B</span>
+<span class="go">2     c;a    B;D</span>
+<span class="go">3     b;a    B;C</span>
+<span class="go">4       c    C;B</span>
+<span class="go">5       d      A</span>
+<span class="go">6       e      A</span>
+<span class="go">7   a;b;c    B;C</span>
+<span class="go">8     e;a   None</span>
+<span class="go">9    None    B;E</span>
+<span class="go">10   None   None</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">crosscorrelation</span><span class="p">(</span><span class="n">termA</span><span class="o">=</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="n">termB</span><span class="o">=</span><span class="s1">&#39;c2&#39;</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span> 
+<span class="go">   c1 c2  Crosscorrelation</span>
+<span class="go">0   a  A          0.258199</span>
+<span class="go">1   a  B          0.676123</span>
+<span class="go">2   a  C          0.670820</span>
+<span class="go">3   a  D          0.447214</span>
+<span class="go">4   a  E          0.000000</span>
+<span class="go">5   b  A          0.288675</span>
+<span class="go">6   b  B          0.755929</span>
+<span class="go">7   b  C          0.750000</span>
+<span class="go">8   b  D          0.000000</span>
+<span class="go">9   b  E          0.000000</span>
+<span class="go">10  c  A          0.000000</span>
+<span class="go">11  c  B          0.654654</span>
+<span class="go">12  c  C          0.577350</span>
+<span class="go">13  c  D          0.577350</span>
+<span class="go">14  c  E          0.000000</span>
+<span class="go">15  d  A          0.577350</span>
+<span class="go">16  d  B          0.000000</span>
+<span class="go">17  d  C          0.000000</span>
+<span class="go">18  d  D          0.000000</span>
+<span class="go">19  d  E          0.000000</span>
+<span class="go">20  e  A          0.408248</span>
+<span class="go">21  e  B          0.000000</span>
+<span class="go">22  e  C          0.000000</span>
+<span class="go">23  e  D          0.000000</span>
+<span class="go">24  e  E          0.000000</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">crosscorrelation</span><span class="p">(</span><span class="n">termA</span><span class="o">=</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="n">termB</span><span class="o">=</span><span class="s1">&#39;c2&#39;</span><span class="p">,</span> <span class="n">sepA</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">sepB</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> 
+<span class="go">c1 c2  Crosscorrelation</span>
+<span class="go">0  a  A          0.258199</span>
+<span class="go">1  a  B          0.676123</span>
+<span class="go">2  a  C          0.670820</span>
+<span class="go">3  b  A          0.288675</span>
+<span class="go">4  b  B          0.755929</span>
+<span class="go">5  b  C          0.750000</span>
+<span class="go">6  c  A          0.000000</span>
+<span class="go">7  c  B          0.654654</span>
+<span class="go">8  c  C          0.577350</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.documents_by_term">
+<code class="sig-name descname">documents_by_term</code><span class="sig-paren">(</span><em class="sig-param">term</em>, <em class="sig-param">sep=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.documents_by_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.documents_by_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of documents per term.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span><span class="s1">&#39;letters&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_term</span><span class="p">(</span><span class="s1">&#39;letters&#39;</span><span class="p">)</span>
+<span class="go">  letters  Num Documents</span>
+<span class="go">0       a              2</span>
+<span class="go">2       c              2</span>
+<span class="go">1       b              1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span><span class="s1">&#39;letters&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a|b&#39;</span><span class="p">,</span> <span class="s1">&#39;b|d|a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_term</span><span class="p">(</span><span class="s1">&#39;letters&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="go">  letters  Num Documents</span>
+<span class="go">0       a              3</span>
+<span class="go">1       b              2</span>
+<span class="go">2       c              2</span>
+<span class="go">3       d              1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.documents_by_year">
+<code class="sig-name descname">documents_by_year</code><span class="sig-paren">(</span><em class="sig-param">cumulative=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.documents_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.documents_by_year" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of documents per year.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span><span class="s1">&#39;Year&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">2014</span><span class="p">,</span> <span class="mi">2016</span><span class="p">,</span> <span class="mi">2017</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2019</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span>
+<span class="go">   Year  Num Documents</span>
+<span class="go">0  2014              2</span>
+<span class="go">1  2015              0</span>
+<span class="go">2  2016              1</span>
+<span class="go">3  2017              1</span>
+<span class="go">4  2018              0</span>
+<span class="go">5  2019              1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">(</span><span class="n">cumulative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">   Year  Num Documents</span>
+<span class="go">0  2014              2</span>
+<span class="go">1  2015              2</span>
+<span class="go">2  2016              3</span>
+<span class="go">3  2017              4</span>
+<span class="go">4  2018              4</span>
+<span class="go">5  2019              5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.factor">
+<code class="sig-name descname">factor</code><span class="sig-paren">(</span><em class="sig-param">term</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">n_components=2</em>, <em class="sig-param">N=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.factor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.most_cited_documents">
+<code class="sig-name descname">most_cited_documents</code><span class="sig-paren">(</span><em class="sig-param">N=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.most_cited_documents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.most_cited_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the top N most cited documents.
+:param N: number of documents to be returned.
+:type N: int</p>
+<dl class="simple">
+<dt>Results:</dt><dd><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.num_of_sources">
+<em class="property">property </em><code class="sig-name descname">num_of_sources</code><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.num_of_sources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="techminer.dataframe.RecordsDataFrame.term_by_term">
+<code class="sig-name descname">term_by_term</code><span class="sig-paren">(</span><em class="sig-param">termA</em>, <em class="sig-param">termB</em>, <em class="sig-param">sepA=None</em>, <em class="sig-param">sepB=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.term_by_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.term_by_term" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">({</span>
+<span class="gp">... </span>  <span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="s1">&#39;B&#39;</span><span class="p">:[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> 
+<span class="go">   A  B</span>
+<span class="go">0  0  a</span>
+<span class="go">1  1  b</span>
+<span class="go">2  2  c</span>
+<span class="go">3  3  d</span>
+<span class="go">4  4  e</span>
+<span class="go">5  0  a</span>
+<span class="go">6  1  b</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">term_by_term</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="go">   A  B  Num Documents</span>
+<span class="go">0  0  a              2</span>
+<span class="go">1  1  b              2</span>
+<span class="go">2  2  c              1</span>
+<span class="go">3  3  d              1</span>
+<span class="go">4  4  e              1</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">term_by_term</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">minmax</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="go">   A  B  Num Documents</span>
+<span class="go">0  0  a              2</span>
+<span class="go">1  1  b              2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">Modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="first_level.html"
+                        title="next chapter">TechMiner.FirstLevelResults</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/dataframe.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="first_level.html" title="TechMiner.FirstLevelResults"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Modules</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 """
-Functions for manipulating records (rows) in a dataframe
+TechMiner.records
 ===============================================================================
 
 Overview
@@ -133,7 +133,7 @@ def coverage(df):
     return result
         
 
-def remove_duplicate_records(df, fields, matchType='strict'):
+def remove_duplicate_records(df, fields, match_type='strict'):
     """Remove duplicate records in a dataframe based in the velue of one 
     or more fields.
 
@@ -186,7 +186,7 @@ def remove_duplicate_records(df, fields, matchType='strict'):
     4   a   1
     5   e   5
 
-    >>> remove_duplicate_records(df, fields='f0', matchType='fingerprint')
+    >>> remove_duplicate_records(df, fields='f0', match_type='fingerprint')
        f0  f1
     0  A;   1
     1   b   2
@@ -205,19 +205,19 @@ def remove_duplicate_records(df, fields, matchType='strict'):
         ## generar error
         pass
 
-    if matchType == 'strict':
+    if match_type == 'strict':
 
         df0 = df0.drop_duplicates()
         return df.loc[df0.index,:]
 
-    if matchType == 'fingerprint':
+    if match_type == 'fingerprint':
         for field in df0.columns:
             df0[field] =  df0[field].map(lambda x: fingerprint(x))
         
         df0 = df0.drop_duplicates()
         return df.loc[df0.index,:]
 
-    if matchType == 'fuzzy':
+    if match_type == 'fuzzy':
         pass
 
 
