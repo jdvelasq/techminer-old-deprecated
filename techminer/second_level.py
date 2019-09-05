@@ -11,6 +11,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import altair as alt
 import seaborn as sns
+import networkx as nx
 from sklearn.cluster import KMeans
 from scipy.optimize import minimize
 from collections import OrderedDict 
@@ -194,8 +195,9 @@ class SecondLevelResult(pd.DataFrame):
         return centers, clusters
 
     #---------------------------------------------------------------------------------------------
-    def network_graph(self, save=True, name='network.png', corr_min=0.7, node_color='lightblue',
-                  edge_color='lightgrey', edge_color2='lightcoral', node_size=None, fond_size=4):
+    def network(self, save=False, name='network.png', corr_min=0.7, node_color='lightblue',
+                  edge_color='lightgrey', edge_color2='lightcoral', node_size=None, fond_size=4,
+                  figsize = (10,10)):
         """
         This function generates network graph for matrix.
 
@@ -219,26 +221,33 @@ class SecondLevelResult(pd.DataFrame):
         
         """
 
+        if self._isfactor is True:
+            x = self.copy()
+        else:
+            x = self.to_matrix()
+
         plt.clf()
+        plt.figure(figsize=figsize)
+        
         #generate network graph
-        graph=nx.Graph()
+        graph = nx.Graph()
         # add nodes
-        rows = self.index
-        columns = self.columns
+        rows = x.index
+        columns = x.columns
         nodes = list(set(rows.append(columns)))
 
         #add nodes
         graph.add_nodes_from(nodes)
         list_ = list(OrderedDict.fromkeys(itertools.product(rows, columns)))
-        if len(rows)== len(columns) and (all(rows.sort_values())==all(columns.sort_values())):
-            list_=list(set(tuple(sorted(t)) for t in list_))
+        if len(rows) == len(columns) and (all(rows.sort_values())==all(columns.sort_values())):
+            list_ = list(set(tuple(sorted(t)) for t in list_))
 
         # add edges
         for i in range(len(list_)):
             combinations=list_[i]
-            from_node, to_node = combinations[0],combinations[1] 
+            from_node, to_node = combinations[0], combinations[1] 
             if from_node != to_node:
-                weight =self.loc[from_node,to_node]
+                weight = x.loc[from_node, to_node]
                 if weight != 0 and abs(weight)>corr_min:  
                     if weight<0:
                         weight=abs(weight)

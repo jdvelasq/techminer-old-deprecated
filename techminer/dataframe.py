@@ -215,17 +215,17 @@ class RecordsDataFrame(pd.DataFrame):
             t = [(x, y) for x, y in zip(df[termA], df[termB])]
             t = [(c, b) for a, b in t for c in a.split(sepA)]
             df = pd.DataFrame({
-                termA: [a for a,b in t],
-                termB: [b for a,b in t]
+                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
+                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
             })
             
         if sepA is None and sepB is not None:
         
             t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(a, c) for a, b in t for c in b.split(sepB)]
+            t = [(a, c.strip()) for a, b in t for c in b.split(sepB)]
             df = pd.DataFrame({
-                termA: [a for a,b in t],
-                termB: [b for a,b in t]
+                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
+                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
             })
 
         if sepA is not None and sepB is not None:
@@ -234,8 +234,8 @@ class RecordsDataFrame(pd.DataFrame):
             t = [(c, b) for a, b in t for c in a.split(sepA)]
             t = [(a, c) for a, b in t for c in b.split(sepB)]
             df = pd.DataFrame({
-                termA: [a for a,b in t],
-                termB: [b for a,b in t]
+                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
+                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
             })
 
         x = df.groupby(by=[termA, termB]).size()
