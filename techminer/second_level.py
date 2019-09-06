@@ -16,6 +16,10 @@ from sklearn.cluster import KMeans
 from scipy.optimize import minimize
 from collections import OrderedDict 
 import itertools
+import geopandas
+import geoplot
+from shapely.geometry import Point, LineString
+
 
 class SecondLevelResult(pd.DataFrame):
     """Class to represent a matrix of analysis of bibliographic records.
@@ -195,6 +199,7 @@ class SecondLevelResult(pd.DataFrame):
         return centers, clusters
 
     #---------------------------------------------------------------------------------------------
+    #TODO personalizar valor superior para escalar los pesos de los puentes
     def network(self, save=False, name='network.png', corr_min=0.7, node_color='lightblue',
                   edge_color='lightgrey', edge_color2='lightcoral', node_size=None, fond_size=4,
                   figsize = (10,10)):
@@ -215,6 +220,7 @@ class SecondLevelResult(pd.DataFrame):
                             to the weights of edges that arrive and leave each one of them.
                             If numeric value, all nodes will be plotted with this given size
             fond_size (int): Node label fond size
+            figsize (float, float): size of figure drawn
 
         Returns:
             None
@@ -272,11 +278,16 @@ class SecondLevelResult(pd.DataFrame):
         colors = dict(((u, v), d["color"]) for u, v, d in graph.edges(data=True))
 
         #Edges weights for plot
-        if max([i for i in weights.values()]) <=1:
+        max_=max([i for i in weights.values()])
+        min_=min([i for i in weights.values()])
+        min_range=1
+        max_range=5
+        if max_<=1:
             width = ([(1+x)*2 for x in weights.values()])  
         else:
-            width = list(weights.values())
-
+            width = ([((((x-min_)/(max_-min_))*(max_range-min_range))+min_range) for x in weights.values()]) 
+            # width=list(weights.values())
+    
         #node sizes
         if not node_size:
             node_sizes = dict(graph.degree())
@@ -293,4 +304,108 @@ class SecondLevelResult(pd.DataFrame):
         if save:
             plt.savefig(name, format="PNG", dpi=300, bbox_inches='tight')
         plt.show()
+        return None
+
+    #---------------------------------------------------------------------------------------------
+   #TODO networkmap validar como pasar lonlat,
+    #que pasa si valores negativos???
+    #personalizar tamaño de la figura, 
+    #guardar archivo 
+    #quitar ejes
+
+    def networkmap(matrix, color_edges ='grey', color_node='red',color_map = 'white', edge_map = 'lightgrey', node_size =None, edge_weight = None):
+
+        """
+        This function generates network graph over map, for matrix with country relations.
+
+        Args:
+            matrix (pandas.DataFrame): Matrix with variables on indexes and column titles
+            color_edges (str): Color name used to plot edges
+            color_node (str): Color name used to plot nodes
+            color_map (str): Color name used to plot map countries
+            edge_map (str): Color name used to plot contries border
+            node_size (int): If None value, the size of the nodes is plotted according
+                            to the weights of edges that arrive and leave each one of them.
+                            If numeric value, all nodes will be plotted with this given size
+            edge_weight (int): If None value, the weigth of the edges is plotted according
+                            to matrix values
+                            If numeric value, all edges will be plotted with this given size
+        Returns:
+            None
+        #
+        """
+
+        #Get longitudes and latituds
+        lonlat=pd.read_csv('LonLat.csv',sep=';')
+
+        #node's names
+        rows=matrix.index
+        columns=matrix.columns
+        nodes=list(set(rows.append(columns)))
+        nodes = [row.replace(' ', '') for row in rows ]
+
+
+        #nodes_combinations
+        list_ = list(OrderedDict.fromkeys(itertools.product(rows, columns)))
+        if len(rows)== len(columns) and (all(rows.sort_values())==all(columns.sort_values())):
+            list_=list(set(tuple(sorted(t)) for t in list_))
+        
+
+        pos=lonlat[lonlat.country.isin(nodes)]
+
+        geometry = [Point(xy) for xy in zip(pos['lon'], pos['lat'])]
+
+        # Coordinate reference system : WGS84
+        crs = {'init': 'epsg:4326'}
+
+        # Creating a Geographic data frame from nodes
+        gdf = geopandas.GeoDataFrame(pos, crs=crs, geometry=geometry)
+
+        #edges
+        df=pd.DataFrame({'initial':[],'final':[],'initial_lon': [], 'initial_lat': [],'final_lon': [],'final_lat': [], 'weight': []})
+        for i in range(len(list_)):
+            combinations=list_[i]
+            from_node, to_node = combinations[0],combinations[1] 
+            if from_node != to_node:
+                weight =matrix.loc[from_node,to_node]
+                if weight != 0: 
+                    df = df.append({'initial':from_node.replace(' ', ''),'final':to_node.replace(' ', ''),'initial_lon': pos[pos.country==from_node.replace(' ', '')]['lon'].values, 'initial_lat': pos[pos.country==from_node.replace(' ', '')]['lat'].values,'final_lon': pos[pos.country==to_node.replace(' ', '')]['lon'].values,'final_lat': pos[pos.country==to_node.replace(' ', '')]['lat'].values, 'weight': weight}, ignore_index='True')
+
+        # Creating a Geographic data frame from edges  
+        df['orig_coord'] = [Point(xy) for xy in zip(df['initial_lon'], df['initial_lat'])]
+        df['dest_coord'] = [Point(xy) for xy in zip(df['final_lon'], df['final_lat'])]
+
+        geometry_lines=[LineString(xy) for xy in zip(df.orig_coord,df.dest_coord)]
+        gdf_lines=geopandas.GeoDataFrame(df, crs=crs, geometry=geometry_lines)
+
+        #base map
+        world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
+
+        #nodes size
+        if not node_size:
+            nodes_freq=list(gdf_lines.initial) + list(gdf_lines.final)
+            nodes_freq.sort()
+            nodes_size= {x:nodes_freq.count(x) for x in nodes_freq}
+            size=nodes_size.values()
+            size=[x*5 for x in size]
+        else:
+            size=node_size
+    
+        #edges weigth
+        if not node_size:
+            edges_=list(gdf_lines.weight)
+        else:
+            edges_= node_size
+        #plot graph
+        gdf.plot(ax=world.plot(ax=gdf_lines.plot(color=color_edges, markersize=edges_,alpha=0.5),color=color_map, edgecolor= edge_map), color=color_node,  markersize=size)
+        
+        plt.show()
+
+        return None
+
+
+
+
+
+
 
