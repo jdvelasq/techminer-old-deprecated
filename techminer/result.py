@@ -3,13 +3,20 @@ TechMiner.Result
 ==================================================================================================
 
 """
-import pandas as pd
 import altair as alt
-import matplotlib.pyplot as plt
-import seaborn as sns
 import geopandas
+import geoplot
+import itertools
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from collections import OrderedDict 
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+from scipy.optimize import minimize
+from shapely.geometry import Point, LineString
+from sklearn.cluster import KMeans
 
 class FirstLevelResult(pd.DataFrame):
     """First level results for analysis (list)
