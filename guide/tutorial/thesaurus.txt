@@ -490,16 +490,11 @@
     "Fundamental Analysis",
     "Fundamental analysis"
   ],
-  "Futures": [
-    "Futures",
-    "futures"
-  ],
   "Futures contract": [
     "Futures contract",
     "Futures contracts"
   ],
   "Futures market": [
-    "Futures Market",
     "Futures market",
     "Futures markets",
     "futures market"
@@ -553,7 +548,6 @@
     "hidden Markov model"
   ],
   "High frequency": [
-    "High Frequency",
     "High frequencies",
     "High frequency",
     "High-Frequency",
@@ -712,7 +706,6 @@
     "Market impact costs"
   ],
   "Market microstructure": [
-    "Market Microstructure",
     "Market microstructure",
     "Market microstructures",
     "market microstructure"
@@ -1030,6 +1023,10 @@
   "Recurrent reinforcement learning": [
     "Recurrent reinforcement learning",
     "recurrent reinforcement learning"
+  ],
+  "Regime-switching": [
+    "Regime switching",
+    "Regime-switching"
   ],
   "Regime-switching models": [
     "Regime-switching model",
@@ -1597,6 +1594,10 @@
     "Function evaluation",
     "function evaluation"
   ],
+  "futures": [
+    "Futures",
+    "futures"
+  ],
   "fuzzy logic": [
     "Fuzzy logic",
     "fuzzy logic"
@@ -1825,6 +1826,7 @@
     "nse"
   ],
   "order book": [
+    "Order Book",
     "Order book",
     "order book"
   ],
@@ -1917,11 +1919,6 @@
   "real-time trading": [
     "Real-time trading",
     "real-time trading"
-  ],
-  "regime-switching": [
-    "Regime switching",
-    "Regime-switching",
-    "regime-switching"
   ],
   "regularization": [
     "Regularization",

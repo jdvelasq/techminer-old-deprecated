@@ -38,7 +38,7 @@ class Matrix(pd.DataFrame):
         """
         if self._rtype not in [
             'num-docs-by-terms',
-            'num_docs-by-year'
+            'num-docs-by-year',
             'num-citations-by-terms',
             'num-citations-by-year']:
 
@@ -58,7 +58,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'num-docs-by-terms',
-            'num_docs-by-year'
+            'num-docs-by-year',
             'num-citations-by-terms',
             'num-citations-by-year']:
 
@@ -78,7 +78,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'num-docs-by-terms',
-            'num_docs-by-year'
+            'num-docs-by-year',
             'num-citations-by-terms',
             'num-citations-by-year']:
 
@@ -100,7 +100,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'num-docs-by-terms',
-            'num_docs-by-year'
+            'num-docs-by-year',
             'num-citations-by-terms',
             'num-citations-by-year']:
 
@@ -123,7 +123,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'co_ocurrence-matrix',
-            'cross-matrix'
+            'cross-matrix',
             'auto-matrix',
             'factor-matrix']:
 
@@ -150,24 +150,65 @@ class Matrix(pd.DataFrame):
 
 
     #---------------------------------------------------------------------------------------------
+    def cross_relation_plot(self, figsize=(7,10)):
+        """Cross-relation plot
+        """
+        x = self
+        
+        llabels = list(set(x[x.columns[0]]))
+        lpos = {k:v for v, k in enumerate(llabels)}
+        
+        rlabels = list(set(x[x.columns[1]]))
+        rpos = {k:v for v, k in enumerate(rlabels)}
+        
+        fig, ax1 = plt.subplots(figsize=(7, 10))
+        ax1.scatter([0] * len(llabels), llabels, color='black', s=50)
+        ax2 = ax1.twinx()
+        ax2.scatter([1] * len(rlabels), rlabels, color='black', s=50)
+        
+        minval = min(x[x.columns[2]])
+        maxval = max(x[x.columns[2]])
+                
+        for index, r in x.iterrows():
+            row = r[0]
+            col = r[1]
+            val = r[2]
+            linewidth = 3 * (val - minval) / maxval
+            plt.plot([0, 1], [lpos[row], rpos[col]], linewidth=linewidth, color='black')
+
+
+        for txt in ['bottom', 'top', 'left', 'right']:
+            ax1.spines[txt].set_color('white')
+            ax2.spines[txt].set_color('white')
+        
+        ax2.set_xticks([])
+
+
+
+    #---------------------------------------------------------------------------------------------
     def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10)):
         
         if self._rtype not in [
             'co_ocurrence-matrix',
-            'cross-matrix'
+            'cross-matrix',
             'auto-matrix',
-            'factor-matrix']:
+            'factor-matrix',
+            'centers-matrix']:
 
             raise Exception('Invalid function call for type: ' + self._rtype )
 
-        if self._isfactor is True:
+        if self._rtype == 'factor-matrix' is True:
             x = self.apply(lambda x: abs(x))
+        elif self._rtype in [
+            'co_ocurrence-matrix',
+            'cross-matrix',
+            'auto-matrix']:
+            x = self.to_matrix(ascendingA, ascendingB)
+        elif self._rtype == 'centers-matrix':
+            x = self.copy()
         else:
-            if self._transform is True:
-                x = self.to_matrix(ascendingA, ascendingB)
-            else:
-                x = self
-
+            Exception('Type of result data uknown:' + self._rtype)
+            
         plt.figure(figsize=figsize)
         plt.pcolor(np.transpose(x.values), cmap='Greys')
         plt.xticks(np.arange(len(x.index))+0.5, x.index, rotation='vertical')
@@ -180,7 +221,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'co_ocurrence-matrix',
-            'cross-matrix'
+            'cross-matrix',
             'auto-matrix']:
 
             raise Exception('Invalid function call for type: ' + self._rtype )
@@ -212,7 +253,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'co_ocurrence-matrix',
-            'cross-matrix'
+            'cross-matrix',
             'auto-matrix']:
 
             raise Exception('Invalid function call for type: ' + self._rtype )
@@ -225,18 +266,13 @@ class Matrix(pd.DataFrame):
 
         m = KMeans(n_clusters)
         m.fit(x.values)
-        # centers = pd.DataFrame(
-        #     m.cluster_centers_,
-        #     columns = x.columns,
-        #     index = ['Cluster ' + str(i) for i in range(n_clusters)])
 
 
-
-        centers = SecondLevelMatrix(
+        centers = Matrix(
             np.transpose(m.cluster_centers_),
             columns = ['Cluster ' + str(i) for i in range(n_clusters)],
             index = x.columns,
-            transform = False)
+            rtype = 'centers-matrix')
 
 
 
@@ -280,7 +316,7 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'co_ocurrence-matrix',
-            'cross-matrix'
+            'cross-matrix',
             'auto-matrix',
             'factor-matrix']:
 
@@ -464,8 +500,116 @@ class Matrix(pd.DataFrame):
 
         return None
 
+    #---------------------------------------------------------------------------------------------
+    def radial_plot(self, figsize=(12, 12), minval=0, R=3):
 
+        
+        def bezier(p0, p1, p2, n=100, linewidth=1):
+            x0, y0 = p0
+            x1, y1 = p1
+            x2, y2 = p2
+            
+            xb = [(1 - t)**2 *x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n)]
+            yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n)]
+        
+            plt.plot(xb, yb, color='black', linewidth=linewidth)
+        
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'auto-matrix']:
 
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
+        x = self
+
+        plt.figure(figsize=figsize)
+        labels = list(set(x[x.columns[0]]))
+        n_labels = len(labels)
+        
+        theta = np.linspace(0.0, 2 * np.pi, n_labels, endpoint=False)
+        points_x = [R * np.cos(t) for t in theta]
+        points_y = [R * np.sin(t) for t in theta]
+        
+        
+        
+        
+        # dibuja los puntos sobre la circunferencia
+        plt.scatter(points_x, points_y, s=80, color='black')
+        plt.xlim(-6, 6)
+        plt.ylim(-6, 6)
+        plt.gca().set_aspect('equal', 'box')
+        
+        # arcos de las relaciones    
+        data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
+        
+        n = 0
+        
+        maxval = max(x[x.columns[2]])
+        
+        textprops = {}
+        textprops.setdefault('clip_on', False)
+        
+        for index, r in x.iterrows():
+            row = r[0]
+            col = r[1]
+            val = r[2]
+            #linewidth = 3 * (val - minval) / maxval
+            if row != col and val > minval:
+                linewidth = 2
+                x0, y0, a0 = data[row]
+                x2, y2, a2 = data[col]            
+                
+                angle = a0 + (a2 - a0) / 2
+                
+                if angle > np.pi:
+                    angle_corr = angle - np.pi
+                else:
+                    angle_corr = angle
+                    
+                distance = np.abs(a2 - a0)
+                if distance > np.pi:
+                    distance = distance - np.pi
+                distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
+                x1 = distance * np.cos(angle)
+                y1 = distance * np.sin(angle)
+                
+                linewidth = 2 * val / maxval
+                        
+                bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth)
+                    
+        
+        ## labels
+        lbl_x = [(R+0.2) * np.cos(t) for t in theta]
+        lbl_y = [(R+0.2) * np.sin(t) for t in theta]
+        lbl_theta = [t / (2 * np.pi) * 360 for t in theta]
+        lbl_theta = [t - 180 if t > 180 else t for t in lbl_theta]
+        lbl_theta = [t - 180 if t > 90 else t for t in lbl_theta]
+        
+        maxlen = max([len(lbl) for lbl in labels])
+        
+        for txt, xt, yt, angletxt, angle  in zip(labels, lbl_x, lbl_y, lbl_theta, theta):
+                
+            if xt >= 0:
+                ha = 'left'
+            else:
+                ha = 'right'
+        
+            plt.text(
+                xt, 
+                yt, 
+                txt, 
+                fontsize=10,
+                rotation=angletxt,
+                va = 'center',
+                ha = ha, # 'center'
+                rotation_mode = 'anchor',
+                backgroundcolor='white')
+                    
+        plt.gca().set_xticks([])
+        plt.gca().set_yticks([])
+        for txt in ['bottom', 'top', 'left', 'right']:
+            plt.gca().spines[txt].set_color('white')
+            
 
     #---------------------------------------------------------------------------------------------
     def to_matrix(self, ascendingA=None, ascendingB=None):
@@ -495,14 +639,11 @@ class Matrix(pd.DataFrame):
 
         if self._rtype not in [
             'co_ocurrence-matrix',
-            'cross-matrix'
+            'cross-matrix',
             'auto-matrix']:
 
             raise Exception('Invalid function call for type: ' + self._rtype )
 
-
-        if self._transform is False:
-            return pd.DataFrame(self)
 
         if self.columns[0] == 'Year':
             termA_unique = range(min(self.Year), max(self.Year)+1)
@@ -533,7 +674,7 @@ class Matrix(pd.DataFrame):
             val = r[2]
             result.loc[row, col] = val
             
-        return Matrix(result, rtype=False)
+        return Matrix(result, rtype='matrix')
 
     #---------------------------------------------------------------------------------------------
     def transpose(self, *args, **kwargs):
@@ -557,7 +698,7 @@ class Matrix(pd.DataFrame):
 
         rdf = self.copy()
         rdf['Country'] = rdf['Country'].map(
-            lambda x: x.replace('UnitedStates', 'United States of America')
+            lambda x: x.replace('United States', 'United States of America')
         )
 
         #rdf['Country'] = [w if w !=  else  for w in rdf['Country']]

@@ -92,10 +92,10 @@ class RecordsDataFrame(pd.DataFrame):
         """Computes the number of citations to docuement per year.
 
         >>> rdf = RecordsDataFrame({
-        ...   'term': ['a', 'a', 'b', 'c', None, 'b'],
+        ...   'term': ['a;b', 'a', 'b', 'c', None, 'b'],
         ...   'Cited by': [1, 2, 3, 4, 3, 7]
         ... })
-        >>> rdf.citations_by_term('term')
+        >>> rdf.citations_by_terms('term', sep=';')
 
         """
         terms = self[term].dropna()
@@ -104,19 +104,25 @@ class RecordsDataFrame(pd.DataFrame):
         else:
             terms = terms.tolist()
 
+        terms = list(set(terms))
+
         ## crea el dataframe de resultados
         result = pd.DataFrame({
-            term : terms
-        })
+            term : terms},
+            index = terms)
         result['Cited by'] = 0
 
         ## suma de citaciones
         for index, row in self[[term, 'Cited by']].iterrows():
+            citations = row[1] if not np.isnan(row[1]) else 0
             if sep is not None:
                 for term in row[0].split(sep):
-                    result.loc[term, 'Cited by'] =  result.loc[term, 'Cited by'] + row[1]
+                    term = term.strip()
+                    result.at[term, 'Cited by'] =  result.loc[term, 'Cited by'] + citations
             else:
-                result.loc[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + row[1]
+                result.at[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + citations
+
+        result = result.sort_values(by='Cited by', ascending=False)
 
         return Matrix(result, rtype='num-citations-by-terms')
 
@@ -233,7 +239,7 @@ class RecordsDataFrame(pd.DataFrame):
             termB = None
 
 
-        x = self.documents_by_term(termA, sep=sepA)
+        x = self.documents_by_terms(termA, sep=sepA)
         termsA = x.loc[:, termA].tolist()
         if N is None or len(termsA) <= N:
             termsA = sorted(termsA)
@@ -241,7 +247,7 @@ class RecordsDataFrame(pd.DataFrame):
             termsA = sorted(termsA[0:N])
 
         if termB is not None:
-            x = self.documents_by_term(termB, sep=sepB)
+            x = self.documents_by_terms(termB, sep=sepB)
             termsB = x.loc[:, termB].tolist()
             if N is None or len(termsB) <= N:
                 termsB = sorted(termsB)
@@ -405,7 +411,7 @@ class RecordsDataFrame(pd.DataFrame):
     #----------------------------------------------------------------------------------------------
     def factor(self, term, sep=None, n_components=2, N=10):
 
-        x = self.documents_by_term(term, sep=sep)
+        x = self.documents_by_terms(term, sep=sep)
         terms = x.loc[:, term].tolist()
         if N is None or len(terms) <= N:
             N = len(terms)
