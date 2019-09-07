@@ -9,8 +9,7 @@ TechMiner.RecordsDataFrame
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
-from techminer.second_level import SecondLevelResult
-from techminer.first_level import FirstLevelResult
+from techminer.matrix import Matrix
 
 
 
@@ -23,107 +22,103 @@ class RecordsDataFrame(pd.DataFrame):
         return self
 
     #----------------------------------------------------------------------------------------------
-    @property
-    def num_of_sources(self):
-        return len(self['Source title'].unique())
-
-    #----------------------------------------------------------------------------------------------
-    def most_cited_documents(self, N=10):
-        """ Returns the top N most cited documents.
-        Args:
-            N (int) : number of documents to be returned.
-
-        Results:
-            pandas.DataFrame
+    def autocorrelation(self, term, sep=None, N=20):
         """
-        result = self.sort_values(by='Cited by', ascending=False)
-        return result[['Title', 'Authors', 'Year', 'Cited by']][0:N]
 
+            
+        >>> rdf = RecordsDataFrame({
+        ... 'A':['a;b', 'b', 'c;a', 'b;a', 'c', 'd', 'e','a;b;c', 'e;a', None]
+        ... })
+        >>> rdf # doctest: +NORMALIZE_WHITESPACE
+               A
+        0    a;b
+        1      b
+        2    c;a
+        3    b;a
+        4      c
+        5      d
+        6      e
+        7  a;b;c
+        8    e;a  
+        9   None
+
+        >>> rdf.autocorrelation(term='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+           A (row) A (col)  Autocorrelation
+        0        a       a         1.000000
+        1        a       b         0.670820
+        2        a       c         0.516398
+        3        a       d         0.000000
+        4        a       e         0.316228
+        5        b       a         0.670820
+        6        b       b         1.000000
+        7        b       c         0.288675
+        8        b       d         0.000000
+        9        b       e         0.000000
+        10       c       a         0.516398
+        11       c       b         0.288675
+        12       c       c         1.000000
+        13       c       d         0.000000
+        14       c       e         0.000000
+        15       d       a         0.000000
+        16       d       b         0.000000
+        17       d       c         0.000000
+        18       d       d         1.000000
+        19       d       e         0.000000
+        20       e       a         0.316228
+        21       e       b         0.000000
+        22       e       c         0.000000
+        23       e       d         0.000000
+        24       e       e         1.000000
+
+        >>> rdf.autocorrelation(term='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+          A (row) A (col)  Autocorrelation
+        0       a       a         1.000000
+        1       a       b         0.670820
+        2       a       c         0.516398
+        3       b       a         0.670820
+        4       b       b         1.000000
+        5       b       c         0.288675
+        6       c       a         0.516398
+        7       c       b         0.288675
+        8       c       c         1.000000
+
+        """
+        result = self.crosscorrelation(termA=term, termB=term, sepA=sep, sepB=sep, N=N)
+        result._rtype = 'auto-matrix'
+        return result
 
     #----------------------------------------------------------------------------------------------
-    def documents_by_term(self, term, sep=None):
-        """Computes the number of documents per term.
+    def citations_by_terms(self, term, sep=None):
+        """Computes the number of citations to docuement per year.
 
-
-        >>> rdf = RecordsDataFrame({'letters': ['a', 'b', 'c', 'a', None, 'c']})
-        >>> rdf.documents_by_term('letters')
-          letters  Num Documents
-        0       a              2
-        2       c              2
-        1       b              1
-        >>> rdf = RecordsDataFrame({'letters': ['a|b', 'b|d|a', 'c', 'a', None, 'c']})
-        >>> rdf.documents_by_term('letters', sep='|')
-          letters  Num Documents
-        0       a              3
-        1       b              2
-        2       c              2
-        3       d              1
+        >>> rdf = RecordsDataFrame({
+        ...   'term': ['a', 'a', 'b', 'c', None, 'b'],
+        ...   'Cited by': [1, 2, 3, 4, 3, 7]
+        ... })
+        >>> rdf.citations_by_term('term')
 
         """
         terms = self[term].dropna()
         if sep is not None:
-            pdf = pd.DataFrame({
-                term: [y.strip() for x in terms for y in x.split(sep) if x is not None]
-            })
+            terms = [y.strip() for x in terms for y in x.split(sep) if x is not None]
         else:
-            pdf = pd.DataFrame({
-                term: terms
-            })
+            terms = terms.tolist()
 
-        result = pdf.groupby(term, as_index=False).size()
+        ## crea el dataframe de resultados
         result = pd.DataFrame({
-            term : result.index,
-            'Num Documents': result.tolist()
+            term : terms
         })
-        result = result.sort_values(by='Num Documents', ascending=False)
+        result['Cited by'] = 0
 
-        return FirstLevelResult(result)
-    
-    #----------------------------------------------------------------------------------------------
-    def documents_by_year(self, cumulative=False):
-        """Computes the number of documents per year.
+        ## suma de citaciones
+        for index, row in self[[term, 'Cited by']].iterrows():
+            if sep is not None:
+                for term in row[0].split(sep):
+                    result.loc[term, 'Cited by'] =  result.loc[term, 'Cited by'] + row[1]
+            else:
+                result.loc[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + row[1]
 
-        >>> rdf = RecordsDataFrame({'Year': [2014, 2014, 2016, 2017, None, 2019]})
-        >>> rdf.documents_by_year()
-           Year  Num Documents
-        0  2014              2
-        1  2015              0
-        2  2016              1
-        3  2017              1
-        4  2018              0
-        5  2019              1
-        >>> rdf.documents_by_year(cumulative=True)
-           Year  Num Documents
-        0  2014              2
-        1  2015              2
-        2  2016              3
-        3  2017              4
-        4  2018              4
-        5  2019              5
-
-        """
-        yearsdf = self[['Year']].copy()
-        yearsdf['Year'] = yearsdf['Year'].map(lambda x: None if np.isnan(x) else x)
-        yearsdf = yearsdf.dropna()
-        yearsdf['Year'] = yearsdf['Year'].map(int)
-        
-        minyear = min(yearsdf.Year)
-        maxyear = max(yearsdf.Year) + 1
-        docs_per_year = pd.Series(0, index=range(minyear, maxyear))
-        
-        count_per_year = yearsdf.groupby('Year')[['Year']].count()
-        docs_per_year[count_per_year.index] = count_per_year['Year']
-        docs_per_year = docs_per_year.to_frame()
-        docs_per_year['Year'] = docs_per_year.index
-        docs_per_year.columns = ['Num Documents', 'Year']
-        docs_per_year = docs_per_year[['Year', 'Num Documents']]
-        docs_per_year.index = range(len(docs_per_year))
-        
-        if cumulative is True:
-            docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
-
-
-        return FirstLevelResult(docs_per_year)
+        return Result(result, rtype='num-citations-by-terms')
 
     #----------------------------------------------------------------------------------------------
     def citations_by_year(self, cumulative=False, yearcol='Year', citedcol='Cited by'):
@@ -166,133 +161,7 @@ class RecordsDataFrame(pd.DataFrame):
             citations_per_year['Cited by'] = citations_per_year['Cited by'].cumsum()
             
         citations_per_year.index = range(len(citations_per_year))
-        return FirstLevelResult(citations_per_year)
-
-    #----------------------------------------------------------------------------------------------
-    def term_by_term(self, termA, termB, sepA=None, sepB=None, minmax=None):
-        """
-
-    
-        >>> rdf = RecordsDataFrame({
-        ...   'A':[0, 1, 2, 3, 4, 0, 1],
-        ...   'B':['a', 'b', 'c', 'd', 'e', 'a', 'b']
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-           A  B
-        0  0  a
-        1  1  b
-        2  2  c
-        3  3  d
-        4  4  e
-        5  0  a
-        6  1  b    
-
-        >>> rdf.term_by_term('A', 'B')
-           A  B  Num Documents
-        0  0  a              2
-        1  1  b              2
-        2  2  c              1
-        3  3  d              1
-        4  4  e              1
-
-        >>> rdf.term_by_term('A', 'B', minmax=(2,8))
-           A  B  Num Documents
-        0  0  a              2
-        1  1  b              2
-        """
-        
-        df = self[[termA, termB]].dropna()
-
-
-        ##
-        ## Expande las dos columnas de los datos originales
-        ##
-        if sepA is None and sepB is None:
-            df = df[[termA, termB]]
-        
-        if sepA is not None and sepB is None:
-            
-            t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(c, b) for a, b in t for c in a.split(sepA)]
-            df = pd.DataFrame({
-                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
-                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-            
-        if sepA is None and sepB is not None:
-        
-            t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(a, c.strip()) for a, b in t for c in b.split(sepB)]
-            df = pd.DataFrame({
-                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
-                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-
-        if sepA is not None and sepB is not None:
-        
-            t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(c, b) for a, b in t for c in a.split(sepA)]
-            t = [(a, c) for a, b in t for c in b.split(sepB)]
-            df = pd.DataFrame({
-                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
-                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-
-        x = df.groupby(by=[termA, termB]).size()
-        a = [t for t,_ in x.index]
-        b = [t for _,t in x.index]
-        df = pd.DataFrame({
-            termA: a,
-            termB: b,
-            'Num Documents': x.tolist()
-        })
-
-        if minmax is not None:
-
-            minval, maxval = minmax
-            df = df[ df[df.columns[2]] >= minval ]
-            df = df[ df[df.columns[2]] <= maxval ]
-
-        return SecondLevelResult(df)
-
-    #----------------------------------------------------------------------------------------------
-    def factor(self, term, sep=None, n_components=2, N=10):
-
-        x = self.documents_by_term(term, sep=sep)
-        terms = x.loc[:, term].tolist()
-        if N is None or len(terms) <= N:
-            N = len(terms)
-        terms = sorted(terms[0:N])
-
-        x = pd.DataFrame(
-            data = np.zeros((len(self), len(terms))),
-            columns = terms,
-            index = self.index)
-
-        for idx in self.index:
-            w = self.loc[idx, term]
-            if w is not None:
-                if sep is not None:
-                    z = w.split(sep)
-                else:
-                    z = [w] 
-                for k in z:
-                    if k in terms:
-                        x.loc[idx, k] = 1
-
-        s = x.sum(axis = 1)
-        x = x.loc[s > 0.0]
-
-        pca = PCA(n_components=n_components)
-        
-        values = np.transpose(pca.fit(X=x.values).components_)
-
-        return SecondLevelResult(
-            pd.DataFrame(
-                values,
-                columns = ['F'+str(i) for i in range(n_components)],
-                index = terms),
-            isfactor = True)
+        return Result(citations_per_year, rtype='num-citations-by-year')
 
     #----------------------------------------------------------------------------------------------
     def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
@@ -444,70 +313,239 @@ class RecordsDataFrame(pd.DataFrame):
 
                 idx += 1
 
-        return SecondLevelResult(result)
+        return Result(result, rtype='cross-matrix')
+
 
     #----------------------------------------------------------------------------------------------
-    def autocorrelation(self, term, sep=None, N=20):
+    def documents_by_terms(self, term, sep=None):
+        """Computes the number of documents per term.
+
+
+        >>> rdf = RecordsDataFrame({'letters': ['a', 'b', 'c', 'a', None, 'c']})
+        >>> rdf.documents_by_terms('letters')
+          letters  Num Documents
+        0       a              2
+        2       c              2
+        1       b              1
+        >>> rdf = RecordsDataFrame({'letters': ['a|b', 'b|d|a', 'c', 'a', None, 'c']})
+        >>> rdf.documents_by_terms('letters', sep='|')
+          letters  Num Documents
+        0       a              3
+        1       b              2
+        2       c              2
+        3       d              1
+
+        """
+        terms = self[term].dropna()
+        if sep is not None:
+            pdf = pd.DataFrame({
+                term: [y.strip() for x in terms for y in x.split(sep) if x is not None]
+            })
+        else:
+            pdf = pd.DataFrame({
+                term: terms
+            })
+
+        result = pdf.groupby(term, as_index=False).size()
+        result = pd.DataFrame({
+            term : result.index,
+            'Num Documents': result.tolist()
+        })
+        result = result.sort_values(by='Num Documents', ascending=False)
+
+        return Result(result, rtype='num-docs-by-terms')
+
+
+    #----------------------------------------------------------------------------------------------
+    def documents_by_year(self, cumulative=False):
+        """Computes the number of documents per year.
+
+        >>> rdf = RecordsDataFrame({'Year': [2014, 2014, 2016, 2017, None, 2019]})
+        >>> rdf.documents_by_year()
+           Year  Num Documents
+        0  2014              2
+        1  2015              0
+        2  2016              1
+        3  2017              1
+        4  2018              0
+        5  2019              1
+        >>> rdf.documents_by_year(cumulative=True)
+           Year  Num Documents
+        0  2014              2
+        1  2015              2
+        2  2016              3
+        3  2017              4
+        4  2018              4
+        5  2019              5
+
+        """
+        yearsdf = self[['Year']].copy()
+        yearsdf['Year'] = yearsdf['Year'].map(lambda x: None if np.isnan(x) else x)
+        yearsdf = yearsdf.dropna()
+        yearsdf['Year'] = yearsdf['Year'].map(int)
+        
+        minyear = min(yearsdf.Year)
+        maxyear = max(yearsdf.Year) + 1
+        docs_per_year = pd.Series(0, index=range(minyear, maxyear))
+        
+        count_per_year = yearsdf.groupby('Year')[['Year']].count()
+        docs_per_year[count_per_year.index] = count_per_year['Year']
+        docs_per_year = docs_per_year.to_frame()
+        docs_per_year['Year'] = docs_per_year.index
+        docs_per_year.columns = ['Num Documents', 'Year']
+        docs_per_year = docs_per_year[['Year', 'Num Documents']]
+        docs_per_year.index = range(len(docs_per_year))
+        
+        if cumulative is True:
+            docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
+
+
+        return Result(docs_per_year, rtype='num-docs-by-year')
+
+    #----------------------------------------------------------------------------------------------
+    def factor(self, term, sep=None, n_components=2, N=10):
+
+        x = self.documents_by_term(term, sep=sep)
+        terms = x.loc[:, term].tolist()
+        if N is None or len(terms) <= N:
+            N = len(terms)
+        terms = sorted(terms[0:N])
+
+        x = pd.DataFrame(
+            data = np.zeros((len(self), len(terms))),
+            columns = terms,
+            index = self.index)
+
+        for idx in self.index:
+            w = self.loc[idx, term]
+            if w is not None:
+                if sep is not None:
+                    z = w.split(sep)
+                else:
+                    z = [w] 
+                for k in z:
+                    if k in terms:
+                        x.loc[idx, k] = 1
+
+        s = x.sum(axis = 1)
+        x = x.loc[s > 0.0]
+
+        pca = PCA(n_components=n_components)
+        
+        values = np.transpose(pca.fit(X=x.values).components_)
+
+        return SecondLevelResult(
+            pd.DataFrame(
+                values,
+                columns = ['F'+str(i) for i in range(n_components)],
+                index = terms),
+            isfactor = True)
+
+
+    #----------------------------------------------------------------------------------------------
+    def most_cited_documents(self, N=10):
+        """ Returns the top N most cited documents.
+        Args:
+            N (int) : number of documents to be returned.
+
+        Results:
+            pandas.DataFrame
+        """
+        result = self.sort_values(by='Cited by', ascending=False)
+        return result[['Title', 'Authors', 'Year', 'Cited by']][0:N]
+
+
+    #----------------------------------------------------------------------------------------------
+    @property
+    def num_of_sources(self):
+        return len(self['Source title'].unique())
+
+    #----------------------------------------------------------------------------------------------
+    def term_by_term(self, termA, termB, sepA=None, sepB=None, minmax=None):
         """
 
-            
+    
         >>> rdf = RecordsDataFrame({
-        ... 'A':['a;b', 'b', 'c;a', 'b;a', 'c', 'd', 'e','a;b;c', 'e;a', None]
+        ...   'A':[0, 1, 2, 3, 4, 0, 1],
+        ...   'B':['a', 'b', 'c', 'd', 'e', 'a', 'b']
         ... })
         >>> rdf # doctest: +NORMALIZE_WHITESPACE
-               A
-        0    a;b
-        1      b
-        2    c;a
-        3    b;a
-        4      c
-        5      d
-        6      e
-        7  a;b;c
-        8    e;a  
-        9   None
+           A  B
+        0  0  a
+        1  1  b
+        2  2  c
+        3  3  d
+        4  4  e
+        5  0  a
+        6  1  b    
 
-        >>> rdf.autocorrelation(term='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-           A (row) A (col)  Autocorrelation
-        0        a       a         1.000000
-        1        a       b         0.670820
-        2        a       c         0.516398
-        3        a       d         0.000000
-        4        a       e         0.316228
-        5        b       a         0.670820
-        6        b       b         1.000000
-        7        b       c         0.288675
-        8        b       d         0.000000
-        9        b       e         0.000000
-        10       c       a         0.516398
-        11       c       b         0.288675
-        12       c       c         1.000000
-        13       c       d         0.000000
-        14       c       e         0.000000
-        15       d       a         0.000000
-        16       d       b         0.000000
-        17       d       c         0.000000
-        18       d       d         1.000000
-        19       d       e         0.000000
-        20       e       a         0.316228
-        21       e       b         0.000000
-        22       e       c         0.000000
-        23       e       d         0.000000
-        24       e       e         1.000000
+        >>> rdf.term_by_term('A', 'B')
+           A  B  Num Documents
+        0  0  a              2
+        1  1  b              2
+        2  2  c              1
+        3  3  d              1
+        4  4  e              1
 
-        >>> rdf.autocorrelation(term='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-          A (row) A (col)  Autocorrelation
-        0       a       a         1.000000
-        1       a       b         0.670820
-        2       a       c         0.516398
-        3       b       a         0.670820
-        4       b       b         1.000000
-        5       b       c         0.288675
-        6       c       a         0.516398
-        7       c       b         0.288675
-        8       c       c         1.000000
-
+        >>> rdf.term_by_term('A', 'B', minmax=(2,8))
+           A  B  Num Documents
+        0  0  a              2
+        1  1  b              2
         """
-        return self.crosscorrelation(termA=term, termB=term, sepA=sep, sepB=sep, N=N)
+        
+        df = self[[termA, termB]].dropna()
+
+
+        ##
+        ## Expande las dos columnas de los datos originales
+        ##
+        if sepA is None and sepB is None:
+            df = df[[termA, termB]]
+        
+        if sepA is not None and sepB is None:
+            
+            t = [(x, y) for x, y in zip(df[termA], df[termB])]
+            t = [(c, b) for a, b in t for c in a.split(sepA)]
+            df = pd.DataFrame({
+                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
+                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
+            })
+            
+        if sepA is None and sepB is not None:
+        
+            t = [(x, y) for x, y in zip(df[termA], df[termB])]
+            t = [(a, c.strip()) for a, b in t for c in b.split(sepB)]
+            df = pd.DataFrame({
+                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
+                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
+            })
+
+        if sepA is not None and sepB is not None:
+        
+            t = [(x, y) for x, y in zip(df[termA], df[termB])]
+            t = [(c, b) for a, b in t for c in a.split(sepA)]
+            t = [(a, c) for a, b in t for c in b.split(sepB)]
+            df = pd.DataFrame({
+                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
+                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
+            })
+
+        x = df.groupby(by=[termA, termB]).size()
+        a = [t for t,_ in x.index]
+        b = [t for _,t in x.index]
+        df = pd.DataFrame({
+            termA: a,
+            termB: b,
+            'Num Documents': x.tolist()
+        })
+
+        if minmax is not None:
+
+            minval, maxval = minmax
+            df = df[ df[df.columns[2]] >= minval ]
+            df = df[ df[df.columns[2]] <= maxval ]
+
+        return Result(df, rtype='factor-matrix')
 
     #----------------------------------------------------------------------------------------------
+
