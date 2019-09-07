@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from wordcloud import WordCloud, ImageColorGenerator
 
 class List(pd.DataFrame):
     """Class implementing a dataframe with results of first level analysis.
@@ -74,8 +75,24 @@ class List(pd.DataFrame):
             return result
 
     #----------------------------------------------------------------------------------------------
-    def worldcloud(self, figsize=(14, 7)):
-        pass
+    def wordcloud(self, figsize=(14, 7), max_font_size=50, max_words=100, 
+        background_color="white"):
+        
+
+        columns = self.columns.tolist()
+
+        words = [row[0]  for _, row in self.iterrows() for i in range(row[1])]
+
+        wordcloud = WordCloud(
+            max_font_size=max_font_size, 
+            max_words=max_words, 
+            background_color=background_color).generate(' '.join(words))
+
+        plt.figure(figsize=figsize)
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        plt.show()
+
 
     #----------------------------------------------------------------------------------------------
     def worldmap(self, figsize=(14, 7)):
