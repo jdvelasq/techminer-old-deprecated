@@ -36,6 +36,14 @@ class Matrix(pd.DataFrame):
     def barhplot_in_altair(self):
         """Plots a pandas.DataFrame using Altair.
         """
+        if self._rtype not in [
+            'num-docs-by-terms',
+            'num_docs-by-year'
+            'num-citations-by-terms',
+            'num-citations-by-year']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
         columns = self.columns.tolist()
         return alt.Chart(self).mark_bar().encode(
             alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
@@ -47,6 +55,15 @@ class Matrix(pd.DataFrame):
     def barplot_in_altair(self):
         """Vertical bar plot in Altair.
         """
+
+        if self._rtype not in [
+            'num-docs-by-terms',
+            'num_docs-by-year'
+            'num-citations-by-terms',
+            'num-citations-by-year']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
         columns = self.columns.tolist()
         return alt.Chart(self).mark_bar().encode(
             alt.X(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
@@ -58,6 +75,15 @@ class Matrix(pd.DataFrame):
     def barhplot_in_seaborn(self):
         """Horizontal bar plot using Seaborn.
         """
+
+        if self._rtype not in [
+            'num-docs-by-terms',
+            'num_docs-by-year'
+            'num-citations-by-terms',
+            'num-citations-by-year']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
         columns = self.columns.tolist()
         return sns.barplot(
             x="Num Documents",
@@ -71,6 +97,15 @@ class Matrix(pd.DataFrame):
     def barplot_in_seaborn(self):
         """Vertical bar plot using Seaborn.
         """
+
+        if self._rtype not in [
+            'num-docs-by-terms',
+            'num_docs-by-year'
+            'num-citations-by-terms',
+            'num-citations-by-year']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
         columns = self.columns.tolist()
         result = sns.barplot(
             y="Num Documents",
@@ -85,6 +120,14 @@ class Matrix(pd.DataFrame):
 
     #---------------------------------------------------------------------------------------------
     def circleplot_in_altair(self, ascendingA=None, ascendingB=None):
+
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'cross-matrix'
+            'auto-matrix',
+            'factor-matrix']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
 
         if ascendingA is None or ascendingA is True:
             sort_X = 'ascending'
@@ -109,6 +152,14 @@ class Matrix(pd.DataFrame):
     #---------------------------------------------------------------------------------------------
     def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10)):
         
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'cross-matrix'
+            'auto-matrix',
+            'factor-matrix']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
         if self._isfactor is True:
             x = self.apply(lambda x: abs(x))
         else:
@@ -126,6 +177,14 @@ class Matrix(pd.DataFrame):
     
     #---------------------------------------------------------------------------------------------
     def heatmap_in_altair(self, ascendingA=None, ascendingB=None):
+
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'cross-matrix'
+            'auto-matrix']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
 
         if ascendingA is None or ascendingA is True:
             sort_X = 'ascending'
@@ -146,13 +205,20 @@ class Matrix(pd.DataFrame):
     def heatmap_in_seaborn(self):
         return sns.heatmap(self)
 
-
     #---------------------------------------------------------------------------------------------
     def kmeans(self, n_clusters=2):
         """Apply KMeans to a pandas dataframe.
         """
 
-        if self._isfactor is True:
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'cross-matrix'
+            'auto-matrix']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
+
+        if self._rtype == 'factor-matrix' is True:
             x = self.copy()
         else:
             x = self.to_matrix()
@@ -212,7 +278,16 @@ class Matrix(pd.DataFrame):
         
         """
 
-        if self._isfactor is True:
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'cross-matrix'
+            'auto-matrix',
+            'factor-matrix']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
+
+        if self._rtype == 'factor-matrix':
             x = self.copy()
         else:
             x = self.to_matrix()
@@ -417,6 +492,15 @@ class Matrix(pd.DataFrame):
         r2  3.0  6.0    
 
         """
+
+        if self._rtype not in [
+            'co_ocurrence-matrix',
+            'cross-matrix'
+            'auto-matrix']:
+
+            raise Exception('Invalid function call for type: ' + self._rtype )
+
+
         if self._transform is False:
             return pd.DataFrame(self)
 
@@ -461,6 +545,10 @@ class Matrix(pd.DataFrame):
     def worldmap(self, figsize=(14, 7)):
         """Worldmap plot with the number of documents per country.
         """
+
+        if 'Country' not in list(self.columns):
+            raise Exception('No country column found in data')
+
 
         world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
         world = world[world.name != "Antarctica"]

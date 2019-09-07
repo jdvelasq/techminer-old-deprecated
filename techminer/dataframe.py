@@ -434,12 +434,12 @@ class RecordsDataFrame(pd.DataFrame):
         
         values = np.transpose(pca.fit(X=x.values).components_)
 
-        return SecondLevelMatrix(
-            pd.DataFrame(
-                values,
-                columns = ['F'+str(i) for i in range(n_components)],
-                index = terms),
-            isfactor = True)
+        result = pd.DataFrame(
+            values,
+            columns = ['F'+str(i) for i in range(n_components)],
+            index = terms)
+
+        return Matrix(result, rtype = 'factor-matrix')
 
 
     #----------------------------------------------------------------------------------------------
@@ -545,7 +545,7 @@ class RecordsDataFrame(pd.DataFrame):
             df = df[ df[df.columns[2]] >= minval ]
             df = df[ df[df.columns[2]] <= maxval ]
 
-        return Matrix(df, rtype='factor-matrix')
+        return Matrix(df, rtype='co_ocurrence-matrix')
 
     #----------------------------------------------------------------------------------------------
 
