@@ -118,7 +118,7 @@ class RecordsDataFrame(pd.DataFrame):
             else:
                 result.loc[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + row[1]
 
-        return Result(result, rtype='num-citations-by-terms')
+        return Matrix(result, rtype='num-citations-by-terms')
 
     #----------------------------------------------------------------------------------------------
     def citations_by_year(self, cumulative=False, yearcol='Year', citedcol='Cited by'):
@@ -161,7 +161,7 @@ class RecordsDataFrame(pd.DataFrame):
             citations_per_year['Cited by'] = citations_per_year['Cited by'].cumsum()
             
         citations_per_year.index = range(len(citations_per_year))
-        return Result(citations_per_year, rtype='num-citations-by-year')
+        return Matrix(citations_per_year, rtype='num-citations-by-year')
 
     #----------------------------------------------------------------------------------------------
     def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
@@ -313,7 +313,7 @@ class RecordsDataFrame(pd.DataFrame):
 
                 idx += 1
 
-        return Result(result, rtype='cross-matrix')
+        return Matrix(result, rtype='cross-matrix')
 
 
     #----------------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ class RecordsDataFrame(pd.DataFrame):
         })
         result = result.sort_values(by='Num Documents', ascending=False)
 
-        return Result(result, rtype='num-docs-by-terms')
+        return Matrix(result, rtype='num-docs-by-terms')
 
 
     #----------------------------------------------------------------------------------------------
@@ -400,7 +400,7 @@ class RecordsDataFrame(pd.DataFrame):
             docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
 
 
-        return Result(docs_per_year, rtype='num-docs-by-year')
+        return Matrix(docs_per_year, rtype='num-docs-by-year')
 
     #----------------------------------------------------------------------------------------------
     def factor(self, term, sep=None, n_components=2, N=10):
@@ -434,7 +434,7 @@ class RecordsDataFrame(pd.DataFrame):
         
         values = np.transpose(pca.fit(X=x.values).components_)
 
-        return SecondLevelResult(
+        return SecondLevelMatrix(
             pd.DataFrame(
                 values,
                 columns = ['F'+str(i) for i in range(n_components)],
@@ -545,7 +545,7 @@ class RecordsDataFrame(pd.DataFrame):
             df = df[ df[df.columns[2]] >= minval ]
             df = df[ df[df.columns[2]] <= maxval ]
 
-        return Result(df, rtype='factor-matrix')
+        return Matrix(df, rtype='factor-matrix')
 
     #----------------------------------------------------------------------------------------------
 

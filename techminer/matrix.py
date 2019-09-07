@@ -18,8 +18,9 @@ from scipy.optimize import minimize
 from shapely.geometry import Point, LineString
 from sklearn.cluster import KMeans
 
-class Result(pd.DataFrame):
-    """First level results for analysis (list)
+
+class Matrix(pd.DataFrame):
+    """Class implementing a dataframe with results of analysis.
     """
     #---------------------------------------------------------------------------------------------
     def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False, rtype=None):
@@ -31,70 +32,79 @@ class Result(pd.DataFrame):
     def _constructor_expanddim(self):
         return self
 
-    #---------------------------------------------------------------------------------------------
-    def transpose(self, *args, **kwargs):
-        result = SecondLevelResult(super().transpose())
-        result._rtype = self._rtype
+    #----------------------------------------------------------------------------------------------
+    def barhplot_in_altair(self):
+        """Plots a pandas.DataFrame using Altair.
+        """
+        columns = self.columns.tolist()
+        return alt.Chart(self).mark_bar().encode(
+            alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
+            alt.X(columns[1] + ':Q'),
+            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys'))
+        )
+
+    #----------------------------------------------------------------------------------------------
+    def barplot_in_altair(self):
+        """Vertical bar plot in Altair.
+        """
+        columns = self.columns.tolist()
+        return alt.Chart(self).mark_bar().encode(
+            alt.X(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
+            alt.Y(columns[1] + ':Q'),
+            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys'))
+        )
+
+    #----------------------------------------------------------------------------------------------
+    def barhplot_in_seaborn(self):
+        """Horizontal bar plot using Seaborn.
+        """
+        columns = self.columns.tolist()
+        return sns.barplot(
+            x="Num Documents",
+            y=columns[0],
+            data=self,
+            label=columns[0],
+            color="gray"
+        )
+
+    #----------------------------------------------------------------------------------------------
+    def barplot_in_seaborn(self):
+        """Vertical bar plot using Seaborn.
+        """
+        columns = self.columns.tolist()
+        result = sns.barplot(
+            y="Num Documents",
+            x=columns[0],
+            data=self,
+            label=columns[0],
+            color="gray")
+        _, labels = plt.xticks()
+        result.set_xticklabels(labels, rotation=90)
         return result
 
+
     #---------------------------------------------------------------------------------------------
-    def to_matrix(self, ascendingA=None, ascendingB=None):
-        """Displays a term by term dataframe as a matrix.
+    def circleplot_in_altair(self, ascendingA=None, ascendingB=None):
 
-        >>> mtx = SecondLevelResult({
-        ...   'rows':['r0', 'r1', 'r2', 'r0', 'r1', 'r2'],
-        ...   'cols':['c0', 'c1', 'c0', 'c1', 'c0', 'c1'],
-        ...   'vals':[ 1.0,  2.0,  3.0,  4.0,  5.0,  6.0]
-        ... })
-        >>> mtx
-          rows cols  vals
-        0   r0   c0   1.0
-        1   r1   c1   2.0
-        2   r2   c0   3.0
-        3   r0   c1   4.0
-        4   r1   c0   5.0
-        5   r2   c1   6.0
-
-        >>> mtx.to_matrix() # doctest: +NORMALIZE_WHITESPACE
-             c0   c1
-        r0  1.0  4.0
-        r1  5.0  2.0
-        r2  3.0  6.0    
-
-        """
-        if self._transform is False:
-            return pd.DataFrame(self)
-
-        if self.columns[0] == 'Year':
-            termA_unique = range(min(self.Year), max(self.Year)+1)
+        if ascendingA is None or ascendingA is True:
+            sort_X = 'ascending'
         else:
-            termA_unique = self.iloc[:,0].unique()
-            
-        if self.columns[1] == 'Year':
-            termB_unique = range(min(self.Year), max(self.Year)+1)
+            sort_X = 'descending'
+
+        if ascendingB is None or ascendingB is True:
+            sort_Y = 'ascending'
         else:
-            termB_unique = self.iloc[:,1].unique()
-            
-        if ascendingA is not None:
-            termA_unique = sorted(termA_unique, reverse = not ascendingA)
+            sort_Y = 'descending'
 
-        if ascendingB is not None:
-            termB_unique = sorted(termB_unique, reverse = not ascendingB)
+        return alt.Chart(self).mark_circle().encode(
+            alt.X(self.columns[0] + ':N',
+                axis=alt.Axis(labelAngle=270), 
+                sort=sort_X),
+            alt.Y(self.columns[1] + ':N',
+                sort=sort_Y),
+            size=self.columns[2],
+            color=self.columns[2])
 
-        result = pd.DataFrame(
-            np.zeros((len(termA_unique), len(termB_unique)))
-        )
-        
-        result.columns = termB_unique
-        result.index = termA_unique
-
-        for index, r in self.iterrows():
-            row = r[0]
-            col = r[1]
-            val = r[2]
-            result.loc[row, col] = val
-            
-        return Result(result, rtype=False)
 
     #---------------------------------------------------------------------------------------------
     def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10)):
@@ -136,27 +146,6 @@ class Result(pd.DataFrame):
     def heatmap_in_seaborn(self):
         return sns.heatmap(self)
 
-    #---------------------------------------------------------------------------------------------
-    def circleplot_in_altair(self, ascendingA=None, ascendingB=None):
-
-        if ascendingA is None or ascendingA is True:
-            sort_X = 'ascending'
-        else:
-            sort_X = 'descending'
-
-        if ascendingB is None or ascendingB is True:
-            sort_Y = 'ascending'
-        else:
-            sort_Y = 'descending'
-
-        return alt.Chart(self).mark_circle().encode(
-            alt.X(self.columns[0] + ':N',
-                axis=alt.Axis(labelAngle=270), 
-                sort=sort_X),
-            alt.Y(self.columns[1] + ':N',
-                sort=sort_Y),
-            size=self.columns[2],
-            color=self.columns[2])
 
     #---------------------------------------------------------------------------------------------
     def kmeans(self, n_clusters=2):
@@ -177,7 +166,7 @@ class Result(pd.DataFrame):
 
 
 
-        centers = SecondLevelResult(
+        centers = SecondLevelMatrix(
             np.transpose(m.cluster_centers_),
             columns = ['Cluster ' + str(i) for i in range(n_clusters)],
             index = x.columns,
@@ -191,8 +180,11 @@ class Result(pd.DataFrame):
 
         return centers, clusters
 
+
+
     #---------------------------------------------------------------------------------------------
     #TODO personalizar valor superior para escalar los pesos de los puentes
+    #TODO map
     def network(self, save=False, name='network.png', corr_min=0.7, node_color='lightblue',
                   edge_color='lightgrey', edge_color2='lightcoral', node_size=None, fond_size=4,
                   figsize = (10,10)):
@@ -299,6 +291,7 @@ class Result(pd.DataFrame):
         plt.show()
         return None
 
+
     #---------------------------------------------------------------------------------------------
    #TODO networkmap validar como pasar lonlat,
     #que pasa si valores negativos???
@@ -399,56 +392,70 @@ class Result(pd.DataFrame):
 
 
 
+    #---------------------------------------------------------------------------------------------
+    def to_matrix(self, ascendingA=None, ascendingB=None):
+        """Displays a term by term dataframe as a matrix.
 
-    #----------------------------------------------------------------------------------------------
-    def barhplot_in_altair(self):
-        """Plots a pandas.DataFrame using Altair.
+        >>> mtx = Results({
+        ...   'rows':['r0', 'r1', 'r2', 'r0', 'r1', 'r2'],
+        ...   'cols':['c0', 'c1', 'c0', 'c1', 'c0', 'c1'],
+        ...   'vals':[ 1.0,  2.0,  3.0,  4.0,  5.0,  6.0]
+        ... })
+        >>> mtx
+          rows cols  vals
+        0   r0   c0   1.0
+        1   r1   c1   2.0
+        2   r2   c0   3.0
+        3   r0   c1   4.0
+        4   r1   c0   5.0
+        5   r2   c1   6.0
+
+        >>> mtx.to_matrix() # doctest: +NORMALIZE_WHITESPACE
+             c0   c1
+        r0  1.0  4.0
+        r1  5.0  2.0
+        r2  3.0  6.0    
+
         """
-        columns = self.columns.tolist()
-        return alt.Chart(self).mark_bar().encode(
-            alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
-            alt.X(columns[1] + ':Q'),
-            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys'))
+        if self._transform is False:
+            return pd.DataFrame(self)
+
+        if self.columns[0] == 'Year':
+            termA_unique = range(min(self.Year), max(self.Year)+1)
+        else:
+            termA_unique = self.iloc[:,0].unique()
+            
+        if self.columns[1] == 'Year':
+            termB_unique = range(min(self.Year), max(self.Year)+1)
+        else:
+            termB_unique = self.iloc[:,1].unique()
+            
+        if ascendingA is not None:
+            termA_unique = sorted(termA_unique, reverse = not ascendingA)
+
+        if ascendingB is not None:
+            termB_unique = sorted(termB_unique, reverse = not ascendingB)
+
+        result = pd.DataFrame(
+            np.zeros((len(termA_unique), len(termB_unique)))
         )
+        
+        result.columns = termB_unique
+        result.index = termA_unique
 
-    #----------------------------------------------------------------------------------------------
-    def barplot_in_altair(self):
-        """Vertical bar plot in Altair.
-        """
-        columns = self.columns.tolist()
-        return alt.Chart(self).mark_bar().encode(
-            alt.X(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
-            alt.Y(columns[1] + ':Q'),
-            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys'))
-        )
+        for index, r in self.iterrows():
+            row = r[0]
+            col = r[1]
+            val = r[2]
+            result.loc[row, col] = val
+            
+        return Matrix(result, rtype=False)
 
-    #----------------------------------------------------------------------------------------------
-    def barhplot_in_seaborn(self):
-        """Horizontal bar plot using Seaborn.
-        """
-        columns = self.columns.tolist()
-        return sns.barplot(
-            x="Num Documents",
-            y=columns[0],
-            data=self,
-            label=columns[0],
-            color="gray"
-        )
-
-    #----------------------------------------------------------------------------------------------
-    def barplot_in_seaborn(self):
-        """Vertical bar plot using Seaborn.
-        """
-        columns = self.columns.tolist()
-        result = sns.barplot(
-            y="Num Documents",
-            x=columns[0],
-            data=self,
-            label=columns[0],
-            color="gray")
-        _, labels = plt.xticks()
-        result.set_xticklabels(labels, rotation=90)
-        return result
+    #---------------------------------------------------------------------------------------------
+    def transpose(self, *args, **kwargs):
+        result = Matrix(super().transpose())
+        result._rtype = self._rtype
+        return result    
 
     #----------------------------------------------------------------------------------------------
     def worldmap(self, figsize=(14, 7)):
@@ -476,3 +483,14 @@ class Result(pd.DataFrame):
         world.plot(column='q', legend=True, ax=axx, cax=cax, cmap='Pastel2')
 
     #----------------------------------------------------------------------------------------------
+
+
+    
+
+
+
+
+
+
+
+
