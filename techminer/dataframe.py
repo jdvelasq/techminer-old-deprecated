@@ -9,6 +9,7 @@ TechMiner.RecordsDataFrame
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
+from techminer.list import List
 from techminer.matrix import Matrix
 
 
@@ -123,8 +124,9 @@ class RecordsDataFrame(pd.DataFrame):
                 result.at[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + citations
 
         result = result.sort_values(by='Cited by', ascending=False)
+        result.index = range(len(result))
 
-        return Matrix(result, rtype='num-citations-by-terms')
+        return List(result)
 
     #----------------------------------------------------------------------------------------------
     def citations_by_year(self, cumulative=False, yearcol='Year', citedcol='Cited by'):
@@ -167,7 +169,7 @@ class RecordsDataFrame(pd.DataFrame):
             citations_per_year['Cited by'] = citations_per_year['Cited by'].cumsum()
             
         citations_per_year.index = range(len(citations_per_year))
-        return Matrix(citations_per_year, rtype='num-citations-by-year')
+        return List(citations_per_year)
 
     #----------------------------------------------------------------------------------------------
     def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
@@ -359,7 +361,7 @@ class RecordsDataFrame(pd.DataFrame):
         })
         result = result.sort_values(by='Num Documents', ascending=False)
 
-        return Matrix(result, rtype='num-docs-by-terms')
+        return List(result)
 
 
     #----------------------------------------------------------------------------------------------
@@ -406,7 +408,7 @@ class RecordsDataFrame(pd.DataFrame):
             docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
 
 
-        return Matrix(docs_per_year, rtype='num-docs-by-year')
+        return List(docs_per_year)
 
     #----------------------------------------------------------------------------------------------
     def factor(self, term, sep=None, n_components=2, N=10):

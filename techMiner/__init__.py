@@ -2,6 +2,7 @@
 """
 from techminer.dataframe import *
 from techminer.keywords import *
+from techminer.list import *
 from techminer.matrix import *
 from techminer.records import *
 from techminer.strings import *
