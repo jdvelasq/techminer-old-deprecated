@@ -10,80 +10,80 @@ Regular expressions recipes
 
 The following code exemplify some common cases using regular expressions.
 
->>> Keywords('111').extract_from('one two three four five') is None
+>>> Keywords('111').extract_from_text('one two three four five') is None
 True
 
 * Partial match.
 
->>> Keywords('hre').extract_from('one two three four five')
+>>> Keywords('hre').extract_from_text('one two three four five')
 'hre'
 
 
 * **Word whole only**. `r'\b'` represents word boundaries.
 
 >>> kyw = Keywords(r'\btwo\b', use_re=True)
->>> kyw.extract_from('one two three four five')
+>>> kyw.extract_from_text('one two three four five')
 'two'
 
 >>> kyw = Keywords(r"\b(TWO)\b", use_re=True)
->>> kyw.extract_from('one two three four five')
+>>> kyw.extract_from_text('one two three four five')
 'two'
 
 
 * **Case sensitive**.
 
->>> Keywords(r'\btwo\b', ignore_case=False, use_re=True).extract_from('one two three four five')
+>>> Keywords(r'\btwo\b', ignore_case=False, use_re=True).extract_from_text('one two three four five')
 'two'
 
->>> Keywords(r"\bTWO\b", ignore_case=False, use_re=True).extract_from('one TWO three four five')
+>>> Keywords(r"\bTWO\b", ignore_case=False, use_re=True).extract_from_text('one TWO three four five')
 'TWO'
 
->>> Keywords(r"\bTWO\b", ignore_case=False, use_re=True).extract_from('one two three four five') is None
+>>> Keywords(r"\bTWO\b", ignore_case=False, use_re=True).extract_from_text('one two three four five') is None
 True
 
 * **A word followed by other word**.
 
->>> Keywords(r'\btwo\Wthree\b', ignore_case=False, use_re=True).extract_from('one two three four five')
+>>> Keywords(r'\btwo\Wthree\b', ignore_case=False, use_re=True).extract_from_text('one two three four five')
 'two three'
 
 
 * **Multiple white spaces**.
 
->>> Keywords(r"two\W+three", ignore_case=False, use_re=True).extract_from('one two   three four five')
+>>> Keywords(r"two\W+three", ignore_case=False, use_re=True).extract_from_text('one two   three four five')
 'two   three'
 
 * **A list of keywords**.
 
->>> Keywords([r"xxx", r"two", r"yyy"]).extract_from('one two three four five')
+>>> Keywords([r"xxx", r"two", r"yyy"]).extract_from_text('one two three four five')
 'two'
 
 
 * **Adjacent terms but the order is unimportant**.
 
->>> Keywords(r"\bthree\W+two\b|\btwo\W+three\b", use_re=True).extract_from('one two three four five')
+>>> Keywords(r"\bthree\W+two\b|\btwo\W+three\b", use_re=True).extract_from_text('one two three four five')
 'two three'
 
 * **Near words**.
 
 Two words (`'two'`, `'four'`) separated by any other.
 
->>> Keywords(r"\btwo\W+\w+\W+four\b", use_re=True).extract_from('one two three four five')
+>>> Keywords(r"\btwo\W+\w+\W+four\b", use_re=True).extract_from_text('one two three four five')
 'two three four'
 
 
 Two words (`'two'`, `'five'`) separated by one, two or three unspecified words.
 
->>> Keywords(r"\btwo\W+(?:\w+\W+){1,3}?five", use_re=True).extract_from('one two three four five')
+>>> Keywords(r"\btwo\W+(?:\w+\W+){1,3}?five", use_re=True).extract_from_text('one two three four five')
 'two three four five'
 
 * **Or operator**.
 
->>> Keywords(r"123|two", use_re=True).extract_from('one two three four five')
+>>> Keywords(r"123|two", use_re=True).extract_from_text('one two three four five')
 'two'
 
 * **And operator**. One word followed by other at any word distance.
 
->>> Keywords(r"\btwo\W+(?:\w+\W+)+?five", use_re=True).extract_from('one two three four five')
+>>> Keywords(r"\btwo\W+(?:\w+\W+)+?five", use_re=True).extract_from_text('one two three four five')
 'two three four five'
 
 
@@ -149,7 +149,7 @@ class Keywords():
         False
 
         """
-        if self.extract_from(x) is None:
+        if self.extract_from_text(x) is None:
             return False
         return True
 
@@ -242,10 +242,10 @@ class Keywords():
             self._keywords = sorted(list(set(x)))
 
     #--------------------------------------------------------------------------------------------------------
-    def extract_from(self, x, sep=';'):
+    def extract_from_text(self, x, sep=';'):
         r"""Returns a new string with the keywords in string x matching the list of keywords used to fit the model.
 
-        >>> Keywords([r"xxx", r"two", r"yyy"]).extract_from('one two three four five')
+        >>> Keywords([r"xxx", r"two", r"yyy"]).extract_from_text('one two three four five')
         'two'
 
         The funcion allows the extraction of complex patterns using regular expresions (regex). 
@@ -282,7 +282,7 @@ class Keywords():
         return None
 
     #--------------------------------------------------------------------------------------------------------
-    def remove_from(self, x, sep=None):
+    def remove_from_text(self, x):
         """Returns a string removing the strings that match a 
         list of keywords from x.
 
@@ -293,123 +293,114 @@ class Keywords():
             String.
 
 
-        # >> Keywords('aaa').remove_from('1 aaa 2')
-        # '1  2'
+        >>> Keywords('aaa').remove_from_text('1 aaa 2')
+        '1  2'
 
-        # >> Keywords('aaa').remove_from('1 2')
-        # '1 2'
+        >>> Keywords('aaa').remove_from_text('1 2')
+        '1 2'
 
-        # >> Keywords('aaa').remove_from('1 aaa 2|1 2', sep='|')
-        # '1  2|1 2'
+        >>> Keywords('aaa').remove_from_text('1 aaa 2 1 2')
+        '1  2 1 2'
 
-        # >> Keywords(['aaa', 'bbb']).remove_from('1 aaa bbb 2|1 aaa 2', sep='|')
-        # '1   2|1  2'
+        >>> Keywords(['aaa', 'bbb']).remove_from_text('1 aaa bbb 2 1 aaa 2')
+        '1   2 1  2'
 
         """
 
-        def _remove(z):
+        if x is None:
+            return None
 
-            while True:
+        for keyword in self._keywords:
 
-                y = self.extract_from(z)
-                if y is None:
-                    return z
+            found_string = find_string(
+                pattern = keyword,
+                x = x,
+                ignore_case = self._ignore_case,
+                full_match = self._full_match,
+                use_re = self._use_re
+            )
 
-                if sep is not None and sep in y:
-                    y = y.split(sep)
-                else:
-                    y = [y]
+            if found_string is not None:
 
-                for w in y:
-                
-                    z = replace_string(
-                        pattern = w,
-                        x = z,
+                x = replace_string(
+                        pattern = found_string,
+                        x = x,
                         repl = '',
-                        ignore_case = self._ignore_case,
-                        full_match = self._full_match,
-                        use_re = self._use_re)
-            return z
+                        ignore_case = False,
+                        full_match = False,
+                        use_re = False)
 
-        if sep is None:
-            return _remove(x)
-        
-        result = [_remove(z) for z in x.split(sep) ]
-        result = [z for z in result if z is not None]
-        if len(result):
-            return sep.join(result)
-        return None
-
+        return x
 
     #--------------------------------------------------------------------------------------------------------
-    def remove_keyword(self, x):
+    def delete_keyword(self, x):
         """Remove string x from the keywords list.
         """
         self._keywords.remove(x)
 
     #--------------------------------------------------------------------------------------------------------
-    def common(self, x, sep=None):
-        """Returns True if x is in keywords list.
+    # def common(self, x, sep=None):
+    #     """Returns True if x is in keywords list.
 
-        Args:
-            x (string): A string object.
+    #     Args:
+    #         x (string): A string object.
             
-        Returns:
-            Boolean.
+    #     Returns:
+    #         Boolean.
 
-        >>> kyw = Keywords(['ann', 'big data', 'deep learning'])
-        >>> kyw.common('Big Data')
-        True
-        >>> kyw.common('Python')
-        False
-        >>> kyw.common('Python|R', sep='|')
-        False
-        >>> kyw.common('Python|big data', sep='|')
-        True
+    #     >>> kyw = Keywords(['ann', 'big data', 'deep learning'])
+    #     >>> kyw.common('Big Data')
+    #     True
+    #     >>> kyw.common('Python')
+    #     False
+    #     >>> kyw.common('Python|R', sep='|')
+    #     False
+    #     >>> kyw.common('Python|big data', sep='|')
+    #     True
 
-        """
-        def _common(x):
-            if self.extract_from(x) is None:
-                return False
-            else:
-                return True
+    #     """
+    #     def _common(x):
+    #         if self.extract_from(x) is None:
+    #             return False
+    #         else:
+    #             return True
 
-        if sep is None:
-            return _common(x)
+    #     if sep is None:
+    #         return _common(x)
 
-        return any([_common(y) for y in x.split(sep)])
+    #     return any([_common(y) for y in x.split(sep)])
 
-    #--------------------------------------------------------------------------------------------------------
-    def complement(self, x, sep=None):
-        """Returns False if x is not in keywords list.
+    # #--------------------------------------------------------------------------------------------------------
+    # def complement(self, x, sep=None):
+    #     """Returns False if x is not in keywords list.
 
-        Args:
-            x (string): A string object.
+    #     Args:
+    #         x (string): A string object.
             
-        Returns:
-            Boolean.
+    #     Returns:
+    #         Boolean.
 
-        >>> kyw = Keywords(['ann', 'big data', 'deep learning'])
-        >>> kyw.complement('Big Data')
-        False
-        >>> kyw.complement('Python')
-        True
-        >>> kyw.complement('Python|R')
-        True
-        >>> kyw.complement('Python|big data')
-        False
+    #     >>> kyw = Keywords(['ann', 'big data', 'deep learning'])
+    #     >>> kyw.complement('Big Data')
+    #     False
+    #     >>> kyw.complement('Python')
+    #     True
+    #     >>> kyw.complement('Python|R')
+    #     True
+    #     >>> kyw.complement('Python|big data')
+    #     False
 
-        """
-        def _complement(x):
-            if self.extract_from(x) is None:
-                return True
-            else:
-                return False
+    #     """
+    #     def _complement(x):
+    #         if self.extract_from(x) is None:
+    #             return True
+    #         else:
+    #             return False
 
-        if sep is None:
-            return _complement(x)
+    #     if sep is None:
+    #         return _complement(x)
 
-        return any([_complement(y) for y in x.split(sep)])        
+    #     return any([_complement(y) for y in x.split(sep)])        
 
 
     #--------------------------------------------------------------------------------------------------------
