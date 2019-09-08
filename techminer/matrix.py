@@ -33,9 +33,9 @@ class Matrix(pd.DataFrame):
         return self
 
     #---------------------------------------------------------------------------------------------
-    def chord_diagram(self, figsize=(12, 12), minval=0, R=3):
+    def chord_diagram(self, figsize=(12, 12), minval=None, R=3):
 
-        def bezier(p0, p1, p2, n=100, linewidth=1):
+        def bezier(p0, p1, p2, linewidth, linestyle, n=100):
             x0, y0 = p0
             x1, y1 = p1
             x2, y2 = p2
@@ -43,12 +43,11 @@ class Matrix(pd.DataFrame):
             xb = [(1 - t)**2 *x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n)]
             yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n)]
         
-            plt.plot(xb, yb, color='black', linewidth=linewidth)
+            plt.plot(xb, yb, color='black', linewidth=linewidth, linestyle=linestyle)
         
-        if self._rtype not in [
-            'factor-matrix',
-            'auto-matrix']:
+        ## rutina ppal
 
+        if self._rtype not in ['auto-matrix']:
             raise Exception('Invalid function call for type: ' + self._rtype )
 
         x = self
@@ -71,40 +70,6 @@ class Matrix(pd.DataFrame):
         data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
         
         n = 0
-        
-        maxval = max(x[x.columns[2]])
-        
-        textprops = {}
-        textprops.setdefault('clip_on', False)
-        
-        for index, r in x.iterrows():
-            row = r[0]
-            col = r[1]
-            val = r[2]
-            #linewidth = 3 * (val - minval) / maxval
-            if row != col and val > minval:
-                linewidth = 2
-                x0, y0, a0 = data[row]
-                x2, y2, a2 = data[col]            
-                
-                angle = a0 + (a2 - a0) / 2
-                
-                if angle > np.pi:
-                    angle_corr = angle - np.pi
-                else:
-                    angle_corr = angle
-                    
-                distance = np.abs(a2 - a0)
-                if distance > np.pi:
-                    distance = distance - np.pi
-                distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
-                x1 = distance * np.cos(angle)
-                y1 = distance * np.sin(angle)
-                
-                linewidth = 2 * val / maxval
-                        
-                bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth)
-                    
         
         ## labels
         lbl_x = [(R+0.2) * np.cos(t) for t in theta]
@@ -137,6 +102,53 @@ class Matrix(pd.DataFrame):
         plt.gca().set_yticks([])
         for txt in ['bottom', 'top', 'left', 'right']:
             plt.gca().spines[txt].set_color('white')
+
+        for index, r in x.iterrows():
+
+            row = r[0]
+            col = r[1]
+            val = r[2]
+
+            if row != col:
+
+                x0, y0, a0 = data[row]
+                x2, y2, a2 = data[col]            
+                
+                angle = a0 + (a2 - a0) / 2
+                
+                if angle > np.pi:
+                    angle_corr = angle - np.pi
+                else:
+                    angle_corr = angle
+                    
+                distance = np.abs(a2 - a0)
+                if distance > np.pi:
+                    distance = distance - np.pi
+                distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
+                x1 = distance * np.cos(angle)
+                y1 = distance * np.sin(angle)
+                
+                if val >= 0.75:
+                    linewidth = 4
+                    linestyle = '-' 
+                elif val >= 0.50:
+                    linewidth = 2
+                    linestyle = '-' 
+                elif val >= 0.25:
+                    linewidth = 2
+                    linestyle = '--' 
+                elif val < 0.25:
+                    linewidth = 1
+                    linestyle = ':'
+                else: 
+                    linewidth = 0
+                    linestyle = '-'
+
+                if minval is  None:
+                    bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)
+                elif abs(val) >= minval :
+                    bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)                    
+        
             
     #---------------------------------------------------------------------------------------------
     def circlerel(self, ascendingA=None, ascendingB=None, library=None):
@@ -176,7 +188,7 @@ class Matrix(pd.DataFrame):
 
 
     #---------------------------------------------------------------------------------------------
-    def sankey_plot(self, figsize=(7,10)):
+    def sankey_plot(self, figsize=(7,10), minval=None):
         """Cross-relation plot
         """
         if self._rtype != 'cross-matrix':
@@ -184,34 +196,65 @@ class Matrix(pd.DataFrame):
 
         x = self
         
-        llabels = list(set(x[x.columns[0]]))
-        lpos = {k:v for v, k in enumerate(llabels)}
-        
-        rlabels = list(set(x[x.columns[1]]))
-        rpos = {k:v for v, k in enumerate(rlabels)}
+        llabels = sorted(list(set(x[x.columns[0]])))
+        rlabels = sorted(list(set(x[x.columns[1]])))
+
+        factorL = max(len(llabels)-1, len(rlabels)-1) / (len(llabels) - 1)
+        factorR = max(len(llabels)-1, len(rlabels)-1) / (len(rlabels) - 1)
+
+        lpos = {k:v*factorL for v, k in enumerate(llabels)}
+        rpos = {k:v*factorR for v, k in enumerate(rlabels)}
         
         fig, ax1 = plt.subplots(figsize=(7, 10))
         ax1.scatter([0] * len(llabels), llabels, color='black', s=50)
-        ax2 = ax1.twinx()
-        ax2.scatter([1] * len(rlabels), rlabels, color='black', s=50)
-        
-        minval = min(x[x.columns[2]])
-        maxval = max(x[x.columns[2]])
-                
+
         for index, r in x.iterrows():
+
             row = r[0]
             col = r[1]
             val = r[2]
-            linewidth = 3 * (val - minval) / maxval
-            plt.plot([0, 1], [lpos[row], rpos[col]], linewidth=linewidth, color='black')
 
+            if val >= 0.75:
+                linewidth = 4
+                linestyle = '-' 
+            elif val >= 0.50:
+                linewidth = 2
+                linstyle = '-' 
+            elif val >= 0.25:
+                linewidth = 2
+                linestyle = '--' 
+            elif val < 0.25:
+                linewidth = 1
+                linestyle = ':'
+            else: 
+                linewidth = 0
+                linestyle = '-'
 
+            if minval is  None:
+                plt.plot(
+                    [0, 1], 
+                    [lpos[row], rpos[col]], 
+                    linewidth=linewidth, 
+                    linestyle=linestyle, 
+                    color='black')
+            elif abs(val) >= minval :
+                plt.plot(
+                    [0, 1], 
+                    [lpos[row], rpos[col]], 
+                    linewidth=linewidth, 
+                    linestyle=linestyle, 
+                    color='black')
+
+        ax2 = ax1.twinx()
+        ax2.scatter([1] * len(rlabels), rlabels, color='black', s=50)
+        #ax2.set_ylim(0, len(rlabels)-1)
+        
+                
         for txt in ['bottom', 'top', 'left', 'right']:
             ax1.spines[txt].set_color('white')
             ax2.spines[txt].set_color('white')
         
         ax2.set_xticks([])
-
 
 
     #---------------------------------------------------------------------------------------------
@@ -403,7 +446,7 @@ class Matrix(pd.DataFrame):
 
 
     #---------------------------------------------------------------------------------------------
-   #TODO networkmap validar como pasar lonlat,
+    #TODO networkmap validar como pasar lonlat,
     #que pasa si valores negativos???
     #personalizar tamaño de la figura, 
     #guardar archivo 
