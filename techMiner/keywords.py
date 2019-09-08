@@ -293,17 +293,17 @@ class Keywords():
             String.
 
 
-        >>> Keywords('aaa').remove_from('1 aaa 2')
-        '1  2'
+        # >> Keywords('aaa').remove_from('1 aaa 2')
+        # '1  2'
 
-        >>> Keywords('aaa').remove_from('1 2')
-        '1 2'
+        # >> Keywords('aaa').remove_from('1 2')
+        # '1 2'
 
-        >>> Keywords('aaa').remove_from('1 aaa 2|1 2', sep='|')
-        '1  2|1 2'
+        # >> Keywords('aaa').remove_from('1 aaa 2|1 2', sep='|')
+        # '1  2|1 2'
 
-        >>> Keywords(['aaa', 'bbb']).remove_from('1 aaa bbb 2|1 aaa 2', sep='|')
-        '1   2|1  2'
+        # >> Keywords(['aaa', 'bbb']).remove_from('1 aaa bbb 2|1 aaa 2', sep='|')
+        # '1   2|1  2'
 
         """
 

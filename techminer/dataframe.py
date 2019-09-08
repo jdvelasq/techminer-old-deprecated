@@ -5,13 +5,11 @@ TechMiner.RecordsDataFrame
 
 
 """
-
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
 from techminer.list import List
 from techminer.matrix import Matrix
-
 
 
 class RecordsDataFrame(pd.DataFrame):
@@ -46,42 +44,42 @@ class RecordsDataFrame(pd.DataFrame):
         >>> rdf.autocorrelation(term='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            A (row) A (col)  Autocorrelation
         0        a       a         1.000000
-        1        a       b         0.670820
-        2        a       c         0.516398
-        3        a       d         0.000000
-        4        a       e         0.316228
-        5        b       a         0.670820
-        6        b       b         1.000000
-        7        b       c         0.288675
-        8        b       d         0.000000
-        9        b       e         0.000000
-        10       c       a         0.516398
-        11       c       b         0.288675
-        12       c       c         1.000000
-        13       c       d         0.000000
-        14       c       e         0.000000
-        15       d       a         0.000000
-        16       d       b         0.000000
-        17       d       c         0.000000
-        18       d       d         1.000000
-        19       d       e         0.000000
-        20       e       a         0.316228
-        21       e       b         0.000000
-        22       e       c         0.000000
-        23       e       d         0.000000
-        24       e       e         1.000000
+        1        b       b         1.000000
+        2        e       e         1.000000
+        3        c       c         1.000000
+        4        d       d         1.000000
+        5        a       b         0.670820
+        6        b       a         0.670820
+        7        a       c         0.516398
+        8        c       a         0.516398
+        9        a       e         0.316228
+        10       e       a         0.316228
+        11       b       c         0.288675
+        12       c       b         0.288675
+        13       d       e         0.000000
+        14       d       c         0.000000
+        15       d       b         0.000000
+        16       d       a         0.000000
+        17       e       d         0.000000
+        18       a       d         0.000000
+        19       e       c         0.000000
+        20       e       b         0.000000
+        21       c       e         0.000000
+        22       b       d         0.000000
+        23       b       e         0.000000
+        24       c       d         0.000000
 
         >>> rdf.autocorrelation(term='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
           A (row) A (col)  Autocorrelation
         0       a       a         1.000000
-        1       a       b         0.670820
-        2       a       c         0.516398
-        3       b       a         0.670820
-        4       b       b         1.000000
-        5       b       c         0.288675
+        1       b       b         1.000000
+        2       c       c         1.000000
+        3       a       b         0.670820
+        4       b       a         0.670820
+        5       a       c         0.516398
         6       c       a         0.516398
-        7       c       b         0.288675
-        8       c       c         1.000000
+        7       b       c         0.288675
+        8       c       b         0.288675
 
         """
         result = self.crosscorrelation(termA=term, termB=term, sepA=sep, sepB=sep, N=N)
@@ -93,11 +91,14 @@ class RecordsDataFrame(pd.DataFrame):
         """Computes the number of citations to docuement per year.
 
         >>> rdf = RecordsDataFrame({
-        ...   'term': ['a;b', 'a', 'b', 'c', None, 'b'],
-        ...   'Cited by': [1, 2, 3, 4, 3, 7]
+        ...   'term':     ['a;b', 'a', 'b', 'c', None, 'b'],
+        ...   'Cited by': [   1,   2,   3,   4,     3,  7]
         ... })
         >>> rdf.citations_by_terms('term', sep=';')
-
+          term  Cited by
+        0    b        11
+        1    c         4
+        2    a         3
         """
         terms = self[term].dropna()
         if sep is not None:
@@ -115,13 +116,14 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## suma de citaciones
         for index, row in self[[term, 'Cited by']].iterrows():
-            citations = row[1] if not np.isnan(row[1]) else 0
-            if sep is not None:
-                for term in row[0].split(sep):
-                    term = term.strip()
-                    result.at[term, 'Cited by'] =  result.loc[term, 'Cited by'] + citations
-            else:
-                result.at[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + citations
+            if row[0] is not None:
+                citations = row[1] if not np.isnan(row[1]) else 0
+                if sep is not None:
+                    for term in row[0].split(sep):
+                        term = term.strip()
+                        result.at[term, 'Cited by'] =  result.loc[term, 'Cited by'] + citations
+                else:
+                    result.at[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + citations
 
         result = result.sort_values(by='Cited by', ascending=False)
         result.index = range(len(result))
@@ -172,6 +174,48 @@ class RecordsDataFrame(pd.DataFrame):
         return List(citations_per_year)
 
     #----------------------------------------------------------------------------------------------
+    def tdf(self, column, sep, N=20):
+        """
+
+        >>> rdf = RecordsDataFrame({
+        ...   'col0': ['a', 'a;b', 'b', 'b;c', None, 'c']
+        ... })
+        >>> rdf.tdf('col0', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+             b    a    c
+        0  0.0  1.0  0.0
+        1  1.0  1.0  0.0
+        2  1.0  0.0  0.0
+        3  1.0  0.0  1.0
+        4  0.0  0.0  0.0
+        5  0.0  0.0  1.0        
+        
+        """
+
+        ## computa los N terminos mas frecuentes
+        x = self.documents_by_terms(column, sep=sep)
+        terms = x[x.columns[0]].tolist()
+        if N is not None and len(terms) > N:
+            terms = terms[0:N]
+        
+        tdf = pd.DataFrame(
+            data = np.zeros((len(self), len(terms))),
+            columns = terms,
+            index = self.index)
+
+        for idx in self.index:
+            txt = self.loc[idx, column]
+            if txt is not None:
+                if sep is not None:
+                    txt = [t.strip() for t in txt.split(sep)]
+                else:
+                    txt = [txt.strip()] 
+                for t in txt:
+                    if t in terms:
+                        tdf.at[idx, t] = 1
+
+        return tdf
+
+    #----------------------------------------------------------------------------------------------
     def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
         """Computes autocorrelation and crosscorrelation.
 
@@ -196,102 +240,55 @@ class RecordsDataFrame(pd.DataFrame):
 
         >>> rdf.crosscorrelation(termA='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            c1 c2  Crosscorrelation
-        0   a  A          0.258199
-        1   a  B          0.676123
-        2   a  C          0.670820
-        3   a  D          0.447214
-        4   a  E          0.000000
-        5   b  A          0.288675
-        6   b  B          0.755929
-        7   b  C          0.750000
-        8   b  D          0.000000
-        9   b  E          0.000000
-        10  c  A          0.000000
-        11  c  B          0.654654
-        12  c  C          0.577350
-        13  c  D          0.577350
-        14  c  E          0.000000
-        15  d  A          0.577350
-        16  d  B          0.000000
-        17  d  C          0.000000
-        18  d  D          0.000000
-        19  d  E          0.000000
-        20  e  A          0.408248
-        21  e  B          0.000000
-        22  e  C          0.000000
-        23  e  D          0.000000
-        24  e  E          0.000000
-
+        0   b  B          0.755929
+        1   b  C          0.750000
+        2   a  B          0.676123
+        3   a  C          0.670820
+        4   c  B          0.654654
+        5   c  D          0.577350
+        6   c  C          0.577350
+        7   d  A          0.577350
+        8   a  D          0.447214
+        9   e  A          0.408248
+        10  b  A          0.288675
+        11  a  A          0.258199
+        12  d  C          0.000000
+        13  d  D          0.000000
+        14  d  B          0.000000
+        15  e  E          0.000000
+        16  e  D          0.000000
+        17  c  A          0.000000
+        18  e  C          0.000000
+        19  e  B          0.000000
+        20  c  E          0.000000
+        21  b  E          0.000000
+        22  b  D          0.000000
+        23  a  E          0.000000
+        24  d  E          0.000000
         >>> rdf.crosscorrelation(termA='c1', termB='c2', sepA=';', sepB=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        c1 c2  Crosscorrelation
-        0  a  A          0.258199
-        1  a  B          0.676123
-        2  a  C          0.670820
-        3  b  A          0.288675
-        4  b  B          0.755929
-        5  b  C          0.750000
-        6  c  A          0.000000
-        7  c  B          0.654654
-        8  c  C          0.577350
+          c1 c2  Crosscorrelation
+        0  b  B          0.755929
+        1  b  C          0.750000
+        2  a  B          0.676123
+        3  a  C          0.670820
+        4  c  B          0.654654
+        5  c  C          0.577350
+        6  b  A          0.288675
+        7  a  A          0.258199
+        8  c  A          0.000000
 
         """ 
-
+ 
         if termA == termB:
             sepB = None
             termB = None
 
-
-        x = self.documents_by_terms(termA, sep=sepA)
-        termsA = x.loc[:, termA].tolist()
-        if N is None or len(termsA) <= N:
-            termsA = sorted(termsA)
-        else:
-            termsA = sorted(termsA[0:N])
-
+        tdf_rows = self.tdf(termA, sepA, N)
         if termB is not None:
-            x = self.documents_by_terms(termB, sep=sepB)
-            termsB = x.loc[:, termB].tolist()
-            if N is None or len(termsB) <= N:
-                termsB = sorted(termsB)
-            else:
-                termsB = sorted(termsB[0:N])
+            tdf_cols = self.tdf(termB, sepB, N)
         else:
-            termsB = termsA
+            tdf_cols = tdf_rows.copy()
             
-        x = pd.DataFrame(
-            data = np.zeros((len(self), len(termsA))),
-            columns = termsA,
-            index = self.index)
-
-        for idx in self.index:
-            w = self.loc[idx, termA]
-            if w is not None:
-                if sepA is not None:
-                    z = w.split(sepA)
-                else:
-                    z = [w] 
-                for k in z:
-                    x.loc[idx, k] = 1
-
-        if termB is not None:
-
-            y = pd.DataFrame(
-                data = np.zeros((len(self), len(termsB))),
-                columns = termsB,
-                index = self.index)
-
-            for idx in self.index:
-                w = self.loc[idx, termB]
-                if w is not None:
-                    if sepB is not None:
-                        z = w.split(sepB)
-                    else:
-                        z = [w] 
-                    for k in z:
-                        y.loc[idx, k] = 1            
-        else:
-            y = x
-
         if termB is not None:
             col0 = termA
             col1 = termB
@@ -301,28 +298,33 @@ class RecordsDataFrame(pd.DataFrame):
             col1 = termA + ' (col)'
             col2 = 'Autocorrelation'
 
-        result =  pd.DataFrame(
-            data = np.zeros((len(termsA) * len(termsB), 3)),
-            columns = [col0, col1, col2]
-        )
+        termsA = tdf_rows.columns.tolist()
+        termsB = tdf_cols.columns.tolist()
+
+        result =  pd.DataFrame({
+            col0 : [None] * (len(termsA) * len(termsB)),
+            col1 : [None] * (len(termsA) * len(termsB)),
+            col2 : [0.0] * (len(termsA) * len(termsB))   
+        })
 
         idx = 0
         for a in termsA:
             for b in termsB:
-                s1 = x.loc[:, a]
-                s2 = y.loc[:, b]
-                num = np.sum((s1 * s2))
-                den = (np.sqrt((np.sum(s1**2))*(np.sum(s2**2))))
-                if den != 0.0:
-                    value =  num / den
-                result.loc[idx, col0] = a
-                result.loc[idx, col1] = b
-                result.loc[idx, col2] = value
 
+                s1 = tdf_rows[a]
+                s2 = tdf_cols[b]
+
+                num = np.sum((s1 * s2))
+                den = np.sqrt(np.sum(s1**2) * np.sum(s2**2))
+                value =  num / den
+                result.at[idx, col0] = a
+                result.at[idx, col1] = b
+                result.at[idx, col2] = value
                 idx += 1
 
+        result = result.sort_values(col2, ascending=False)
+        result.index = range(len(result))
         return Matrix(result, rtype='cross-matrix')
-
 
     #----------------------------------------------------------------------------------------------
     def documents_by_terms(self, term, sep=None):
@@ -407,11 +409,10 @@ class RecordsDataFrame(pd.DataFrame):
         if cumulative is True:
             docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
 
-
         return List(docs_per_year)
 
     #----------------------------------------------------------------------------------------------
-    def factor(self, term, sep=None, n_components=2, N=10):
+    def factor_analysis(self, term, sep=None, n_components=2, N=10):
 
         x = self.documents_by_terms(term, sep=sep)
         terms = x.loc[:, term].tolist()
@@ -442,10 +443,18 @@ class RecordsDataFrame(pd.DataFrame):
         
         values = np.transpose(pca.fit(X=x.values).components_)
 
-        result = pd.DataFrame(
-            values,
-            columns = ['F'+str(i) for i in range(n_components)],
-            index = terms)
+        cols = [['F'+str(i) for i in range(n_components)] for k in range(len(terms))]
+        rows = [[t for n in range(n_components) ] for t in terms]
+        values = [values[i,j] for i in range(len(terms)) for j in range(n_components)]
+
+        cols = [e for row in cols for e in row]
+        rows = [e for row in rows for e in row]
+        #values = [e for row in values for e in row]
+
+        result = pd.DataFrame({
+            term : rows,
+            'Factor' : cols,
+            'value' : values})
 
         return Matrix(result, rtype = 'factor-matrix')
 
@@ -553,7 +562,7 @@ class RecordsDataFrame(pd.DataFrame):
             df = df[ df[df.columns[2]] >= minval ]
             df = df[ df[df.columns[2]] <= maxval ]
 
-        return Matrix(df, rtype='co_ocurrence-matrix')
+        return Matrix(df, rtype='coo-matrix')
 
     #----------------------------------------------------------------------------------------------
 

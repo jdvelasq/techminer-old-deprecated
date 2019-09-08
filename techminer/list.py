@@ -93,7 +93,6 @@ class List(pd.DataFrame):
         plt.axis("off")
         plt.show()
 
-
     #----------------------------------------------------------------------------------------------
     def worldmap(self, figsize=(14, 7)):
         """Worldmap plot with the number of documents per country.
