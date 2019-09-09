@@ -327,7 +327,7 @@ class RecordsDataFrame(pd.DataFrame):
         return Matrix(result, rtype='cross-matrix')
 
     #----------------------------------------------------------------------------------------------
-    def documents_by_terms(self, term, sep=None):
+    def documents_by_terms(self, column, sep=None):
         """Computes the number of documents per term.
 
 
@@ -346,19 +346,19 @@ class RecordsDataFrame(pd.DataFrame):
         3       d              1
 
         """
-        terms = self[term].dropna()
+        terms = self[column].dropna()
         if sep is not None:
             pdf = pd.DataFrame({
-                term: [y.strip() for x in terms for y in x.split(sep) if x is not None]
+                column: [y.strip() for x in terms for y in x.split(sep) if x is not None]
             })
         else:
             pdf = pd.DataFrame({
-                term: terms
+                column: terms
             })
 
-        result = pdf.groupby(term, as_index=False).size()
+        result = pdf.groupby(column, as_index=False).size()
         result = pd.DataFrame({
-            term : result.index,
+            column : result.index,
             'Num Documents': result.tolist()
         })
         result = result.sort_values(by='Num Documents', ascending=False)
