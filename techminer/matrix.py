@@ -19,6 +19,102 @@ from shapely.geometry import Point, LineString
 from sklearn.cluster import KMeans
 
 
+
+def chord_diagram(labels, edges, figsize=(12, 12), minval=None, R=3, n_bezier=100, dist=0.2):
+    
+
+    def bezier(p0, p1, p2, linewidth, linestyle, n_bezier=100):
+
+        x0, y0 = p0
+        x1, y1 = p1
+        x2, y2 = p2
+        
+        xb = [(1 - t)**2 * x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n_bezier)]
+        yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n_bezier)]
+    
+        plt.plot(xb, yb, color='black', linewidth=linewidth, linestyle=linestyle)
+    
+    #
+    # rutina ppal
+    #
+
+    plt.figure(figsize=figsize)
+    n_nodes = len(labels)
+    
+    theta = np.linspace(0.0, 2 * np.pi, n_nodes, endpoint=False)
+    points_x = [R * np.cos(t) for t in theta]
+    points_y = [R * np.sin(t) for t in theta]
+    
+    # dibuja los puntos sobre la circunferencia
+    plt.scatter(points_x, points_y, s=80, color='black')
+    plt.xlim(-6, 6)
+    plt.ylim(-6, 6)
+    plt.gca().set_aspect('equal', 'box')
+    
+    # arcos de las relaciones    
+    data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
+    
+    ## labels
+    lbl_x = [(R+dist) * np.cos(t) for t in theta]
+    lbl_y = [(R+dist) * np.sin(t) for t in theta]
+    lbl_theta = [t / (2 * np.pi) * 360 for t in theta]
+    lbl_theta = [t - 180 if t > 180 else t for t in lbl_theta]
+    lbl_theta = [t - 180 if t > 90 else t for t in lbl_theta]
+        
+    for txt, xt, yt, angletxt, angle  in zip(labels, lbl_x, lbl_y, lbl_theta, theta):
+            
+        if xt >= 0:
+            ha = 'left'
+        else:
+            ha = 'right'
+    
+        plt.text(
+            xt, 
+            yt, 
+            txt, 
+            fontsize=10,
+            rotation=angletxt,
+            va = 'center',
+            ha = ha, # 'center'
+            rotation_mode = 'anchor',
+            backgroundcolor='white')
+                
+    plt.gca().set_xticks([])
+    plt.gca().set_yticks([])
+    for txt in ['bottom', 'top', 'left', 'right']:
+        plt.gca().spines[txt].set_color('white')
+
+    for index, r in edges.iterrows():
+
+        row = r[0]
+        col = r[1]
+        linewidth = r[2]
+        linestyle = r[3]
+
+        if row != col:
+
+            x0, y0, a0 = data[row]
+            x2, y2, a2 = data[col]            
+            
+            angle = a0 + (a2 - a0) / 2
+            
+            if angle > np.pi:
+                angle_corr = angle - np.pi
+            else:
+                angle_corr = angle
+                
+            distance = np.abs(a2 - a0)
+            if distance > np.pi:
+                distance = distance - np.pi
+            distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
+            x1 = distance * np.cos(angle)
+            y1 = distance * np.sin(angle)
+
+            ## dibuja los arcos            
+            bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)
+                 
+
+
 class Matrix(pd.DataFrame):
     """Class implementing a dataframe with results of analysis.
     """
@@ -32,76 +128,21 @@ class Matrix(pd.DataFrame):
     def _constructor_expanddim(self):
         return self
 
+
     #---------------------------------------------------------------------------------------------
     def chord_diagram(self, figsize=(12, 12), minval=None, R=3):
 
-        def bezier(p0, p1, p2, linewidth, linestyle, n=100):
-            x0, y0 = p0
-            x1, y1 = p1
-            x2, y2 = p2
-            
-            xb = [(1 - t)**2 *x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n)]
-            yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n)]
         
-            plt.plot(xb, yb, color='black', linewidth=linewidth, linestyle=linestyle)
-        
-        ## rutina ppal
-
         if self._rtype not in ['auto-matrix']:
             raise Exception('Invalid function call for type: ' + self._rtype )
-
+            
         x = self
-
-        plt.figure(figsize=figsize)
         labels = list(set(x[x.columns[0]]))
-        n_labels = len(labels)
-        
-        theta = np.linspace(0.0, 2 * np.pi, n_labels, endpoint=False)
-        points_x = [R * np.cos(t) for t in theta]
-        points_y = [R * np.sin(t) for t in theta]
-        
-        # dibuja los puntos sobre la circunferencia
-        plt.scatter(points_x, points_y, s=80, color='black')
-        plt.xlim(-6, 6)
-        plt.ylim(-6, 6)
-        plt.gca().set_aspect('equal', 'box')
-        
-        # arcos de las relaciones    
-        data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
-        
-        n = 0
-        
-        ## labels
-        lbl_x = [(R+0.2) * np.cos(t) for t in theta]
-        lbl_y = [(R+0.2) * np.sin(t) for t in theta]
-        lbl_theta = [t / (2 * np.pi) * 360 for t in theta]
-        lbl_theta = [t - 180 if t > 180 else t for t in lbl_theta]
-        lbl_theta = [t - 180 if t > 90 else t for t in lbl_theta]
-        
-        maxlen = max([len(lbl) for lbl in labels])
-        
-        for txt, xt, yt, angletxt, angle  in zip(labels, lbl_x, lbl_y, lbl_theta, theta):
-                
-            if xt >= 0:
-                ha = 'left'
-            else:
-                ha = 'right'
-        
-            plt.text(
-                xt, 
-                yt, 
-                txt, 
-                fontsize=10,
-                rotation=angletxt,
-                va = 'center',
-                ha = ha, # 'center'
-                rotation_mode = 'anchor',
-                backgroundcolor='white')
-                    
-        plt.gca().set_xticks([])
-        plt.gca().set_yticks([])
-        for txt in ['bottom', 'top', 'left', 'right']:
-            plt.gca().spines[txt].set_color('white')
+
+        from_list = []
+        to_list = []
+        linewidth_list = []
+        linestyle_list = []
 
         for index, r in x.iterrows():
 
@@ -110,23 +151,6 @@ class Matrix(pd.DataFrame):
             val = r[2]
 
             if row != col:
-
-                x0, y0, a0 = data[row]
-                x2, y2, a2 = data[col]            
-                
-                angle = a0 + (a2 - a0) / 2
-                
-                if angle > np.pi:
-                    angle_corr = angle - np.pi
-                else:
-                    angle_corr = angle
-                    
-                distance = np.abs(a2 - a0)
-                if distance > np.pi:
-                    distance = distance - np.pi
-                distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
-                x1 = distance * np.cos(angle)
-                y1 = distance * np.sin(angle)
                 
                 if val >= 0.75:
                     linewidth = 4
@@ -144,10 +168,139 @@ class Matrix(pd.DataFrame):
                     linewidth = 0
                     linestyle = '-'
 
-                if minval is  None:
-                    bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)
-                elif abs(val) >= minval :
-                    bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)                    
+                if minval is None or abs(val) >= minval:
+                    from_list.append(row)
+                    to_list.append(col)
+                    linewidth_list.append(linewidth)
+                    linestyle_list.append(linestyle)
+
+        edges = pd.DataFrame({
+            'from' : from_list,
+            'to' : to_list,
+            'linewidth' : linewidth_list,
+            'linestyle' : linestyle_list
+        })
+            
+        chord_diagram(labels, edges) 
+
+
+
+    #---------------------------------------------------------------------------------------------
+    # def _chord_diagram(self, figsize=(12, 12), minval=None, R=3):
+
+    #     def bezier(p0, p1, p2, linewidth, linestyle, n=100):
+    #         x0, y0 = p0
+    #         x1, y1 = p1
+    #         x2, y2 = p2
+            
+    #         xb = [(1 - t)**2 *x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n)]
+    #         yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n)]
+        
+    #         plt.plot(xb, yb, color='black', linewidth=linewidth, linestyle=linestyle)
+        
+    #     ## rutina ppal
+
+    #     if self._rtype not in ['auto-matrix']:
+    #         raise Exception('Invalid function call for type: ' + self._rtype )
+
+    #     x = self
+
+    #     plt.figure(figsize=figsize)
+    #     labels = list(set(x[x.columns[0]]))
+    #     n_labels = len(labels)
+        
+    #     theta = np.linspace(0.0, 2 * np.pi, n_labels, endpoint=False)
+    #     points_x = [R * np.cos(t) for t in theta]
+    #     points_y = [R * np.sin(t) for t in theta]
+        
+    #     # dibuja los puntos sobre la circunferencia
+    #     plt.scatter(points_x, points_y, s=80, color='black')
+    #     plt.xlim(-6, 6)
+    #     plt.ylim(-6, 6)
+    #     plt.gca().set_aspect('equal', 'box')
+        
+    #     # arcos de las relaciones    
+    #     data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
+        
+    #     n = 0
+        
+    #     ## labels
+    #     lbl_x = [(R+0.2) * np.cos(t) for t in theta]
+    #     lbl_y = [(R+0.2) * np.sin(t) for t in theta]
+    #     lbl_theta = [t / (2 * np.pi) * 360 for t in theta]
+    #     lbl_theta = [t - 180 if t > 180 else t for t in lbl_theta]
+    #     lbl_theta = [t - 180 if t > 90 else t for t in lbl_theta]
+        
+    #     maxlen = max([len(lbl) for lbl in labels])
+        
+    #     for txt, xt, yt, angletxt, angle  in zip(labels, lbl_x, lbl_y, lbl_theta, theta):
+                
+    #         if xt >= 0:
+    #             ha = 'left'
+    #         else:
+    #             ha = 'right'
+        
+    #         plt.text(
+    #             xt, 
+    #             yt, 
+    #             txt, 
+    #             fontsize=10,
+    #             rotation=angletxt,
+    #             va = 'center',
+    #             ha = ha, # 'center'
+    #             rotation_mode = 'anchor',
+    #             backgroundcolor='white')
+                    
+    #     plt.gca().set_xticks([])
+    #     plt.gca().set_yticks([])
+    #     for txt in ['bottom', 'top', 'left', 'right']:
+    #         plt.gca().spines[txt].set_color('white')
+
+    #     for index, r in x.iterrows():
+
+    #         row = r[0]
+    #         col = r[1]
+    #         val = r[2]
+
+    #         if row != col:
+
+    #             x0, y0, a0 = data[row]
+    #             x2, y2, a2 = data[col]            
+                
+    #             angle = a0 + (a2 - a0) / 2
+                
+    #             if angle > np.pi:
+    #                 angle_corr = angle - np.pi
+    #             else:
+    #                 angle_corr = angle
+                    
+    #             distance = np.abs(a2 - a0)
+    #             if distance > np.pi:
+    #                 distance = distance - np.pi
+    #             distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
+    #             x1 = distance * np.cos(angle)
+    #             y1 = distance * np.sin(angle)
+                
+    #             if val >= 0.75:
+    #                 linewidth = 4
+    #                 linestyle = '-' 
+    #             elif val >= 0.50:
+    #                 linewidth = 2
+    #                 linestyle = '-' 
+    #             elif val >= 0.25:
+    #                 linewidth = 2
+    #                 linestyle = '--' 
+    #             elif val < 0.25:
+    #                 linewidth = 1
+    #                 linestyle = ':'
+    #             else: 
+    #                 linewidth = 0
+    #                 linestyle = '-'
+
+    #             if minval is  None:
+    #                 bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)
+    #             elif abs(val) >= minval :
+    #                 bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)                    
         
             
     #---------------------------------------------------------------------------------------------
@@ -187,75 +340,7 @@ class Matrix(pd.DataFrame):
             return
 
 
-    #---------------------------------------------------------------------------------------------
-    def sankey_plot(self, figsize=(7,10), minval=None):
-        """Cross-relation plot
-        """
-        if self._rtype != 'cross-matrix':
-            Exception('Invalid matrix type:' + self._rtype)
-
-        x = self
-        
-        llabels = sorted(list(set(x[x.columns[0]])))
-        rlabels = sorted(list(set(x[x.columns[1]])))
-
-        factorL = max(len(llabels)-1, len(rlabels)-1) / (len(llabels) - 1)
-        factorR = max(len(llabels)-1, len(rlabels)-1) / (len(rlabels) - 1)
-
-        lpos = {k:v*factorL for v, k in enumerate(llabels)}
-        rpos = {k:v*factorR for v, k in enumerate(rlabels)}
-        
-        fig, ax1 = plt.subplots(figsize=(7, 10))
-        ax1.scatter([0] * len(llabels), llabels, color='black', s=50)
-
-        for index, r in x.iterrows():
-
-            row = r[0]
-            col = r[1]
-            val = r[2]
-
-            if val >= 0.75:
-                linewidth = 4
-                linestyle = '-' 
-            elif val >= 0.50:
-                linewidth = 2
-                linstyle = '-' 
-            elif val >= 0.25:
-                linewidth = 2
-                linestyle = '--' 
-            elif val < 0.25:
-                linewidth = 1
-                linestyle = ':'
-            else: 
-                linewidth = 0
-                linestyle = '-'
-
-            if minval is  None:
-                plt.plot(
-                    [0, 1], 
-                    [lpos[row], rpos[col]], 
-                    linewidth=linewidth, 
-                    linestyle=linestyle, 
-                    color='black')
-            elif abs(val) >= minval :
-                plt.plot(
-                    [0, 1], 
-                    [lpos[row], rpos[col]], 
-                    linewidth=linewidth, 
-                    linestyle=linestyle, 
-                    color='black')
-
-        ax2 = ax1.twinx()
-        ax2.scatter([1] * len(rlabels), rlabels, color='black', s=50)
-        #ax2.set_ylim(0, len(rlabels)-1)
-        
-                
-        for txt in ['bottom', 'top', 'left', 'right']:
-            ax1.spines[txt].set_color('white')
-            ax2.spines[txt].set_color('white')
-        
-        ax2.set_xticks([])
-
+    
 
     #---------------------------------------------------------------------------------------------
     def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10), library=None):
@@ -325,6 +410,133 @@ class Matrix(pd.DataFrame):
             index = x.index)
 
         return centers, clusters
+
+
+    #---------------------------------------------------------------------------------------------
+    def map(self, figsize = (10,10)):
+
+        def add_group(group, weight, style):
+            
+            if len(group) > 0:
+                for row in group[col0].tolist():
+                    for col in group[col0].tolist():
+                        if row != col:
+                            graph.add_edge(row, col, weight=weight, style=style)
+
+
+        x = self
+        ## nombres de las columnas
+        col0 = x.columns[0]
+        col1 = x.columns[1]
+        col2 = x.columns[2]
+    
+        ## node names
+        nodes = sorted(list(set(x[col0])))
+        
+        ## generate a network graph
+        plt.figure(figsize=figsize)
+        graph = nx.Graph()
+        graph.add_nodes_from(nodes)
+
+        
+        for factor in list(set(x[col1])):
+            
+            values = x[x[col1] == factor]
+            values.index = values[col0].tolist()     
+            
+            group0 = values[values[col2] >= 0.75]
+            group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
+            group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
+            group3 = values[values[col2] <= -0.25]
+            
+            if len(group0) > 0:
+                add_group(group0, weight=3, style='solid')
+            if len(group1) > 0:
+                add_group(group1, weight=2, style='solid')
+            if len(group2) > 0:
+                add_group(group2, weight=2, style='dashed')
+            if len(group3) > 0:
+                add_group(group3, weight=1, style='dotted')
+        
+        
+        
+        # #calculate distance between relationated nodes to avoid overlaping
+        path_length = nx.shortest_path_length(graph)
+        distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
+        for row, data in path_length:
+            for col, dist in data.items():
+                distances.loc[row,col] = dist
+        distances = distances.fillna(distances.max().max())
+
+        #layout of graph
+        pos = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+
+        #visual graph configuration
+        nx.draw(graph, pos, with_labels=True)
+
+
+    #---------------------------------------------------------------------------------------------
+    def map_to_chord(self, figsize = (10,10), minval=None, R=3):
+
+        def add_group(group, linewidth, linestyle):
+            
+            if len(group) == 0:
+                return
+
+            for row in group[col0].tolist():
+                for col in group[col0].tolist():
+
+                    if row != col:    
+                        if minval is None or abs(val) >= minval:
+                            from_list.append(row)
+                            to_list.append(col)
+                            linewidth_list.append(linewidth)
+                            linestyle_list.append(linestyle)
+
+
+        x = self
+
+        ## nombres de las columnas
+        col0 = x.columns[0]
+        col1 = x.columns[1]
+        col2 = x.columns[2]
+
+        labels = list(set(x[col0]))
+        n_labels = len(labels)
+
+        from_list = []
+        to_list = []
+        linewidth_list = []
+        linestyle_list = []
+
+        for factor in list(set(x[col1])):
+            
+            values = x[x[col1] == factor]
+            values.index = values[col0].tolist()     
+            
+            group0 = values[values[col2] >= 0.75]
+            group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
+            group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
+            group3 = values[values[col2] <= -0.25]
+            
+            if len(group0) > 0:
+                add_group(group0, linewidth=3, linestyle='solid')
+            if len(group1) > 0:
+                add_group(group1, linewidth=2, linestyle='solid')
+            if len(group2) > 0:
+                add_group(group2, linewidth=2, linestyle='dashed')
+            if len(group3) > 0:
+                add_group(group3, linewidth=1, linestyle='dotted')
+        
+        edges = pd.DataFrame({
+            'from' : from_list,
+            'to' : to_list,
+            'linewidth' : linewidth_list,
+            'linestyle' : linestyle_list
+        })
+            
+        chord_diagram(labels, edges) 
+
 
     #---------------------------------------------------------------------------------------------
     #TODO personalizar valor superior para escalar los pesos de los puentes
@@ -542,6 +754,75 @@ class Matrix(pd.DataFrame):
 
         return None
 
+
+#---------------------------------------------------------------------------------------------
+    def sankey_plot(self, figsize=(7,10), minval=None):
+        """Cross-relation plot
+        """
+        if self._rtype != 'cross-matrix':
+            Exception('Invalid matrix type:' + self._rtype)
+
+        x = self
+        
+        llabels = sorted(list(set(x[x.columns[0]])))
+        rlabels = sorted(list(set(x[x.columns[1]])))
+
+        factorL = max(len(llabels)-1, len(rlabels)-1) / (len(llabels) - 1)
+        factorR = max(len(llabels)-1, len(rlabels)-1) / (len(rlabels) - 1)
+
+        lpos = {k:v*factorL for v, k in enumerate(llabels)}
+        rpos = {k:v*factorR for v, k in enumerate(rlabels)}
+        
+        fig, ax1 = plt.subplots(figsize=(7, 10))
+        ax1.scatter([0] * len(llabels), llabels, color='black', s=50)
+
+        for index, r in x.iterrows():
+
+            row = r[0]
+            col = r[1]
+            val = r[2]
+
+            if val >= 0.75:
+                linewidth = 4
+                linestyle = '-' 
+            elif val >= 0.50:
+                linewidth = 2
+                linstyle = '-' 
+            elif val >= 0.25:
+                linewidth = 2
+                linestyle = '--' 
+            elif val < 0.25:
+                linewidth = 1
+                linestyle = ':'
+            else: 
+                linewidth = 0
+                linestyle = '-'
+
+            if minval is  None:
+                plt.plot(
+                    [0, 1], 
+                    [lpos[row], rpos[col]], 
+                    linewidth=linewidth, 
+                    linestyle=linestyle, 
+                    color='black')
+            elif abs(val) >= minval :
+                plt.plot(
+                    [0, 1], 
+                    [lpos[row], rpos[col]], 
+                    linewidth=linewidth, 
+                    linestyle=linestyle, 
+                    color='black')
+
+        ax2 = ax1.twinx()
+        ax2.scatter([1] * len(rlabels), rlabels, color='black', s=50)
+        #ax2.set_ylim(0, len(rlabels)-1)
+        
+                
+        for txt in ['bottom', 'top', 'left', 'right']:
+            ax1.spines[txt].set_color('white')
+            ax2.spines[txt].set_color('white')
+        
+        ax2.set_xticks([])
     
     #---------------------------------------------------------------------------------------------
     def tomatrix(self, ascendingA=None, ascendingB=None):
