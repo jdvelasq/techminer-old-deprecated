@@ -412,10 +412,10 @@ class RecordsDataFrame(pd.DataFrame):
         return List(docs_per_year)
 
     #----------------------------------------------------------------------------------------------
-    def factor_analysis(self, term, sep=None, n_components=2, N=10):
+    def factor_analysis(self, column, sep=None, n_components=2, N=10):
 
-        x = self.documents_by_terms(term, sep=sep)
-        terms = x.loc[:, term].tolist()
+        x = self.documents_by_terms(column, sep=sep)
+        terms = x.loc[:, column].tolist()
         if N is None or len(terms) <= N:
             N = len(terms)
         terms = sorted(terms[0:N])
@@ -426,7 +426,7 @@ class RecordsDataFrame(pd.DataFrame):
             index = self.index)
 
         for idx in self.index:
-            w = self.loc[idx, term]
+            w = self.loc[idx, column]
             if w is not None:
                 if sep is not None:
                     z = w.split(sep)
@@ -452,7 +452,7 @@ class RecordsDataFrame(pd.DataFrame):
         #values = [e for row in values for e in row]
 
         result = pd.DataFrame({
-            term : rows,
+            column : rows,
             'Factor' : cols,
             'value' : values})
 
@@ -478,7 +478,7 @@ class RecordsDataFrame(pd.DataFrame):
         return len(self['Source title'].unique())
 
     #----------------------------------------------------------------------------------------------
-    def term_by_term(self, termA, termB, sepA=None, sepB=None, minmax=None):
+    def term_by_term(self, column_r, column_c, sep_r=None, sep_c=None, minmax=None):
         """
 
     
@@ -510,49 +510,49 @@ class RecordsDataFrame(pd.DataFrame):
         1  1  b              2
         """
         
-        df = self[[termA, termB]].dropna()
+        df = self[[column_r, column_c]].dropna()
 
 
         ##
         ## Expande las dos columnas de los datos originales
         ##
-        if sepA is None and sepB is None:
-            df = df[[termA, termB]]
+        if sep_r is None and sep_c is None:
+            df = df[[column_r, column_c]]
         
-        if sepA is not None and sepB is None:
+        if sep_r is not None and sep_c is None:
             
-            t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(c, b) for a, b in t for c in a.split(sepA)]
+            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
+            t = [(c, b) for a, b in t for c in a.split(sep_r)]
             df = pd.DataFrame({
-                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
-                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
+                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
+                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
             })
             
-        if sepA is None and sepB is not None:
+        if sep_r is None and sep_c is not None:
         
-            t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(a, c.strip()) for a, b in t for c in b.split(sepB)]
+            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
+            t = [(a, c.strip()) for a, b in t for c in b.split(sep_c)]
             df = pd.DataFrame({
-                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
-                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
+                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
+                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
             })
 
-        if sepA is not None and sepB is not None:
+        if sep_r is not None and sep_c is not None:
         
-            t = [(x, y) for x, y in zip(df[termA], df[termB])]
-            t = [(c, b) for a, b in t for c in a.split(sepA)]
-            t = [(a, c) for a, b in t for c in b.split(sepB)]
+            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
+            t = [(c, b) for a, b in t for c in a.split(sep_r)]
+            t = [(a, c) for a, b in t for c in b.split(sep_c)]
             df = pd.DataFrame({
-                termA: [a.strip() if isinstance(a, str) else a for a,b in t],
-                termB: [b.strip() if isinstance(b, str) else b for a,b in t]
+                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
+                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
             })
 
-        x = df.groupby(by=[termA, termB]).size()
+        x = df.groupby(by=[column_r, column_c]).size()
         a = [t for t,_ in x.index]
         b = [t for _,t in x.index]
         df = pd.DataFrame({
-            termA: a,
-            termB: b,
+            column_r: a,
+            column_c: b,
             'Num Documents': x.tolist()
         })
 
