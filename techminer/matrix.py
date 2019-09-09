@@ -303,16 +303,16 @@ class Matrix(pd.DataFrame):
         
             
     #---------------------------------------------------------------------------------------------
-    def circlerel(self, ascendingA=None, ascendingB=None, library=None):
+    def circlerel(self, ascending_r=None, ascending_c=None, library=None):
 
 
         if library is None or library == 'altair':
-            if ascendingA is None or ascendingA is True:
+            if ascending_r is None or ascending_r is True:
                 sort_X = 'ascending'
             else:
                 sort_X = 'descending'
 
-            if ascendingB is None or ascendingB is True:
+            if ascending_c is None or ascending_c is True:
                 sort_Y = 'ascending'
             else:
                 sort_Y = 'descending'
@@ -339,12 +339,12 @@ class Matrix(pd.DataFrame):
             return
 
     #---------------------------------------------------------------------------------------------
-    def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10), library=None):
+    def heatmap(self, ascending_c=None, ascending_c=None, figsize=(10, 10), library=None):
 
         if library is None:
-            x = self.tomatrix(ascendingA, ascendingB)
+            x = self.tomatrix(ascending_r, ascending_c)
             if self._rtype == 'factor-matrix':
-                x = self.tomatrix(ascendingA, ascendingB)
+                x = self.tomatrix(ascending_r, ascending_c)
                 x = x.transpose()
                 x = x.apply(lambda w: abs(w))
             plt.figure(figsize=figsize)
@@ -357,12 +357,12 @@ class Matrix(pd.DataFrame):
 
         if library == 'altair':
 
-            if ascendingA is None or ascendingA is True:
+            if ascending_r is None or ascending_r is True:
                 sort_X = 'ascending'
             else:
                 sort_X = 'descending'
 
-            if ascendingB is None or ascendingB is True:
+            if ascending_c is None or ascending_c is True:
                 sort_Y = 'ascending'
             else:
                 sort_Y = 'descending'
