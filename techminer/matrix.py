@@ -128,7 +128,6 @@ class Matrix(pd.DataFrame):
     def _constructor_expanddim(self):
         return self
 
-
     #---------------------------------------------------------------------------------------------
     def chord_diagram(self, figsize=(12, 12), minval=None, R=3):
 
@@ -339,9 +338,6 @@ class Matrix(pd.DataFrame):
             plt.xticks(rotation=90)
             return
 
-
-    
-
     #---------------------------------------------------------------------------------------------
     def heatmap(self, ascendingA=None, ascendingB=None, figsize=(10, 10), library=None):
 
@@ -390,7 +386,6 @@ class Matrix(pd.DataFrame):
             'auto-matrix']:
 
             raise Exception('Invalid function call for type: ' + self._rtype )
-
 
         if self._rtype == 'factor-matrix' is True:
             x = self.copy()

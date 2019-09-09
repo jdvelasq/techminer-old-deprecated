@@ -21,7 +21,7 @@ class RecordsDataFrame(pd.DataFrame):
         return self
 
     #----------------------------------------------------------------------------------------------
-    def autocorrelation(self, term, sep=None, N=20):
+    def autocorrelation(self, column, sep=None, N=20):
         """
 
             
@@ -41,7 +41,7 @@ class RecordsDataFrame(pd.DataFrame):
         8    e;a  
         9   None
 
-        >>> rdf.autocorrelation(term='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.autocorrelation(column='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            A (row) A (col)  Autocorrelation
         0        a       a         1.000000
         1        b       b         1.000000
@@ -69,7 +69,7 @@ class RecordsDataFrame(pd.DataFrame):
         23       b       e         0.000000
         24       c       d         0.000000
 
-        >>> rdf.autocorrelation(term='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.autocorrelation(column='A', sep=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
           A (row) A (col)  Autocorrelation
         0       a       a         1.000000
         1       b       b         1.000000
@@ -82,12 +82,12 @@ class RecordsDataFrame(pd.DataFrame):
         8       c       b         0.288675
 
         """
-        result = self.crosscorrelation(termA=term, termB=term, sepA=sep, sepB=sep, N=N)
+        result = self.crosscorrelation(termA=column, termB=column, sepA=sep, sepB=sep, N=N)
         result._rtype = 'auto-matrix'
         return result
 
     #----------------------------------------------------------------------------------------------
-    def citations_by_terms(self, term, sep=None):
+    def citations_by_terms(self, column, sep=None):
         """Computes the number of citations to docuement per year.
 
         >>> rdf = RecordsDataFrame({
@@ -100,7 +100,7 @@ class RecordsDataFrame(pd.DataFrame):
         1    c         4
         2    a         3
         """
-        terms = self[term].dropna()
+        terms = self[column].dropna()
         if sep is not None:
             terms = [y.strip() for x in terms for y in x.split(sep) if x is not None]
         else:
@@ -110,12 +110,12 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## crea el dataframe de resultados
         result = pd.DataFrame({
-            term : terms},
+            column : terms},
             index = terms)
         result['Cited by'] = 0
 
         ## suma de citaciones
-        for index, row in self[[term, 'Cited by']].iterrows():
+        for index, row in self[[column, 'Cited by']].iterrows():
             if row[0] is not None:
                 citations = row[1] if not np.isnan(row[1]) else 0
                 if sep is not None:
