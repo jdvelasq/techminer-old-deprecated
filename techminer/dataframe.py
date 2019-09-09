@@ -82,7 +82,7 @@ class RecordsDataFrame(pd.DataFrame):
         8       c       b         0.288675
 
         """
-        result = self.crosscorrelation(termA=column, termB=column, sepA=sep, sepB=sep, N=N)
+        result = self.crosscorrelation(column_r=column, column_c=column, sep_r=sep, sep_c=sep, N=N)
         result._rtype = 'auto-matrix'
         return result
 
@@ -216,7 +216,7 @@ class RecordsDataFrame(pd.DataFrame):
         return tdf
 
     #----------------------------------------------------------------------------------------------
-    def crosscorrelation(self, termA, termB=None, sepA=None, sepB=None, N=20):
+    def crosscorrelation(self, column_r, column_c=None, sep_r=None, sep_c=None, N=20):
         """Computes autocorrelation and crosscorrelation.
 
 
@@ -238,7 +238,7 @@ class RecordsDataFrame(pd.DataFrame):
         9    None    B;E
         10   None   None
 
-        >>> rdf.crosscorrelation(termA='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.crosscorrelation(column_r='c1', termB='c2', sepA=';', sepB=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            c1 c2  Crosscorrelation
         0   b  B          0.755929
         1   b  C          0.750000
@@ -265,7 +265,7 @@ class RecordsDataFrame(pd.DataFrame):
         22  b  D          0.000000
         23  a  E          0.000000
         24  d  E          0.000000
-        >>> rdf.crosscorrelation(termA='c1', termB='c2', sepA=';', sepB=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> rdf.crosscorrelation(column_r='c1', termB='c2', sepA=';', sepB=';', N=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
           c1 c2  Crosscorrelation
         0  b  B          0.755929
         1  b  C          0.750000
@@ -279,23 +279,23 @@ class RecordsDataFrame(pd.DataFrame):
 
         """ 
  
-        if termA == termB:
-            sepB = None
-            termB = None
+        if column_r == column_c:
+            sep_c = None
+            column_c = None
 
-        tdf_rows = self.tdf(termA, sepA, N)
-        if termB is not None:
-            tdf_cols = self.tdf(termB, sepB, N)
+        tdf_rows = self.tdf(column_r, sep_r, N)
+        if column_c is not None:
+            tdf_cols = self.tdf(column_c, sep_c, N)
         else:
             tdf_cols = tdf_rows.copy()
             
-        if termB is not None:
-            col0 = termA
-            col1 = termB
+        if column_c is not None:
+            col0 = column_r
+            col1 = column_c
             col2 = 'Crosscorrelation'
         else:
-            col0 = termA + ' (row)'
-            col1 = termA + ' (col)'
+            col0 = column_r + ' (row)'
+            col1 = column_r + ' (col)'
             col2 = 'Autocorrelation'
 
         termsA = tdf_rows.columns.tolist()
