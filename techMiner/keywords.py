@@ -339,36 +339,36 @@ class Keywords():
         self._keywords.remove(x)
 
     #--------------------------------------------------------------------------------------------------------
-    # def common(self, x, sep=None):
-    #     """Returns True if x is in keywords list.
+    def common(self, x, sep=None):
+        """Returns True if x is in keywords list.
 
-    #     Args:
-    #         x (string): A string object.
+        Args:
+            x (string): A string object.
             
-    #     Returns:
-    #         Boolean.
+        Returns:
+            Boolean.
 
-    #     >>> kyw = Keywords(['ann', 'big data', 'deep learning'])
-    #     >>> kyw.common('Big Data')
-    #     True
-    #     >>> kyw.common('Python')
-    #     False
-    #     >>> kyw.common('Python|R', sep='|')
-    #     False
-    #     >>> kyw.common('Python|big data', sep='|')
-    #     True
+        >>> kyw = Keywords(['ann', 'big data', 'deep learning'])
+        >>> kyw.common('Big Data')
+        True
+        >>> kyw.common('Python')
+        False
+        >>> kyw.common('Python|R', sep='|')
+        False
+        >>> kyw.common('Python|big data', sep='|')
+        True
 
-    #     """
-    #     def _common(x):
-    #         if self.extract_from(x) is None:
-    #             return False
-    #         else:
-    #             return True
+        """
+        def _common(x):
+            if self.extract_from_text(x) is None:
+                return False
+            else:
+                return True
 
-    #     if sep is None:
-    #         return _common(x)
+        if sep is None:
+            return _common(x)
 
-    #     return any([_common(y) for y in x.split(sep)])
+        return any([_common(y.strip()) for y in x.split(sep)])
 
     # #--------------------------------------------------------------------------------------------------------
     # def complement(self, x, sep=None):

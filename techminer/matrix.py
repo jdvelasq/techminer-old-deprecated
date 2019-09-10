@@ -19,10 +19,9 @@ from shapely.geometry import Point, LineString
 from sklearn.cluster import KMeans
 
 
-
+#---------------------------------------------------------------------------------------------
 def chord_diagram(labels, edges, figsize=(12, 12), minval=None, R=3, n_bezier=100, dist=0.2):
     
-
     def bezier(p0, p1, p2, linewidth, linestyle, n_bezier=100):
 
         x0, y0 = p0
@@ -114,7 +113,7 @@ def chord_diagram(labels, edges, figsize=(12, 12), minval=None, R=3, n_bezier=10
             bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)
                  
 
-
+#---------------------------------------------------------------------------------------------
 class Matrix(pd.DataFrame):
     """Class implementing a dataframe with results of analysis.
     """
@@ -339,7 +338,7 @@ class Matrix(pd.DataFrame):
             return
 
     #---------------------------------------------------------------------------------------------
-    def heatmap(self, ascending_c=None, ascending_c=None, figsize=(10, 10), library=None):
+    def heatmap(self, ascending_r=None, ascending_c=None, figsize=(10, 10), library=None):
 
         if library is None:
             x = self.tomatrix(ascending_r, ascending_c)
@@ -820,7 +819,7 @@ class Matrix(pd.DataFrame):
         ax2.set_xticks([])
     
     #---------------------------------------------------------------------------------------------
-    def tomatrix(self, ascendingA=None, ascendingB=None):
+    def tomatrix(self, ascending_r=None, ascending_c=None):
         """Displays a term by term dataframe as a matrix.
 
         >>> mtx = Matrix({
@@ -863,11 +862,11 @@ class Matrix(pd.DataFrame):
         else:
             termB_unique = self.iloc[:,1].unique()
             
-        if ascendingA is not None:
-            termA_unique = sorted(termA_unique, reverse = not ascendingA)
+        if ascending_r is not None:
+            termA_unique = sorted(termA_unique, reverse = not ascending_r)
 
-        if ascendingB is not None:
-            termB_unique = sorted(termB_unique, reverse = not ascendingB)
+        if ascending_c is not None:
+            termB_unique = sorted(termB_unique, reverse = not ascending_c)
 
         result = pd.DataFrame(
             np.zeros((len(termA_unique), len(termB_unique)))

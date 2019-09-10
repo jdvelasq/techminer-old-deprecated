@@ -548,6 +548,7 @@
     "hidden Markov model"
   ],
   "High frequency": [
+    "High Frequency",
     "High frequencies",
     "High frequency",
     "High-Frequency",
@@ -706,6 +707,7 @@
     "Market impact costs"
   ],
   "Market microstructure": [
+    "Market Microstructure",
     "Market microstructure",
     "Market microstructures",
     "market microstructure"
@@ -1268,6 +1270,10 @@
     "trend prediction",
     "trend's prediction"
   ],
+  "Type-2 fuzzy": [
+    "Type-2 Fuzzy",
+    "Type-2 fuzzy"
+  ],
   "Type-reduction": [
     "Type reduction",
     "Type-reduction"
@@ -1599,6 +1605,7 @@
     "futures"
   ],
   "fuzzy logic": [
+    "Fuzzy Logic",
     "Fuzzy logic",
     "fuzzy logic"
   ],
@@ -1620,10 +1627,6 @@
     "High-Frequency Traders",
     "High-frequency traders",
     "high-frequency traders"
-  ],
-  "hilbert transform": [
-    "Hilbert transform",
-    "hilbert transform"
   ],
   "hill climbing": [
     "Hill climbing",
@@ -1671,6 +1674,10 @@
   "innovation": [
     "Innovation",
     "innovation"
+  ],
+  "insider trading": [
+    "Insider trading",
+    "insider trading"
   ],
   "international trade": [
     "International trade",
@@ -1943,8 +1950,7 @@
   "risk": [
     "Risk",
     "Risks",
-    "risk",
-    "risks"
+    "risk"
   ],
   "risk averse": [
     "Risk averse",
@@ -2117,10 +2123,6 @@
   "triangular arbitrage": [
     "Triangular arbitrage",
     "triangular arbitrage"
-  ],
-  "type-2 fuzzy": [
-    "Type-2 fuzzy",
-    "type-2 fuzzy"
   ],
   "volatility": [
     "Volatility",

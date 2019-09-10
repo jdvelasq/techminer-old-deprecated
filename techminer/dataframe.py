@@ -460,16 +460,21 @@ class RecordsDataFrame(pd.DataFrame):
 
 
     #----------------------------------------------------------------------------------------------
-    def most_cited_documents(self, N=10):
-        """ Returns the top N most cited documents.
+    def most_cited_documents(self, top_n=10, min_value=None):
+        """ Returns the top N most cited documents and citations > min_value .
         Args:
-            N (int) : number of documents to be returned.
+            top_n (int) : number of documents to be returned.
+            min_value (int) : minimal number of citations
 
         Results:
             pandas.DataFrame
         """
         result = self.sort_values(by='Cited by', ascending=False)
-        return result[['Title', 'Authors', 'Year', 'Cited by']][0:N]
+        if min_value is not None:
+            result = result[result['Cited by'] >= min_value]
+        if top_n is not None and len(result) > top_n:
+            result = result[0:top_n]
+        return result[['Title', 'Authors', 'Year', 'Cited by']]
 
 
     #----------------------------------------------------------------------------------------------
