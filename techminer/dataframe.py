@@ -114,29 +114,7 @@ class RecordsDataFrame(pd.DataFrame):
         if cumulative is True:
             result['Num Documents'] = result['Num Documents'].cumsum()
 
-        return result
-
-
-        docs_per_year = self.years_list()
-
-        count_per_year = yearsdf.groupby('Year')[['Year']].count()
-        docs_per_year[count_per_year.index] = count_per_year['Year']
-        docs_per_year = docs_per_year.to_frame()
-        docs_per_year['Year'] = docs_per_year.index
-        docs_per_year.columns = ['Num Documents', 'Year']
-        docs_per_year = docs_per_year[['Year', 'Num Documents']]
-        docs_per_year.index = range(len(docs_per_year))
-        
-        if cumulative is True:
-            docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
-
-        return List(docs_per_year)
-
-
-
-
-
-
+        return List(result)
 
 
     #----------------------------------------------------------------------------------------------
