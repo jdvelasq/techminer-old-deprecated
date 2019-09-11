@@ -22,52 +22,6 @@ class RecordsDataFrame(pd.DataFrame):
 
 
     #----------------------------------------------------------------------------------------------
-    def ___documents_by_year(self, cumulative=False):
-        """Computes the number of documents per year.
-
-        >>> rdf = RecordsDataFrame({'Year': [2014, 2014, 2016, 2017, None, 2019]})
-        >>> rdf.documents_by_year()
-           Year  Num Documents
-        0  2014              2
-        1  2015              0
-        2  2016              1
-        3  2017              1
-        4  2018              0
-        5  2019              1
-        >>> rdf.documents_by_year(cumulative=True)
-           Year  Num Documents
-        0  2014              2
-        1  2015              2
-        2  2016              3
-        3  2017              4
-        4  2018              4
-        5  2019              5
-
-        """
-        yearsdf = self[['Year']].copy()
-        yearsdf['Year'] = yearsdf['Year'].map(lambda x: None if np.isnan(x) else x)
-        yearsdf = yearsdf.dropna()
-        yearsdf['Year'] = yearsdf['Year'].map(int)
-        
-        minyear = min(yearsdf.Year)
-        maxyear = max(yearsdf.Year) + 1
-        docs_per_year = pd.Series(0, index=range(minyear, maxyear))
-        
-        count_per_year = yearsdf.groupby('Year')[['Year']].count()
-        docs_per_year[count_per_year.index] = count_per_year['Year']
-        docs_per_year = docs_per_year.to_frame()
-        docs_per_year['Year'] = docs_per_year.index
-        docs_per_year.columns = ['Num Documents', 'Year']
-        docs_per_year = docs_per_year[['Year', 'Num Documents']]
-        docs_per_year.index = range(len(docs_per_year))
-        
-        if cumulative is True:
-            docs_per_year['Num Documents'] = docs_per_year['Num Documents'].cumsum()
-
-        return List(docs_per_year)
-
-
-    #----------------------------------------------------------------------------------------------
     def years_list(self):
 
         df = self[['Year']].copy()
@@ -78,6 +32,10 @@ class RecordsDataFrame(pd.DataFrame):
         maxyear = max(df.Year)
         return pd.Series(0, index=range(minyear, maxyear+1), name='Year')
 
+    #----------------------------------------------------------------------------------------------
+    #
+    #  Analytical functions
+    #
     #----------------------------------------------------------------------------------------------
     def documents_by_year(self, cumulative=False):
         """Computes the number of documents per year.
@@ -115,6 +73,89 @@ class RecordsDataFrame(pd.DataFrame):
             result['Num Documents'] = result['Num Documents'].cumsum()
 
         return List(result)
+
+    #----------------------------------------------------------------------------------------------
+    def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
+        """
+
+        >>> rdf = RecordsDataFrame({
+        ...   'Year':[2014,  2014, 2015, 2015, 2018, 2018, 2018 ],
+        ...   'term':[   'a;b;a', 'b;c', 'c;b', 'd;a',  'e;b',  'a;a',  'b']
+        ... })
+        >>> rdf # doctest: +NORMALIZE_WHITESPACE
+           Year   term
+        0  2014  a;b;a
+        1  2014    b;c
+        2  2015    c;b
+        3  2015    d;a
+        4  2018    e;b
+        5  2018    a;a
+        6  2018      b
+
+        >>> rdf.terms_by_year('term', sep=';')
+          term  Year  Num Documents
+        0    a  2014              2
+        1    a  2015              1
+        2    a  2018              2
+        3    b  2014              2
+        4    b  2015              1
+        5    b  2018              2
+        6    c  2014              1
+        7    c  2015              1
+        8    d  2015              1
+        9    e  2018              1
+
+        >>> rdf.terms_by_year('term',  minmax=(2,8), sep=';')
+          term  Year  Num Documents
+        0    a  2014              2
+        2    a  2018              2
+        3    b  2014              2
+        5    b  2018              2
+
+        >>> rdf.terms_by_year('term',  top_n=3, minmax=(1,8), sep=';')
+          term  Year  Num Documents
+        0    a  2014              2
+        1    a  2015              1
+        2    a  2018              2
+        3    b  2014              2
+        4    b  2015              1
+        5    b  2018              2
+        6    c  2014              1
+        7    c  2015              1
+        """
+
+        df = self[[column, 'Year']].dropna()
+        if sep is not None:
+            df[column] = df[column].map(lambda x: x.split(sep) if x is not None else None)
+            df = df.explode(column)
+            
+        df = df.groupby(by=[column, 'Year'], as_index=False).size()
+        idx_term = [t for t,_ in df.index]
+        idx_year = [t for _,t in df.index]
+        df = pd.DataFrame({
+            column: idx_term,
+            'Year': idx_year,
+            'Num Documents': df.tolist()
+        })
+
+        if top_n is not None:
+            top = self.documents_by_terms(column, sep)
+            if len(top) > top_n:
+                top = top[0:top_n][column].tolist()
+                selected = [True if row[0] in top else False for idx, row in df.iterrows()] 
+                df = df[selected]
+
+        if minmax is not None:
+            minval, maxval = minmax
+            df = df[ df[df.columns[2]] >= minval ]
+            df = df[ df[df.columns[2]] <= maxval ]
+
+        return Matrix(df, rtype='coo-matrix')
+
+
+
+
+
 
 
     #----------------------------------------------------------------------------------------------
@@ -674,63 +715,3 @@ class RecordsDataFrame(pd.DataFrame):
 
         return Matrix(df, rtype='coo-matrix')
 
-    #----------------------------------------------------------------------------------------------
-    # def terms_by_year(self, column, sep=None, minmax=None):
-    #     """
-
-    #     >>> rdf = RecordsDataFrame({
-    #     ...   'year':[2014,  2014, 2015, 2015, 2018, 2018, 2018 ],
-    #     ...   'term':[   'a;b', 'b;c', 'c', 'd;a',  'e',  'a',  'b']
-    #     ... })
-    #     >>> rdf # doctest: +NORMALIZE_WHITESPACE
-    #        year term
-    #     0  2014  a;b
-    #     1  2014  b;c
-    #     2  2015    c
-    #     3  2015  d;a
-    #     4  2018    e
-    #     5  2018    a
-    #     6  2018    b
-
-    #     >>> rdf.terms_by_year('term')
-
-
-    #     >>> rdf.terms_by_year('term',  minmax=(2,8))
-        
-    #     """
-
-        
-    #     df = self[[column, 'Year']].dropna()
-
-    #     ##
-    #     ## Expande las dos columnas de los datos originales
-    #     ##
-    #     if sep is None :
-    #         df = df[[column, 'Year']]
-        
-    #     if sep is not None:
-            
-    #         t = [(x, y) for x, y in zip(df[column], df['Year'])]
-    #         t = [(c, b) for a, b in t for c in a.split(sep)]
-    #         df = pd.DataFrame({
-    #             column: [a.strip() if isinstance(a, str) else a for a,b in t],
-    #             'Year': [b.strip() if isinstance(b, str) else b for a,b in t]
-    #         })
-            
-
-    #     x = df.groupby(by=[column, 'Year']).size()
-    #     a = [t for t,_ in x.index]
-    #     b = [t for _,t in x.index]
-    #     df = pd.DataFrame({
-    #         column: a,
-    #         'Year': b,
-    #         'Num Documents': x.tolist()
-    #     })
-
-    #     if minmax is not None:
-
-    #         minval, maxval = minmax
-    #         df = df[ df[df.columns[2]] >= minval ]
-    #         df = df[ df[df.columns[2]] <= maxval ]
-
-    #     return Matrix(df, rtype='coo-matrix')
