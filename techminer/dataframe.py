@@ -62,6 +62,7 @@ class RecordsDataFrame(pd.DataFrame):
         if sep is not None:
             numdocs[column] = numdocs[column].map(lambda x: x.split(sep) if x is not None else None)
             numdocs = numdocs.explode(column)
+            numdocs.index = range(len(numdocs))
         numdocs = numdocs.groupby(column, as_index=False).size()
         
         ## dataframe with results
@@ -177,6 +178,7 @@ class RecordsDataFrame(pd.DataFrame):
         if sep is not None:
             numdocs[column] = numdocs[column].map(lambda x: x.split(sep) if x is not None else None)
             numdocs = numdocs.explode(column)    
+            numdocs.index = range(len(numdocs))
         numdocs = numdocs.groupby(by=[column, 'Year'], as_index=False).size()
 
         ## dataframe with results
@@ -243,9 +245,11 @@ class RecordsDataFrame(pd.DataFrame):
         if sep_r is not None:
             numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
             numdocs = numdocs.explode(column_r)
+            numdocs.index = range(len(numdocs))
         if sep_c is not None:
             numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
             numdocs = numdocs.explode(column_c)   
+            numdocs.index = range(len(numdocs))
         numdocs = numdocs.groupby(by=[column_r, column_c]).size()
 
         ## results dataframe
@@ -256,7 +260,6 @@ class RecordsDataFrame(pd.DataFrame):
             column_c : b,
             'Num Documents' : numdocs.tolist()
         })
-
 
         ## compute top_n terms
         if top_n is not None:
@@ -282,59 +285,109 @@ class RecordsDataFrame(pd.DataFrame):
         return Matrix(result, rtype='coo-matrix')
 
 
+    #----------------------------------------------------------------------------------------------
+    def terms_by_terms_by_year(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
+        """
 
-        return 
+    
+        >>> rdf = RecordsDataFrame({
+        ...   'Year'  : [   2013,   2013,  2014,    2014,  2015,  2016, 2016],
+        ...   'term0' : [ '0;1;2', '1;2', '2;1',     '3',   '4',   '0',  '1'],
+        ...   'term1' : [     'a',   'a',   'c', 'd,a,b', 'e,b', 'a,b',  'b']
+        ... })
+        >>> rdf # doctest: +NORMALIZE_WHITESPACE
+           Year  term0  term1
+        0  2013  0;1;2      a
+        1  2013    1;2      a
+        2  2014    2;1      c
+        3  2014      3  d,a,b
+        4  2015      4    e,b
+        5  2016      0    a,b
+        6  2016      1      b          
 
-        ##
-        ## Expande las dos columnas de los datos originales
-        ##
-        if sep_r is None and sep_c is None:
-            df = df[[column_r, column_c]]
+        >>> rdf.terms_by_terms_by_year('term0', 'term1', sep_r=';', sep_c=',')
+           term0 term1  Year  Num Documents
+        0      0     a  2013              1
+        1      0     a  2016              1
+        2      0     b  2016              1
+        3      1     a  2013              2
+        4      1     b  2016              1
+        5      1     c  2014              1
+        6      2     a  2013              2
+        7      2     c  2014              1
+        8      3     a  2014              1
+        9      3     b  2014              1
+        10     3     d  2014              1
+        11     4     b  2015              1
+        12     4     e  2015              1
+
+        >>> rdf.terms_by_terms_by_year('term0', 'term1', sep_r=';', sep_c=',', top_n=3)
+          term0 term1  Year  Num Documents
+        0     0     a  2013              1
+        1     0     a  2016              1
+        2     0     b  2016              1
+        3     1     a  2013              2
+        4     1     b  2016              1
+        5     1     c  2014              1
+        6     2     a  2013              2
+        7     2     c  2014              1
+
+        >>> rdf.terms_by_terms_by_year('term0', 'term1', minmax=(2,8), sep_r=';', sep_c=',')
+          term0 term1  Year  Num Documents
+        3     1     a  2013              2
+        6     2     a  2013              2
+
+
+        """
         
-        if sep_r is not None and sep_c is None:
-            
-            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
-            t = [(c, b) for a, b in t for c in a.split(sep_r)]
-            df = pd.DataFrame({
-                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
-                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-            
-        if sep_r is None and sep_c is not None:
+        ## computes the number of documents by term by term
+        numdocs = self[[column_r, column_c, 'Year']].dropna()
+        if sep_r is not None:
+            numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r))
+            numdocs = numdocs.explode(column_r)
+            numdocs.index = range(len(numdocs))
+        if sep_c is not None:
+            numdocs = numdocs[[column_c, column_r, 'Year']]
+            numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c))
+            numdocs = numdocs.explode(column_c)   
+            numdocs.index = range(len(numdocs))
         
-            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
-            t = [(a, c.strip()) for a, b in t for c in b.split(sep_c)]
-            df = pd.DataFrame({
-                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
-                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
 
-        if sep_r is not None and sep_c is not None:
-        
-            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
-            t = [(c, b) for a, b in t for c in a.split(sep_r)]
-            t = [(a, c) for a, b in t for c in b.split(sep_c)]
-            df = pd.DataFrame({
-                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
-                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
+        numdocs = numdocs.groupby(by=[column_r, column_c, 'Year']).size()
 
-        x = df.groupby(by=[column_r, column_c]).size()
-        a = [t for t,_ in x.index]
-        b = [t for _,t in x.index]
-        df = pd.DataFrame({
-            column_r: a,
-            column_c: b,
-            'Num Documents': x.tolist()
+        ## results dataframe
+        a = [t for t,_,_ in numdocs.index]
+        b = [t for _,t,_ in numdocs.index]
+        y = [t for _,_,t in numdocs.index]
+        result = pd.DataFrame({
+            column_r : a,
+            column_c : b,
+            'Year' : y,
+            'Num Documents' : numdocs.tolist()
         })
 
+        ## compute top_n terms
+        if top_n is not None:
+            ## rows
+            top = self.documents_by_terms(column_r, sep_r)
+            if len(top) > top_n:
+                top = top[0:top_n][column_r].tolist()
+                selected = [True if row[0] in top else False for idx, row in result.iterrows()] 
+                result = result[selected]
+
+            ## cols
+            top = self.documents_by_terms(column_c, sep_c)
+            if len(top) > top_n:
+                top = top[0:top_n][column_c].tolist()
+                selected = [True if row[1] in top else False for idx, row in result.iterrows()] 
+                result = result[selected]
+            
         if minmax is not None:
-
             minval, maxval = minmax
-            df = df[ df[df.columns[2]] >= minval ]
-            df = df[ df[df.columns[2]] <= maxval ]
+            result = result[ result[result.columns[3]] >= minval ]
+            result = result[ result[result.columns[3]] <= maxval ]
 
-        return Matrix(df, rtype='coo-matrix')
+        return Matrix(result, rtype='coo-matrix')
 
 
     #----------------------------------------------------------------------------------------------
@@ -399,6 +452,7 @@ class RecordsDataFrame(pd.DataFrame):
         if sep is not None:
             citations[column] = citations[column].map(lambda x: x.split(sep) if x is not None else None)
             citations = citations.explode(column)
+            citations.index = range(len(citations))
         citations = citations.groupby([column], as_index=True).agg({
             'Cited by': np.sum
         })
