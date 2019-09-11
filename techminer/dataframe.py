@@ -206,7 +206,6 @@ class RecordsDataFrame(pd.DataFrame):
 
         return Matrix(result, rtype='coo-matrix')
 
-
     #----------------------------------------------------------------------------------------------
     def terms_by_terms(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """
@@ -284,7 +283,6 @@ class RecordsDataFrame(pd.DataFrame):
 
         return Matrix(result, rtype='coo-matrix')
 
-
     #----------------------------------------------------------------------------------------------
     def terms_by_terms_by_year(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """
@@ -352,7 +350,6 @@ class RecordsDataFrame(pd.DataFrame):
             numdocs = numdocs.explode(column_c)   
             numdocs.index = range(len(numdocs))
         
-
         numdocs = numdocs.groupby(by=[column_r, column_c, 'Year']).size()
 
         ## results dataframe
@@ -387,7 +384,7 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[3]] >= minval ]
             result = result[ result[result.columns[3]] <= maxval ]
 
-        return Matrix(result, rtype='coo-matrix')
+        return Matrix(result, rtype='coo-matrix-year')
 
 
     #----------------------------------------------------------------------------------------------
@@ -418,22 +415,22 @@ class RecordsDataFrame(pd.DataFrame):
             'Cited by': np.sum
         })
 
-        df = pd.DataFrame({
+        result = pd.DataFrame({
             column : citations.index,
             'Cited by' : citations['Cited by'].tolist()
         })
-        df = df.sort_values(by='Cited by', ascending=False)
-        df.index = range(len(df))
+        result = result.sort_values(by='Cited by', ascending=False)
+        result.index = range(len(result))
 
-        if top_n is not None and len(df) > top_n:
-            df = df.head(top_n)
+        if top_n is not None and len(result) > top_n:
+            result = result.head(top_n)
 
         if minmax is not None:
             minval, maxval = minmax
-            df = df[ df[df.columns[1]] >= minval ]
-            df = df[ df[df.columns[1]] <= maxval ]
+            result = result[ result[result.columns[1]] >= minval ]
+            result = result[ result[result.columns[1]] <= maxval ]
 
-        return List(df)
+        return List(result)
 
     #----------------------------------------------------------------------------------------------
     def citations_by_year(self, cumulative=False):
@@ -535,6 +532,48 @@ class RecordsDataFrame(pd.DataFrame):
     #  Analytical functions --- Analysis
     #
     #----------------------------------------------------------------------------------------------
+    def tdf(self, column, sep, top_n=20):
+        """
+
+        >>> rdf = RecordsDataFrame({
+        ...   'col0': ['a', 'a;b', 'b', 'b;c', None, 'c']
+        ... })
+        >>> rdf.tdf('col0', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+             b    a    c
+        0  0.0  1.0  0.0
+        1  1.0  1.0  0.0
+        2  1.0  0.0  0.0
+        3  1.0  0.0  1.0
+        4  0.0  0.0  0.0
+        5  0.0  0.0  1.0        
+        
+        """
+
+        ## computa los N terminos mas frecuentes
+        x = self.documents_by_terms(column, sep=sep)
+        terms = x[x.columns[0]].tolist()
+        if top_n is not None and len(terms) > top_n:
+            terms = terms[0:top_n]
+        
+        tdf = pd.DataFrame(
+            data = np.zeros((len(self), len(terms))),
+            columns = terms,
+            index = self.index)
+
+        for idx in self.index:
+            txt = self.loc[idx, column]
+            if txt is not None:
+                if sep is not None:
+                    txt = [t.strip() for t in txt.split(sep)]
+                else:
+                    txt = [txt.strip()] 
+                for t in txt:
+                    if t in terms:
+                        tdf.at[idx, t] = 1
+
+        return tdf
+
+    #----------------------------------------------------------------------------------------------
     def autocorr(self, column, sep=None, top_n=20):
         """
 
@@ -599,100 +638,6 @@ class RecordsDataFrame(pd.DataFrame):
         result = self.crosscorr(column_r=column, column_c=column, sep_r=sep, sep_c=sep, top_n=top_n)
         result._rtype = 'auto-matrix'
         return result
-
-
-    # #----------------------------------------------------------------------------------------------
-    # def citations_by_terms_by_year(self, column, sep=None):
-    #     """Computes the number of citations to docuement per year.
-
-    #     >>> rdf = RecordsDataFrame({
-    #     ...   'term':     ['a;b', 'a', 'b', 'c', None, 'b'],
-    #     ...   'Cited by': [   1,   2,   3,   4,     3,  7]
-    #     ... })
-    #     >>> rdf.citations_by_terms_by_year('term', sep=';')
-    #       term  Cited by
-    #     0    b        11
-    #     1    c         4
-    #     2    a         3
-    #     """
-
-
-
-
-
-
-    #     terms = self[column].dropna()
-    #     if sep is not None:
-    #         terms = [y.strip() for x in terms for y in x.split(sep) if x is not None]
-    #     else:
-    #         terms = terms.tolist()
-
-    #     terms = list(set(terms))
-
-    #     ## crea el dataframe de resultados
-    #     result = pd.DataFrame({
-    #         column : terms},
-    #         index = terms)
-    #     result['Cited by'] = 0
-
-    #     ## suma de citaciones
-    #     for index, row in self[[column, 'Cited by']].iterrows():
-    #         if row[0] is not None:
-    #             citations = row[1] if not np.isnan(row[1]) else 0
-    #             if sep is not None:
-    #                 for term in row[0].split(sep):
-    #                     term = term.strip()
-    #                     result.at[term, 'Cited by'] =  result.loc[term, 'Cited by'] + citations
-    #             else:
-    #                 result.at[row[0], 'Cited by'] =  result.loc[row[0], 'Cited by'] + citations
-
-    #     result = result.sort_values(by='Cited by', ascending=False)
-    #     result.index = range(len(result))
-
-    #     return List(result)
-
-
-    #----------------------------------------------------------------------------------------------
-    def tdf(self, column, sep, N=20):
-        """
-
-        >>> rdf = RecordsDataFrame({
-        ...   'col0': ['a', 'a;b', 'b', 'b;c', None, 'c']
-        ... })
-        >>> rdf.tdf('col0', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-             b    a    c
-        0  0.0  1.0  0.0
-        1  1.0  1.0  0.0
-        2  1.0  0.0  0.0
-        3  1.0  0.0  1.0
-        4  0.0  0.0  0.0
-        5  0.0  0.0  1.0        
-        
-        """
-
-        ## computa los N terminos mas frecuentes
-        x = self.documents_by_terms(column, sep=sep)
-        terms = x[x.columns[0]].tolist()
-        if N is not None and len(terms) > N:
-            terms = terms[0:N]
-        
-        tdf = pd.DataFrame(
-            data = np.zeros((len(self), len(terms))),
-            columns = terms,
-            index = self.index)
-
-        for idx in self.index:
-            txt = self.loc[idx, column]
-            if txt is not None:
-                if sep is not None:
-                    txt = [t.strip() for t in txt.split(sep)]
-                else:
-                    txt = [txt.strip()] 
-                for t in txt:
-                    if t in terms:
-                        tdf.at[idx, t] = 1
-
-        return tdf
 
     #----------------------------------------------------------------------------------------------
     def crosscorr(self, column_r, column_c=None, sep_r=None, sep_c=None, top_n=20):
@@ -805,36 +750,16 @@ class RecordsDataFrame(pd.DataFrame):
         result.index = range(len(result))
         return Matrix(result, rtype='cross-matrix')
 
-    
 
     #----------------------------------------------------------------------------------------------
     def factor_analysis(self, column, sep=None, n_components=2, top_n=10):
 
-        x = self.documents_by_terms(column, sep=sep, top_n=top_n)
-        terms = x[column].tolist()
-        
-        x = pd.DataFrame(
-            data = np.zeros((len(self), len(terms))),
-            columns = terms,
-            index = self.index)
 
-        for idx in self.index:
-            w = self.loc[idx, column]
-            if w is not None:
-                if sep is not None:
-                    z = w.split(sep)
-                else:
-                    z = [w] 
-                for k in z:
-                    if k in terms:
-                        x.loc[idx, k] = 1
-
-        s = x.sum(axis = 1)
-        x = x.loc[s > 0.0]
+        tdf = self.tdf(column, sep, top_n)
 
         pca = PCA(n_components=n_components)
         
-        values = np.transpose(pca.fit(X=x.values).components_)
+        values = np.transpose(pca.fit(X=tdf.values).components_)
 
         cols = [['F'+str(i) for i in range(n_components)] for k in range(len(terms))]
         rows = [[t for n in range(n_components) ] for t in terms]
@@ -842,7 +767,6 @@ class RecordsDataFrame(pd.DataFrame):
 
         cols = [e for row in cols for e in row]
         rows = [e for row in rows for e in row]
-        #values = [e for row in values for e in row]
 
         result = pd.DataFrame({
             column : rows,
