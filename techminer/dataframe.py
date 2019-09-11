@@ -205,6 +205,137 @@ class RecordsDataFrame(pd.DataFrame):
         return Matrix(result, rtype='coo-matrix')
 
 
+    #----------------------------------------------------------------------------------------------
+    def terms_by_terms(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
+        """
+
+    
+        >>> rdf = RecordsDataFrame({
+        ...   'A':[0, 1, 2, 3, 4, 0, 1],
+        ...   'B':['a', 'b', 'c', 'd', 'e', 'a', 'b']
+        ... })
+        >>> rdf # doctest: +NORMALIZE_WHITESPACE
+           A  B
+        0  0  a
+        1  1  b
+        2  2  c
+        3  3  d
+        4  4  e
+        5  0  a
+        6  1  b    
+
+        >>> rdf.terms_by_terms('A', 'B')
+           A  B  Num Documents
+        0  0  a              2
+        1  1  b              2
+        2  2  c              1
+        3  3  d              1
+        4  4  e              1
+
+        >>> rdf.terms_by_terms('A', 'B', minmax=(2,8))
+           A  B  Num Documents
+        0  0  a              2
+        1  1  b              2
+        """
+        
+        ## computes the number of documents by term by term
+        numdocs = self[[column_r, column_c]].dropna()
+        if sep_r is not None:
+            numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
+            numdocs = numdocs.explode(column_r)
+        if sep_c is not None:
+            numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
+            numdocs = numdocs.explode(column_c)   
+        numdocs = numdocs.groupby(by=[column_r, column_c]).size()
+
+        ## results dataframe
+        a = [t for t,_ in numdocs.index]
+        b = [t for _,t in numdocs.index]
+        result = pd.DataFrame({
+            column_r : a,
+            column_c : b,
+            'Num Documents' : numdocs.tolist()
+        })
+
+
+        ## compute top_n terms
+        if top_n is not None:
+            ## rows
+            top = self.documents_by_terms(column_r, sep_r)
+            if len(top) > top_n:
+                top = top[0:top_n][column_r].tolist()
+                selected = [True if row[0] in top else False for idx, row in result.iterrows()] 
+                result = result[selected]
+
+            ## cols
+            top = self.documents_by_terms(column_c, sep_c)
+            if len(top) > top_n:
+                top = top[0:top_n][column_c].tolist()
+                selected = [True if row[1] in top else False for idx, row in result.iterrows()] 
+                result = result[selected]
+            
+        if minmax is not None:
+            minval, maxval = minmax
+            result = result[ result[result.columns[2]] >= minval ]
+            result = result[ result[result.columns[2]] <= maxval ]
+
+        return Matrix(result, rtype='coo-matrix')
+
+
+
+        return 
+
+        ##
+        ## Expande las dos columnas de los datos originales
+        ##
+        if sep_r is None and sep_c is None:
+            df = df[[column_r, column_c]]
+        
+        if sep_r is not None and sep_c is None:
+            
+            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
+            t = [(c, b) for a, b in t for c in a.split(sep_r)]
+            df = pd.DataFrame({
+                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
+                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
+            })
+            
+        if sep_r is None and sep_c is not None:
+        
+            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
+            t = [(a, c.strip()) for a, b in t for c in b.split(sep_c)]
+            df = pd.DataFrame({
+                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
+                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
+            })
+
+        if sep_r is not None and sep_c is not None:
+        
+            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
+            t = [(c, b) for a, b in t for c in a.split(sep_r)]
+            t = [(a, c) for a, b in t for c in b.split(sep_c)]
+            df = pd.DataFrame({
+                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
+                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
+            })
+
+        x = df.groupby(by=[column_r, column_c]).size()
+        a = [t for t,_ in x.index]
+        b = [t for _,t in x.index]
+        df = pd.DataFrame({
+            column_r: a,
+            column_c: b,
+            'Num Documents': x.tolist()
+        })
+
+        if minmax is not None:
+
+            minval, maxval = minmax
+            df = df[ df[df.columns[2]] >= minval ]
+            df = df[ df[df.columns[2]] <= maxval ]
+
+        return Matrix(df, rtype='coo-matrix')
+
 
     #----------------------------------------------------------------------------------------------
     #
@@ -641,91 +772,4 @@ class RecordsDataFrame(pd.DataFrame):
     @property
     def num_of_sources(self):
         return len(self['Source title'].unique())
-
-    #----------------------------------------------------------------------------------------------
-    def terms_by_terms(self, column_r, column_c, sep_r=None, sep_c=None, minmax=None):
-        """
-
-    
-        >>> rdf = RecordsDataFrame({
-        ...   'A':[0, 1, 2, 3, 4, 0, 1],
-        ...   'B':['a', 'b', 'c', 'd', 'e', 'a', 'b']
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-           A  B
-        0  0  a
-        1  1  b
-        2  2  c
-        3  3  d
-        4  4  e
-        5  0  a
-        6  1  b    
-
-        >>> rdf.terms_by_terms('A', 'B')
-           A  B  Num Documents
-        0  0  a              2
-        1  1  b              2
-        2  2  c              1
-        3  3  d              1
-        4  4  e              1
-
-        >>> rdf.terms_by_terms('A', 'B', minmax=(2,8))
-           A  B  Num Documents
-        0  0  a              2
-        1  1  b              2
-        """
-        
-        df = self[[column_r, column_c]].dropna()
-
-
-        ##
-        ## Expande las dos columnas de los datos originales
-        ##
-        if sep_r is None and sep_c is None:
-            df = df[[column_r, column_c]]
-        
-        if sep_r is not None and sep_c is None:
-            
-            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
-            t = [(c, b) for a, b in t for c in a.split(sep_r)]
-            df = pd.DataFrame({
-                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
-                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-            
-        if sep_r is None and sep_c is not None:
-        
-            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
-            t = [(a, c.strip()) for a, b in t for c in b.split(sep_c)]
-            df = pd.DataFrame({
-                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
-                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-
-        if sep_r is not None and sep_c is not None:
-        
-            t = [(x, y) for x, y in zip(df[column_r], df[column_c])]
-            t = [(c, b) for a, b in t for c in a.split(sep_r)]
-            t = [(a, c) for a, b in t for c in b.split(sep_c)]
-            df = pd.DataFrame({
-                column_r: [a.strip() if isinstance(a, str) else a for a,b in t],
-                column_c: [b.strip() if isinstance(b, str) else b for a,b in t]
-            })
-
-        x = df.groupby(by=[column_r, column_c]).size()
-        a = [t for t,_ in x.index]
-        b = [t for _,t in x.index]
-        df = pd.DataFrame({
-            column_r: a,
-            column_c: b,
-            'Num Documents': x.tolist()
-        })
-
-        if minmax is not None:
-
-            minval, maxval = minmax
-            df = df[ df[df.columns[2]] >= minval ]
-            df = df[ df[df.columns[2]] <= maxval ]
-
-        return Matrix(df, rtype='coo-matrix')
 
