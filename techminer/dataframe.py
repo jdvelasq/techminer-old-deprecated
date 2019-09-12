@@ -61,6 +61,9 @@ class RecordsDataFrame(pd.DataFrame):
         numdocs = self[[column]].dropna()
         if sep is not None:
             numdocs[column] = numdocs[column].map(lambda x: x.split(sep) if x is not None else None)
+            numdocs[column] = numdocs[column].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             numdocs = numdocs.explode(column)
             numdocs.index = range(len(numdocs))
         numdocs = numdocs.groupby(column, as_index=False).size()
@@ -177,6 +180,9 @@ class RecordsDataFrame(pd.DataFrame):
         numdocs = self[[column, 'Year']].dropna()
         if sep is not None:
             numdocs[column] = numdocs[column].map(lambda x: x.split(sep) if x is not None else None)
+            numdocs[column] = numdocs[column].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             numdocs = numdocs.explode(column)    
             numdocs.index = range(len(numdocs))
         numdocs = numdocs.groupby(by=[column, 'Year'], as_index=False).size()
@@ -243,10 +249,16 @@ class RecordsDataFrame(pd.DataFrame):
         numdocs = self[[column_r, column_c]].dropna()
         if sep_r is not None:
             numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
+            numdocs[column_r] = numdocs[column_r].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             numdocs = numdocs.explode(column_r)
             numdocs.index = range(len(numdocs))
         if sep_c is not None:
             numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
+            numdocs[column_c] = numdocs[column_c].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             numdocs = numdocs.explode(column_c)   
             numdocs.index = range(len(numdocs))
         numdocs = numdocs.groupby(by=[column_r, column_c]).size()
@@ -342,11 +354,17 @@ class RecordsDataFrame(pd.DataFrame):
         numdocs = self[[column_r, column_c, 'Year']].dropna()
         if sep_r is not None:
             numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r))
+            numdocs[column_r] = numdocs[column_r].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             numdocs = numdocs.explode(column_r)
             numdocs.index = range(len(numdocs))
         if sep_c is not None:
             numdocs = numdocs[[column_c, column_r, 'Year']]
             numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c))
+            numdocs[column_c] = numdocs[column_c].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             numdocs = numdocs.explode(column_c)   
             numdocs.index = range(len(numdocs))
         
@@ -409,6 +427,9 @@ class RecordsDataFrame(pd.DataFrame):
         citations = citations.dropna()
         if sep is not None:
             citations[column] = citations[column].map(lambda x: x.split(sep) if x is not None else None)
+            citations[column] = citations[column].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             citations = citations.explode(column)
             citations.index = range(len(citations))
         citations = citations.groupby([column], as_index=True).agg({
@@ -496,6 +517,9 @@ class RecordsDataFrame(pd.DataFrame):
         citations['Year'] = citations['Year'].map(int)
         if sep is not None:
             citations[column] = citations[column].map(lambda x: x.split(sep) if x is not None else None)
+            citations[column] = citations[column].map(
+                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+            )
             citations = citations.explode(column)
             citations.index = range(len(citations))
         citations = citations.groupby(by=[column, 'Year'], as_index=True).agg({
@@ -740,6 +764,12 @@ class RecordsDataFrame(pd.DataFrame):
 
                 num = np.sum((s1 * s2))
                 den = np.sqrt(np.sum(s1**2) * np.sum(s2**2))
+
+                if den == 0:
+                    print('>>>>')
+                    print(s1, s2, a, b)
+                    print('<<<<')
+
                 value =  num / den
                 result.at[idx, col0] = a
                 result.at[idx, col1] = b
@@ -756,6 +786,7 @@ class RecordsDataFrame(pd.DataFrame):
 
 
         tdf = self.tdf(column, sep, top_n)
+        terms = tdf.columns.tolist()
 
         pca = PCA(n_components=n_components)
         

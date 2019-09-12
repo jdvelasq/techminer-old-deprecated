@@ -481,11 +481,11 @@ class Matrix(pd.DataFrame):
                 for col in group[col0].tolist():
 
                     if row != col:    
-                        if minval is None or abs(val) >= minval:
-                            from_list.append(row)
-                            to_list.append(col)
-                            linewidth_list.append(linewidth)
-                            linestyle_list.append(linestyle)
+                    
+                        from_list.append(row)
+                        to_list.append(col)
+                        linewidth_list.append(linewidth)
+                        linestyle_list.append(linestyle)
 
 
         x = self
@@ -508,10 +508,17 @@ class Matrix(pd.DataFrame):
             values = x[x[col1] == factor]
             values.index = values[col0].tolist()     
             
-            group0 = values[values[col2] >= 0.75]
-            group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
-            group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
-            group3 = values[values[col2] <= -0.25]
+            if minval is None:
+                group0 = values[values[col2] >= 0.75]
+                group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
+                group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
+                group3 = values[values[col2] <= -0.25]
+            else:
+                group0 = values[(values[col2] >= 0.75) & (values[col2] >= minval)]
+                group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50) & (values[col2] >= minval)]
+                group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25) & (values[col2] >= minval)]
+                group3 = values[(values[col2] <= -0.25) & (values[col2] >= minval)]
+
             
             if len(group0) > 0:
                 add_group(group0, linewidth=3, linestyle='solid')
