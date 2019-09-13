@@ -14,6 +14,7 @@ from wordcloud import WordCloud, ImageColorGenerator
 class List(pd.DataFrame):
     """Class implementing a dataframe with results of first level analysis.
     """
+
     #----------------------------------------------------------------------------------------------
     @property
     def _constructor_expanddim(self):
@@ -27,7 +28,7 @@ class List(pd.DataFrame):
         columns = self.columns.tolist()
 
         if library is None:
-            return self.plot.barh(columns[0], columns[1], color='gray');
+            return self.plot.barh(columns[0], columns[1], color='gray')
 
         if library == 'altair':
             columns = self.columns.tolist()
@@ -122,5 +123,12 @@ class List(pd.DataFrame):
         world.plot(column='q', legend=True, ax=axx, cax=cax, cmap='Pastel2')
 
     #----------------------------------------------------------------------------------------------
+    def title_view(self, column_values=None):
+        """
+        """
+
+
+
+
 
 

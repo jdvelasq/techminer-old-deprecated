@@ -15,11 +15,12 @@ from techminer.matrix import Matrix
 class RecordsDataFrame(pd.DataFrame):
     """Class to represent a dataframe of bibliographic records.
     """
+
+
     #----------------------------------------------------------------------------------------------
     @property
     def _constructor_expanddim(self):
         return self
-
 
     #----------------------------------------------------------------------------------------------
     def years_list(self):
@@ -31,6 +32,14 @@ class RecordsDataFrame(pd.DataFrame):
         minyear = min(df.Year)
         maxyear = max(df.Year)
         return pd.Series(0, index=range(minyear, maxyear+1), name='Year')
+
+    #----------------------------------------------------------------------------------------------
+    def generate_ID(self):
+        """Generates a unique ID for each document.
+        """
+        self['ID'] = [ '[*'+str(x)+ '*]' for x in range(len(self))]
+        self.index = self['ID']
+        return self
 
     #----------------------------------------------------------------------------------------------
     #
@@ -58,22 +67,24 @@ class RecordsDataFrame(pd.DataFrame):
         """
 
         # computes the number of documents by term
-        numdocs = self[[column]].dropna()
+        data = self[[column, 'ID']].dropna()
         if sep is not None:
-            numdocs[column] = numdocs[column].map(lambda x: x.split(sep) if x is not None else None)
-            numdocs[column] = numdocs[column].map(
+            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
+            data[column] = data[column].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            numdocs = numdocs.explode(column)
-            numdocs.index = range(len(numdocs))
-        numdocs = numdocs.groupby(column, as_index=False).size()
+            data = data.explode(column)
+            data.index = range(len(data))
+        numdocs = data.groupby(column, as_index=False).size()
         
+
         ## dataframe with results
         result = pd.DataFrame({
             column : numdocs.index,
             'Num Documents' : numdocs.tolist()
         })
         result = result.sort_values(by='Num Documents', ascending=False)
+        result.index = result[column]
 
         ## compute top_n terms
         if top_n is not None and len(result) > top_n:
@@ -83,6 +94,22 @@ class RecordsDataFrame(pd.DataFrame):
             minval, maxval = minmax
             result = result[ result[result.columns[1]] >= minval ]
             result = result[ result[result.columns[1]] <= maxval ]
+
+
+        result['ID'] = None
+
+        for current_term in result[result.columns[0]]:
+
+            if isinstance(current_term, str):
+                selected_IDs = data[data[column] == current_term]['ID']
+            else:
+                selected_IDs = data[data[column] == current_term]['ID']
+            
+            if len(selected_IDs):
+                #selected_IDs = ','.join(selected_IDs)
+                result.at[current_term,'ID'] = selected_IDs.tolist()
+
+        result.index = range(len(result))
 
         return List(result)
 
@@ -124,7 +151,15 @@ class RecordsDataFrame(pd.DataFrame):
         if cumulative is True:
             result['Num Documents'] = result['Num Documents'].cumsum()
 
-        return List(result)
+        title_view_data = {}
+        for column_val in result[column]:
+            if isinstance(column_val, str):
+                idx = [column_val in w for w in self[column]]    
+            else:
+                idx = [column_val == w for w in self[column]]
+            title_view_data[column_val] = self[[idx]][Title]
+
+        return List(result, title_view_data)
 
     #----------------------------------------------------------------------------------------------
     def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
@@ -210,7 +245,18 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
 
-        return Matrix(result, rtype='coo-matrix')
+        title_view_data = {}
+
+        for column_val in result[column]:
+            for year in result['Year']:
+
+                if isinstance(column_val, str):
+                    idx = [column_val in w and y == year for w, y in zip(self[column], self['Year']) ]    
+                else:
+                    idx = [column_val == w and y == year for w, y in zip(self[column], self['Year']) ]
+                title_view_data[(column_val, year)] = self[[idx]][Title]
+
+        return Matrix(result, rtype='coo-matrix', titles=title_view_data)
 
     #----------------------------------------------------------------------------------------------
     def terms_by_terms(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
@@ -293,7 +339,23 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
 
-        return Matrix(result, rtype='coo-matrix')
+
+        title_view_data = {}
+        for col_r in result[result.columns[0]]:
+            for col_c in result[result.columns[0]]:
+
+                if isinstance(col_r, str) and isinstance(col_c, str):
+                    idx = [col_r in w and col_c in y for w, y in zip(self[col_r], self[col_c]) ]    
+                elif isinstance(col_r, float) and isinstance(col_c, str):
+                    idx = [col_r == w and col_c in y for w, y in zip(self[col_r], self[col_c]) ]
+                elif isinstance(col_r, str) and isinstance(col_c, float):
+                    idx = [col_r in w and col_c == y for w, y in zip(self[col_r], self[col_c]) ]
+                else:
+                    idx = [col_r == w and col_c == y for w, y in zip(self[col_r], self[col_c]) ]
+
+                title_view_data[(column_val, year)] = self[[idx]][Title]
+
+        return Matrix(result, rtype='coo-matrix', titles=title_view_data)
 
     #----------------------------------------------------------------------------------------------
     def terms_by_terms_by_year(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
@@ -401,6 +463,7 @@ class RecordsDataFrame(pd.DataFrame):
             minval, maxval = minmax
             result = result[ result[result.columns[3]] >= minval ]
             result = result[ result[result.columns[3]] <= maxval ]
+
 
         return Matrix(result, rtype='coo-matrix-year')
 
