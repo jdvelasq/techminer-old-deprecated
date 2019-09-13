@@ -375,7 +375,7 @@ def extract_country(x, sep=';'):
         return countries
 
 #-------------------------------------------------------------------------------------------
-def _steamming(pattern, text):
+def steamming(pattern, text):
     
     text = asciify(text)
     pattern = asciify(pattern)
@@ -401,7 +401,7 @@ def steamming_all(pattern, text):
     False
 
     """
-    return all(_steamming(pattern, text))
+    return all(steamming(pattern, text))
 
 #-------------------------------------------------------------------------------------------
 def steamming_any(pattern, text):
@@ -417,7 +417,7 @@ def steamming_any(pattern, text):
     False
 
     """
-    return any(_steamming(pattern, text))
+    return any(steamming(pattern, text))
 
     
 

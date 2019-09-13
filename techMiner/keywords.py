@@ -231,9 +231,10 @@ class Keywords():
             x = x.tolist()
 
         if sep is not None:
-            x = [z for y in x if y is not None for z in y.split(sep)]    
+            x = [z.strip() for y in x if y is not None for z in y.split(sep) if z.strip() != '']    
         else:
-            x = [y for y in x if y is not None]
+            x = [y.strip() for y in x if y is not None and y.strip() != '']
+
 
         if self._keywords is None:
             self._keywords = sorted(list(set(x)))

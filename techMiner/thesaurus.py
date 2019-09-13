@@ -8,10 +8,11 @@ import json
 from techminer.strings import (
     find_string, 
     replace_string,
-    fingerprint)
+    fingerprint,
+    steamming_all)
 
 #-------------------------------------------------------------------------------------------------
-def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprint', sep=None):
+def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprint', sep=None, transformer=None, min_cluster_size=1):
     """Builds a thesaurus by clustering a list of strings.
     
     Args:
@@ -162,6 +163,7 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
             m = w.value_counts().sort_values()
             m = m[m == m[-1]].sort_index()
             groupName = m.index[-1]
+
             
         if name_strategy == 'longest' or name_strategy == 'shortest':
             m = pd.Series([len(a) for a in w], index = w.index).sort_values()
@@ -170,11 +172,125 @@ def text_clustering(x, name_strategy='mostfrequent', search_strategy='fingerprin
             else:
                 groupName = w[m.index[0]]
 
+        if transformer is not None:
+            groupName = transformer(groupName)
+
         z = w.sort_values().unique().tolist()
-        if len(z) > 1:
-            result[groupName] = z
+        if len(z) > min_cluster_size:
+            if groupName in result.keys():
+                result[groupName] += z
+            else:
+                result[groupName] = z
 
     return Thesaurus(result, ignore_case=False, full_match=True, use_re=False)
+
+
+#-----------------------------------------------------------------------------------------------
+def text_nesting(x, search_strategy='fingerprint', sep=None, transformer=None, max_distance=None):
+    """
+
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({
+    ...    'f': ['a', 
+    ...          'a b',
+    ...          'a b c', 
+    ...          'a b c d', 
+    ...          'a e',
+    ...          'a f',
+    ...          'a b e', 
+    ...          'a b e f', 
+    ...          'a b e f g'],
+    ... })
+    >>> df # doctest: +NORMALIZE_WHITESPACE
+               f
+    0          a
+    1        a b
+    2      a b c
+    3    a b c d
+    4        a e
+    5        a f
+    6      a b e
+    7    a b e f
+    8  a b e f g
+
+    >>> text_nesting(df.f, sep=',') # doctest: +NORMALIZE_WHITESPACE
+    {
+      "a": [
+        "a",
+        "a b",
+        "a b c",
+        "a b c d",
+        "a b e",
+        "a b e f",
+        "a b e f g",
+        "a e",
+        "a f"
+      ]
+    }
+
+    >>> df = pd.DataFrame({
+    ...    'f': ['neural networks; Artificial Neural Networks']
+    ... })
+    >>> df # doctest: +NORMALIZE_WHITESPACE
+                                                 f
+    0  neural networks; Artificial Neural Networks
+    >>> text_nesting(df.f, sep=';', max_distance=1) # doctest: +NORMALIZE_WHITESPACE
+    {
+      "neural networks": [
+        "Artificial Neural Networks",
+        "neural networks"
+      ]
+    }
+    """
+
+    x = x.dropna()
+
+    if sep is not None:
+        x = pd.Series([z.strip() for y in x for z in y.split(sep)]) 
+    
+    result = {}
+    selected = {text : False for text in x.tolist()}
+
+    max_text_len = max([len(text) for text in x])
+    sorted_x = []
+    for text_len in range(max_text_len, -1, -1):
+        texts = x[[True if len(w) == text_len else False  for w in x]]
+        texts = sorted(texts)
+        sorted_x += texts
+    x = sorted_x
+
+
+
+
+    for pattern in x:
+
+        if pattern == "":
+            continue
+
+        if selected[pattern] is True:
+            continue
+
+        nested_texts = [text for text in x if selected[text] is False and steamming_all(pattern, text)]
+
+        if max_distance is not None:
+            nested_texts = [z for z in nested_texts if abs(len(pattern.split()) - len(z.split())) <= max_distance]
+
+        if len(nested_texts) > 1:
+            nested_texts = sorted(list(set(nested_texts)))
+
+        if len(nested_texts) > 1:
+
+            if transformer is not None:
+                pattern = transformer(pattern)   
+            if pattern in result.keys():
+                result[pattern] += nested_texts    
+            else:
+                result[pattern] = nested_texts
+            for txt in nested_texts:
+                selected[txt] = True
+
+    return Thesaurus(result, ignore_case=False, full_match=True, use_re=False)
+
 
 #-----------------------------------------------------------------------------------------------
 class Thesaurus:
