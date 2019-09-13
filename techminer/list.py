@@ -21,6 +21,15 @@ class List(pd.DataFrame):
         return self
 
     #----------------------------------------------------------------------------------------------
+    def print_IDs(self):
+        result = {}
+        for idx, ids in enumerate(self['ID']):
+            print(self.loc[idx, self.columns[0]], ' : ', sep='', end='')
+            for i in ids:
+                print(i, sep='', end='')
+            print()
+
+    #----------------------------------------------------------------------------------------------
     def barhplot(self, library=None):
         """Plots a pandas.DataFrame using Altair.
         """

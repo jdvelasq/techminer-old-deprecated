@@ -97,16 +97,9 @@ class RecordsDataFrame(pd.DataFrame):
 
 
         result['ID'] = None
-
         for current_term in result[result.columns[0]]:
-
-            if isinstance(current_term, str):
-                selected_IDs = data[data[column] == current_term]['ID']
-            else:
-                selected_IDs = data[data[column] == current_term]['ID']
-            
+            selected_IDs = data[data[column] == current_term]['ID']
             if len(selected_IDs):
-                #selected_IDs = ','.join(selected_IDs)
                 result.at[current_term,'ID'] = selected_IDs.tolist()
 
         result.index = range(len(result))
@@ -146,20 +139,20 @@ class RecordsDataFrame(pd.DataFrame):
         result['Year'] = result.index
         result['Num Documents'] = 0
         result.at[numdocs.index.tolist(), 'Num Documents'] = numdocs['Year'].tolist()
-        result.index = range(len(result))
+        result.index = result['Year']
 
         if cumulative is True:
             result['Num Documents'] = result['Num Documents'].cumsum()
 
-        title_view_data = {}
-        for column_val in result[column]:
-            if isinstance(column_val, str):
-                idx = [column_val in w for w in self[column]]    
-            else:
-                idx = [column_val == w for w in self[column]]
-            title_view_data[column_val] = self[[idx]][Title]
+        result['ID'] = None
+        for current_term in result['Year']:
+            selected_IDs = self[self['Year'] == current_term]['ID']            
+            if len(selected_IDs):
+                result.at[current_term,'ID'] = selected_IDs.tolist()
 
-        return List(result, title_view_data)
+        result.index = range(len(result))
+
+        return List(result)
 
     #----------------------------------------------------------------------------------------------
     def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
