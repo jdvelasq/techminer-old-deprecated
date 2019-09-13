@@ -217,14 +217,20 @@ def text_nesting(x, search_strategy='fingerprint', sep=None, transformer=None, m
     {
       "a": [
         "a",
-        "a b",
-        "a b c",
-        "a b c d",
-        "a b e",
-        "a b e f",
-        "a b e f g",
         "a e",
         "a f"
+      ],
+      "a b": [
+        "a b",
+        "a b e"
+      ],
+      "a b c": [
+        "a b c",
+        "a b c d"
+      ],
+      "a b e f": [
+        "a b e f",
+        "a b e f g"
       ]
     }
 
