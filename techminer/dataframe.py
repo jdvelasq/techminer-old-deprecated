@@ -205,15 +205,15 @@ class RecordsDataFrame(pd.DataFrame):
         """
 
         ## computes the number of documents by year
-        numdocs = self[[column, 'Year']].dropna()
+        data = self[[column, 'Year', 'ID']].dropna()
         if sep is not None:
-            numdocs[column] = numdocs[column].map(lambda x: x.split(sep) if x is not None else None)
-            numdocs[column] = numdocs[column].map(
+            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
+            data[column] = data[column].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            numdocs = numdocs.explode(column)    
-            numdocs.index = range(len(numdocs))
-        numdocs = numdocs.groupby(by=[column, 'Year'], as_index=False).size()
+            data = data.explode(column)    
+            data.index = range(len(numdocs))
+        numdocs = data.groupby(by=[column, 'Year'], as_index=False).size()
 
         ## dataframe with results
         idx_term = [t for t,_ in numdocs.index]
@@ -237,19 +237,18 @@ class RecordsDataFrame(pd.DataFrame):
             minval, maxval = minmax
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
+        
+        result['ID'] = None
+        for idx, row in result.iterrows():
+            current_term = row[0]
+            year = row[1]
+            selected_IDs = data[(data[column] == current_term) & (data['Year'] == year)]['ID']
+            if len(selected_IDs):
+                result.at[idx, 'ID'] = selected_IDs.tolist()
 
-        title_view_data = {}
+        result.index = range(len(result))
 
-        for column_val in result[column]:
-            for year in result['Year']:
-
-                if isinstance(column_val, str):
-                    idx = [column_val in w and y == year for w, y in zip(self[column], self['Year']) ]    
-                else:
-                    idx = [column_val == w and y == year for w, y in zip(self[column], self['Year']) ]
-                title_view_data[(column_val, year)] = self[[idx]][Title]
-
-        return Matrix(result, rtype='coo-matrix', titles=title_view_data)
+        return Matrix(result, rtype='coo-matrix')
 
     #----------------------------------------------------------------------------------------------
     def terms_by_terms(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):

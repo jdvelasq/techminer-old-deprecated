@@ -127,6 +127,14 @@ class Matrix(pd.DataFrame):
     def _constructor_expanddim(self):
         return self
 
+    #----------------------------------------------------------------------------------------------
+    def print_IDs(self):
+        for idx, row in self.iterrows():
+            print(row[0], ', ', row[1], ' (', len(row[-1]), ')',   ' : ', sep='', end='')
+            for i in row[-1]:
+                print(i, sep='', end='')
+            print()
+
     #---------------------------------------------------------------------------------------------
     def chord_diagram(self, figsize=(12, 12), minval=None, R=3):
 
