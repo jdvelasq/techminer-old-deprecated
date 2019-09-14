@@ -130,7 +130,7 @@ class Matrix(pd.DataFrame):
     #----------------------------------------------------------------------------------------------
     def print_IDs(self):
 
-        if self._rtype in ['coo-matrix', 'cross-matrix']:
+        if self._rtype in ['coo-matrix', 'cross-matrix', 'auto-matrix']:
 
             for idx, row in self.iterrows():
                 if row[-1] is not None:
