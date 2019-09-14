@@ -22,10 +22,9 @@ class List(pd.DataFrame):
 
     #----------------------------------------------------------------------------------------------
     def print_IDs(self):
-        result = {}
-        for idx, ids in enumerate(self['ID']):
-            print(self.loc[idx, self.columns[0]], ' : ', sep='', end='')
-            for i in ids:
+        for idx, row in self.iterrows():
+            print(row[0], ' (', len(row[-1]), ')',' : ', sep='', end='')
+            for i in row[-1]:
                 print(i, sep='', end='')
             print()
 

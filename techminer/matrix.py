@@ -129,11 +129,29 @@ class Matrix(pd.DataFrame):
 
     #----------------------------------------------------------------------------------------------
     def print_IDs(self):
-        for idx, row in self.iterrows():
-            print(row[0], ', ', row[1], ' (', len(row[-1]), ')',   ' : ', sep='', end='')
-            for i in row[-1]:
-                print(i, sep='', end='')
-            print()
+
+        if self._rtype in ['coo-matrix', 'cross-matrix']:
+
+            for idx, row in self.iterrows():
+                if row[-1] is not None:
+                    print(row[0], ', ', row[1], ' (', len(row[-1]), ')', ' : ', sep='', end='')
+                    for i in row[-1]:
+                        print(i, sep='', end='')
+                    print()
+
+        elif self._rtype == 'coo-matrix-year':
+
+            for idx, row in self.iterrows():
+                if row[-1] is not None:
+                    print(row[0], ', ', row[1], ', ', row[2], ' (', len(row[-1]), ')', ' : ', sep='', end='')
+                    for i in row[-1]:
+                        print(i, sep='', end='')
+                    print()
+
+        elif self._rtype == 'factor-matrix':
+            pass
+        else:
+            pass
 
     #---------------------------------------------------------------------------------------------
     def chord_diagram(self, figsize=(12, 12), minval=None, R=3):
@@ -188,126 +206,6 @@ class Matrix(pd.DataFrame):
         })
             
         chord_diagram(labels, edges) 
-
-
-
-    #---------------------------------------------------------------------------------------------
-    # def _chord_diagram(self, figsize=(12, 12), minval=None, R=3):
-
-    #     def bezier(p0, p1, p2, linewidth, linestyle, n=100):
-    #         x0, y0 = p0
-    #         x1, y1 = p1
-    #         x2, y2 = p2
-            
-    #         xb = [(1 - t)**2 *x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n)]
-    #         yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n)]
-        
-    #         plt.plot(xb, yb, color='black', linewidth=linewidth, linestyle=linestyle)
-        
-    #     ## rutina ppal
-
-    #     if self._rtype not in ['auto-matrix']:
-    #         raise Exception('Invalid function call for type: ' + self._rtype )
-
-    #     x = self
-
-    #     plt.figure(figsize=figsize)
-    #     labels = list(set(x[x.columns[0]]))
-    #     n_labels = len(labels)
-        
-    #     theta = np.linspace(0.0, 2 * np.pi, n_labels, endpoint=False)
-    #     points_x = [R * np.cos(t) for t in theta]
-    #     points_y = [R * np.sin(t) for t in theta]
-        
-    #     # dibuja los puntos sobre la circunferencia
-    #     plt.scatter(points_x, points_y, s=80, color='black')
-    #     plt.xlim(-6, 6)
-    #     plt.ylim(-6, 6)
-    #     plt.gca().set_aspect('equal', 'box')
-        
-    #     # arcos de las relaciones    
-    #     data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
-        
-    #     n = 0
-        
-    #     ## labels
-    #     lbl_x = [(R+0.2) * np.cos(t) for t in theta]
-    #     lbl_y = [(R+0.2) * np.sin(t) for t in theta]
-    #     lbl_theta = [t / (2 * np.pi) * 360 for t in theta]
-    #     lbl_theta = [t - 180 if t > 180 else t for t in lbl_theta]
-    #     lbl_theta = [t - 180 if t > 90 else t for t in lbl_theta]
-        
-    #     maxlen = max([len(lbl) for lbl in labels])
-        
-    #     for txt, xt, yt, angletxt, angle  in zip(labels, lbl_x, lbl_y, lbl_theta, theta):
-                
-    #         if xt >= 0:
-    #             ha = 'left'
-    #         else:
-    #             ha = 'right'
-        
-    #         plt.text(
-    #             xt, 
-    #             yt, 
-    #             txt, 
-    #             fontsize=10,
-    #             rotation=angletxt,
-    #             va = 'center',
-    #             ha = ha, # 'center'
-    #             rotation_mode = 'anchor',
-    #             backgroundcolor='white')
-                    
-    #     plt.gca().set_xticks([])
-    #     plt.gca().set_yticks([])
-    #     for txt in ['bottom', 'top', 'left', 'right']:
-    #         plt.gca().spines[txt].set_color('white')
-
-    #     for index, r in x.iterrows():
-
-    #         row = r[0]
-    #         col = r[1]
-    #         val = r[2]
-
-    #         if row != col:
-
-    #             x0, y0, a0 = data[row]
-    #             x2, y2, a2 = data[col]            
-                
-    #             angle = a0 + (a2 - a0) / 2
-                
-    #             if angle > np.pi:
-    #                 angle_corr = angle - np.pi
-    #             else:
-    #                 angle_corr = angle
-                    
-    #             distance = np.abs(a2 - a0)
-    #             if distance > np.pi:
-    #                 distance = distance - np.pi
-    #             distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
-    #             x1 = distance * np.cos(angle)
-    #             y1 = distance * np.sin(angle)
-                
-    #             if val >= 0.75:
-    #                 linewidth = 4
-    #                 linestyle = '-' 
-    #             elif val >= 0.50:
-    #                 linewidth = 2
-    #                 linestyle = '-' 
-    #             elif val >= 0.25:
-    #                 linewidth = 2
-    #                 linestyle = '--' 
-    #             elif val < 0.25:
-    #                 linewidth = 1
-    #                 linestyle = ':'
-    #             else: 
-    #                 linewidth = 0
-    #                 linestyle = '-'
-
-    #             if minval is  None:
-    #                 bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)
-    #             elif abs(val) >= minval :
-    #                 bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle)                    
-        
             
     #---------------------------------------------------------------------------------------------
     def circlerel(self, ascending_r=None, ascending_c=None, library=None):

@@ -284,22 +284,22 @@ class RecordsDataFrame(pd.DataFrame):
         """
         
         ## computes the number of documents by term by term
-        numdocs = self[[column_r, column_c]].dropna()
+        data = self[[column_r, column_c, 'ID']].dropna()
         if sep_r is not None:
-            numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
-            numdocs[column_r] = numdocs[column_r].map(
+            data[column_r] = data[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
+            data[column_r] = data[column_r].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            numdocs = numdocs.explode(column_r)
-            numdocs.index = range(len(numdocs))
+            data = data.explode(column_r)
+            data.index = range(len(numdocs))
         if sep_c is not None:
-            numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
-            numdocs[column_c] = numdocs[column_c].map(
+            data[column_c] = data[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
+            data[column_c] = data[column_c].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            numdocs = numdocs.explode(column_c)   
-            numdocs.index = range(len(numdocs))
-        numdocs = numdocs.groupby(by=[column_r, column_c]).size()
+            data = data.explode(column_c)   
+            data.index = range(len(data))
+        numdocs = data.groupby(by=[column_r, column_c]).size()
 
         ## results dataframe
         a = [t for t,_ in numdocs.index]
@@ -331,23 +331,17 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
 
+        result['ID'] = None
+        for idx, row in result.iterrows():
+            term0 = row[0]
+            term1 = row[1]
+            selected_IDs = data[(data[column_r] == term0) & (data[column_c] == term1)]['ID']
+            if len(selected_IDs):
+                result.at[idx, 'ID'] = selected_IDs.tolist()
 
-        title_view_data = {}
-        for col_r in result[result.columns[0]]:
-            for col_c in result[result.columns[0]]:
+        result.index = range(len(result))
 
-                if isinstance(col_r, str) and isinstance(col_c, str):
-                    idx = [col_r in w and col_c in y for w, y in zip(self[col_r], self[col_c]) ]    
-                elif isinstance(col_r, float) and isinstance(col_c, str):
-                    idx = [col_r == w and col_c in y for w, y in zip(self[col_r], self[col_c]) ]
-                elif isinstance(col_r, str) and isinstance(col_c, float):
-                    idx = [col_r in w and col_c == y for w, y in zip(self[col_r], self[col_c]) ]
-                else:
-                    idx = [col_r == w and col_c == y for w, y in zip(self[col_r], self[col_c]) ]
-
-                title_view_data[(column_val, year)] = self[[idx]][Title]
-
-        return Matrix(result, rtype='coo-matrix', titles=title_view_data)
+        return Matrix(result, rtype='coo-matrix')
 
     #----------------------------------------------------------------------------------------------
     def terms_by_terms_by_year(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
@@ -405,24 +399,24 @@ class RecordsDataFrame(pd.DataFrame):
         """
         
         ## computes the number of documents by term by term
-        numdocs = self[[column_r, column_c, 'Year']].dropna()
+        data = self[[column_r, column_c, 'Year', 'ID']].dropna()
         if sep_r is not None:
-            numdocs[column_r] = numdocs[column_r].map(lambda x: x.split(sep_r))
-            numdocs[column_r] = numdocs[column_r].map(
+            data[column_r] = data[column_r].map(lambda x: x.split(sep_r))
+            data[column_r] = data[column_r].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            numdocs = numdocs.explode(column_r)
-            numdocs.index = range(len(numdocs))
+            data = data.explode(column_r)
+            data.index = range(len(data))
         if sep_c is not None:
-            numdocs = numdocs[[column_c, column_r, 'Year']]
-            numdocs[column_c] = numdocs[column_c].map(lambda x: x.split(sep_c))
-            numdocs[column_c] = numdocs[column_c].map(
+            #data = data[[column_c, column_r, 'Year']]
+            data[column_c] = data[column_c].map(lambda x: x.split(sep_c))
+            data[column_c] = data[column_c].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            numdocs = numdocs.explode(column_c)   
-            numdocs.index = range(len(numdocs))
+            data = data.explode(column_c)   
+            data.index = range(len(data))
         
-        numdocs = numdocs.groupby(by=[column_r, column_c, 'Year']).size()
+        numdocs = data.groupby(by=[column_r, column_c, 'Year']).size()
 
         ## results dataframe
         a = [t for t,_,_ in numdocs.index]
@@ -456,6 +450,16 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[3]] >= minval ]
             result = result[ result[result.columns[3]] <= maxval ]
 
+        result['ID'] = None
+        for idx, row in result.iterrows():
+            term0 = row[0]
+            term1 = row[1]
+            term2 = row[2]
+            selected_IDs = data[
+                (data[column_r] == term0) & (data[column_c] == term1) & (data['Year'] == term2)
+            ]['ID']
+            if len(selected_IDs):
+                result.at[idx, 'ID'] = selected_IDs.tolist()
 
         return Matrix(result, rtype='coo-matrix-year')
 
@@ -810,6 +814,8 @@ class RecordsDataFrame(pd.DataFrame):
             col2 : [0.0] * (len(termsA) * len(termsB))   
         })
 
+        result['ID'] = None
+
         idx = 0
         for a in termsA:
             for b in termsB:
@@ -819,22 +825,20 @@ class RecordsDataFrame(pd.DataFrame):
 
                 num = np.sum((s1 * s2))
                 den = np.sqrt(np.sum(s1**2) * np.sum(s2**2))
-
-                if den == 0:
-                    print('>>>>')
-                    print(s1, s2, a, b)
-                    print('<<<<')
-
                 value =  num / den
                 result.at[idx, col0] = a
                 result.at[idx, col1] = b
                 result.at[idx, col2] = value
+
+                selected_IDs = self[(s1 > 0) & (s2 > 0)]['ID']
+                if len(selected_IDs):
+                    result.at[idx, 'ID'] = selected_IDs.tolist()
+
                 idx += 1
 
         result = result.sort_values(col2, ascending=False)
         result.index = range(len(result))
         return Matrix(result, rtype='cross-matrix')
-
 
     #----------------------------------------------------------------------------------------------
     def factor_analysis(self, column, sep=None, n_components=2, top_n=10):
@@ -859,7 +863,7 @@ class RecordsDataFrame(pd.DataFrame):
             'Factor' : cols,
             'value' : values})
 
-        return Matrix(result, rtype = 'factor-matrix')
+        return Matrix(result, rtype='factor-matrix')
 
 
     #----------------------------------------------------------------------------------------------
