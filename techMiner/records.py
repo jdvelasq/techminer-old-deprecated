@@ -22,6 +22,7 @@ import json
 
 from techminer.strings import asciify, fingerprint
 
+#----------------------------------------------------------------------------------------------
 def display_records(df):
     """Show one or more records of dataframe at a time. User can use standard
     pandas.DataFrame funcions to select and order specific records or a dataframe.
@@ -98,8 +99,7 @@ def display_records(df):
         parsed = json.loads(y)
         print(json.dumps(parsed, indent=2, sort_keys=True))
 
-
-
+#----------------------------------------------------------------------------------------------
 def coverage(df):
     """Counts the number of None.
 
@@ -132,7 +132,7 @@ def coverage(df):
 
     return result
         
-
+#----------------------------------------------------------------------------------------------
 def remove_duplicate_records(df, fields, match_type='strict'):
     """Remove duplicate records in a dataframe based in the velue of one 
     or more fields.
@@ -220,7 +220,7 @@ def remove_duplicate_records(df, fields, match_type='strict'):
     if match_type == 'fuzzy':
         pass
 
-
+#----------------------------------------------------------------------------------------------
 def merge_fields(fieldA, fieldB, sepA=None, sepB=None, new_sep=';'):
 
     if sepA is not None:
@@ -256,6 +256,6 @@ def merge_fields(fieldA, fieldB, sepA=None, sepB=None, new_sep=';'):
             result.append(a)
 
     result = pd.Series([new_sep.join(x) if x is not None else x for x in result])
-    #result = pd.Series(result, index=df.index)
     
     return result
+#----------------------------------------------------------------------------------------------

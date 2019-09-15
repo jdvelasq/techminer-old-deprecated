@@ -6,10 +6,12 @@ TechMiner.RecordsDataFrame
 
 """
 import pandas as pd
+import math
 import numpy as np
 from sklearn.decomposition import PCA
 from techminer.list import List
 from techminer.matrix import Matrix
+
 
 
 class RecordsDataFrame(pd.DataFrame):
@@ -40,6 +42,18 @@ class RecordsDataFrame(pd.DataFrame):
         self['ID'] = [ '[*'+str(x)+ '*]' for x in range(len(self))]
         self.index = self['ID']
         return self
+
+
+
+    #----------------------------------------------------------------------------------------------
+    def get_records_by_IDs(self, IDs):
+        """
+        """
+        selected = self[['ID']]
+        selected['Selected'] = False
+        for ID in IDs:
+            selected['Selected'] = selected['Selected'] | (self['ID'] == ID)
+        return self[selected]
 
     #----------------------------------------------------------------------------------------------
     #
@@ -212,7 +226,7 @@ class RecordsDataFrame(pd.DataFrame):
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
             data = data.explode(column)    
-            data.index = range(len(numdocs))
+            data.index = range(len(data))
         numdocs = data.groupby(by=[column, 'Year'], as_index=False).size()
 
         ## dataframe with results
@@ -291,7 +305,7 @@ class RecordsDataFrame(pd.DataFrame):
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
             data = data.explode(column_r)
-            data.index = range(len(numdocs))
+            data.index = range(len(data))
         if sep_c is not None:
             data[column_c] = data[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
             data[column_c] = data[column_c].map(
@@ -841,11 +855,14 @@ class RecordsDataFrame(pd.DataFrame):
         return Matrix(result, rtype='cross-matrix')
 
     #----------------------------------------------------------------------------------------------
-    def factor_analysis(self, column, sep=None, n_components=2, top_n=10):
+    def factor_analysis(self, column, sep=None, n_components=None, top_n=10):
 
 
         tdf = self.tdf(column, sep, top_n)
         terms = tdf.columns.tolist()
+
+        if n_components is None:
+            n_components = int(math.sqrt(len(set(terms))))
 
         pca = PCA(n_components=n_components)
         
@@ -862,6 +879,7 @@ class RecordsDataFrame(pd.DataFrame):
             column : rows,
             'Factor' : cols,
             'value' : values})
+
 
         return Matrix(result, rtype='factor-matrix')
 
@@ -886,7 +904,7 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result['Cited by'] >= minval ]
             result = result[ result['Cited by'] <= maxval ]
         
-        return result[['Title', 'Authors', 'Year', 'Cited by']]
+        return result[['Title', 'Authors', 'Year', 'Cited by', 'ID']]
 
 
     #----------------------------------------------------------------------------------------------
