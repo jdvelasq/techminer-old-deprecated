@@ -246,6 +246,15 @@ class Matrix(pd.DataFrame):
     #---------------------------------------------------------------------------------------------
     def heatmap(self, ascending_r=None, ascending_c=None, figsize=(10, 10), library=None, 
         cmap='Blues'):
+        """
+        Available cmaps:
+
+        https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
+        
+            'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
+            'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
+            'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn'
+        """
 
         def cut_text(w):
             return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
@@ -289,9 +298,25 @@ class Matrix(pd.DataFrame):
                             va="center", 
                             color=color)
 
-                    elif self._rtype == 'auto-matrix':
+                    elif self._rtype in ['auto-matrix', 'cross-matrix']:
 
                         if x.at[row, col] > 0.5:
+                            color = 'white'
+                        else:
+                            color = 'black'
+
+                        plt.text(
+                            idx_row + 0.5, 
+                            idx_col + 0.5, 
+                            "{:3.2f}".format(x.at[row, col]),
+                            ha="center", 
+                            va="center", 
+                            color=color)
+
+                    elif self._rtype in ['factor-matrix']:
+
+                        max_value = x.values.max() / 2.0
+                        if x.at[row, col] > max_value:
                             color = 'white'
                         else:
                             color = 'black'

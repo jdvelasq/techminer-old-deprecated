@@ -927,6 +927,17 @@ class RecordsDataFrame(pd.DataFrame):
             'value' : values})
 
 
+        ## adds number of records to columns
+        num = self.documents_by_terms(column, sep)
+        new_names = {}
+        for idx, row in num.iterrows():
+            old_name = row[0]
+            new_name = old_name + ' [' + str(row[1]) + ']'
+            new_names[old_name] = new_name
+        result[column] = result[column].map(lambda x: new_names[x])
+        ## end 
+
+
         return Matrix(result, rtype='factor-matrix')
 
 
