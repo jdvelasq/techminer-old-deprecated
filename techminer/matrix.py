@@ -273,6 +273,7 @@ class Matrix(pd.DataFrame):
             max_value = x.values.max() / 2.0
             for idx_row, row in enumerate(x.index):
                 for idx_col, col in enumerate(x.columns):
+
                     if self._rtype == 'coo-matrix' and x.at[row, col] > 0:
                         
                         if x.at[row, col] > max_value:
@@ -287,6 +288,22 @@ class Matrix(pd.DataFrame):
                             ha="center", 
                             va="center", 
                             color=color)
+
+                    elif self._rtype == 'auto-matrix':
+
+                        if x.at[row, col] > 0.5:
+                            color = 'white'
+                        else:
+                            color = 'black'
+
+                        plt.text(
+                            idx_row + 0.5, 
+                            idx_col + 0.5, 
+                            "{:3.2f}".format(x.at[row, col]),
+                            ha="center", 
+                            va="center", 
+                            color=color)
+
             ## ends annotation
 
             plt.show()

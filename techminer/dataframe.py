@@ -872,6 +872,30 @@ class RecordsDataFrame(pd.DataFrame):
 
                 idx += 1
 
+        ## adds number of records to columns
+        num = self.documents_by_terms(column_r, sep_r)
+        new_names = {}
+        for idx, row in num.iterrows():
+            old_name = row[0]
+            new_name = old_name + ' [' + str(row[1]) + ']'
+            new_names[old_name] = new_name
+
+        result[col0] = result[col0].map(lambda x: new_names[x])
+
+        if column_c is not None:
+            num = self.documents_by_terms(column_c, sep_c)
+            new_names = {}
+            for idx, row in num.iterrows():
+                old_name = row[0]
+                new_name = old_name + ' [' + str(row[1]) + ']'
+                new_names[old_name] = new_name
+
+        result[col1] = result[col1].map(lambda x: new_names[x])
+
+
+
+        ## end adds numbers of records to columns
+
         result = result.sort_values(col2, ascending=False)
         result.index = range(len(result))
         return Matrix(result, rtype='cross-matrix')
