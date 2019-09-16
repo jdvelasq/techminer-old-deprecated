@@ -24,6 +24,7 @@ class RecordsDataFrame(pd.DataFrame):
     def _constructor_expanddim(self):
         return self
 
+
     #----------------------------------------------------------------------------------------------
     def years_list(self):
 
@@ -362,7 +363,7 @@ class RecordsDataFrame(pd.DataFrame):
         new_names = {}
         for idx, row in num.iterrows():
             old_name = row[0]
-            new_name = '[' + str(row[1]) + '] ' +  old_name
+            new_name = old_name + ' [' + str(row[1]) + ']'
             new_names[old_name] = new_name
 
         result[column_r] = result[column_r].map(lambda x: new_names[x])
@@ -371,7 +372,7 @@ class RecordsDataFrame(pd.DataFrame):
         new_names = {}
         for idx, row in num.iterrows():
             old_name = row[0]
-            new_name = '[' + str(row[1]) + '] ' +  old_name
+            new_name = old_name + ' [' + str(row[1]) + ']'
             new_names[old_name] = new_name
 
         result[column_c] = result[column_c].map(lambda x: new_names[x])

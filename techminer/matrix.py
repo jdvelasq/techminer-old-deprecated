@@ -244,23 +244,60 @@ class Matrix(pd.DataFrame):
             return
 
     #---------------------------------------------------------------------------------------------
-    def heatmap(self, ascending_r=None, ascending_c=None, figsize=(10, 10), library=None):
+    def heatmap(self, ascending_r=None, ascending_c=None, figsize=(10, 10), library=None, 
+        cmap='Blues'):
+
+        def cut_text(w):
+            return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
 
         if library is None:
+
             x = self.tomatrix(ascending_r, ascending_c)
+
+            ## rename columns and row index
+            x.columns = [cut_text(w) for w in x.columns]
+            x.index = [cut_text(w) for w in x.index]
+
             if self._rtype == 'factor-matrix':
                 x = self.tomatrix(ascending_r, ascending_c)
                 x = x.transpose()
                 x = x.apply(lambda w: abs(w))
             plt.figure(figsize=figsize)
-            plt.pcolor(np.transpose(x.values), cmap='Greys')
+            plt.pcolor(np.transpose(x.values), cmap=cmap)
             plt.xticks(np.arange(len(x.index))+0.5, x.index, rotation='vertical')
             plt.yticks(np.arange(len(x.columns))+0.5, x.columns)
-            plt.gca().set_aspect('equal', 'box')
+            #plt.gca().set_aspect('equal', 'box')
             plt.gca().invert_yaxis()
-            return
 
+            ## annotation
+            max_value = x.values.max() / 2.0
+            for idx_row, row in enumerate(x.index):
+                for idx_col, col in enumerate(x.columns):
+                    if self._rtype == 'coo-matrix' and x.at[row, col] > 0:
+                        
+                        if x.at[row, col] > max_value:
+                            color = 'white'
+                        else:
+                            color = 'black'
+
+                        plt.text(
+                            idx_row + 0.5, 
+                            idx_col + 0.5, 
+                            x.at[row, col],
+                            ha="center", 
+                            va="center", 
+                            color=color)
+            ## ends annotation
+
+            plt.show()
+            
+            
         if library == 'altair':
+
+            _self = self.copy()
+
+            _self[_self.columns[0]] = _self[_self.columns[0]].map(lambda w: cut_text(w))
+            _self[_self.columns[1]] = _self[_self.columns[1]].map(lambda w: cut_text(w))
 
             if ascending_r is None or ascending_r is True:
                 sort_X = 'ascending'
@@ -272,13 +309,36 @@ class Matrix(pd.DataFrame):
             else:
                 sort_Y = 'descending'
 
-            return alt.Chart(self).mark_rect().encode(
-                alt.X(self.columns[0] + ':O', sort=sort_X),
-                alt.Y(self.columns[1] + ':O', sort=sort_Y),
-                color=self.columns[2] + ':Q')
+            graph = alt.Chart(_self).mark_rect().encode(
+                alt.X(_self.columns[0] + ':O', sort=sort_X),
+                alt.Y(_self.columns[1] + ':O', sort=sort_Y),
+                color=_self.columns[2] + ':Q')
+
+            if self._rtype == 'coo-matrix':
+                text = graph.mark_text(
+                    align='center',
+                    baseline='middle',
+                    dx=5
+                ).encode(
+                    text=_self.columns[2] + ':Q'
+                )
+            else:
+                text = None
+
+            if text is not None:
+                return graph 
+
+            return graph
 
         if library == 'seaborn':
-            return sns.heatmap(self)
+
+            sns.set()
+            _self = self.tomatrix(ascending_r, ascending_c)
+            _self = _self.transpose()
+            _self.columns = [cut_text(w) for w in _self.columns]
+            _self.index = [cut_text(w) for w in _self.index]
+
+            return sns.heatmap(_self)
 
     #---------------------------------------------------------------------------------------------
     def kmeans(self, n_clusters=2):
@@ -1088,9 +1148,15 @@ class Matrix(pd.DataFrame):
         if ascending_c is not None:
             termB_unique = sorted(termB_unique, reverse = not ascending_c)
 
-        result = pd.DataFrame(
-            np.zeros((len(termA_unique), len(termB_unique)))
-        )
+        if self._rtype == 'coo-matrix':
+            result = pd.DataFrame(
+                np.full((len(termA_unique), len(termB_unique)), 0)
+            )
+
+        else:
+            result = pd.DataFrame(
+                np.zeros((len(termA_unique), len(termB_unique)))
+            )
         
         result.columns = termB_unique
         result.index = termA_unique
