@@ -345,6 +345,8 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
 
+
+        ## collects the references
         result['ID'] = None
         for idx, row in result.iterrows():
             term0 = row[0]
@@ -354,6 +356,25 @@ class RecordsDataFrame(pd.DataFrame):
                 result.at[idx, 'ID'] = selected_IDs.tolist()
 
         result.index = range(len(result))
+
+        ## adds number of records to columns
+        num = self.documents_by_terms(column_r, sep_r)
+        new_names = {}
+        for idx, row in num.iterrows():
+            old_name = row[0]
+            new_name = '[' + str(row[1]) + '] ' +  old_name
+            new_names[old_name] = new_name
+
+        result[column_r] = result[column_r].map(lambda x: new_names[x])
+
+        num = self.documents_by_terms(column_c, sep_c)
+        new_names = {}
+        for idx, row in num.iterrows():
+            old_name = row[0]
+            new_name = '[' + str(row[1]) + '] ' +  old_name
+            new_names[old_name] = new_name
+
+        result[column_c] = result[column_c].map(lambda x: new_names[x])
 
         return Matrix(result, rtype='coo-matrix')
 
