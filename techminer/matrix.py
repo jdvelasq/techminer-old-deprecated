@@ -471,7 +471,14 @@ class Matrix(pd.DataFrame):
             'value' : value
         })
 
-        
+        edges = edges.sort_values(by='value', ascending=False)
+
+        if top_links is not None and top_links < len(edges):
+                edges = edges[0:top_links]
+
+        if min_value is not None:
+            edges = edges[edges['value'] >= min_value]
+
         ## edges from center of cluster to nodes.
         for _, row in cluster_data.iterrows():
             graph.add_edge(row[0], row[1]) 

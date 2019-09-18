@@ -945,9 +945,9 @@ class RecordsDataFrame(pd.DataFrame):
             'similarity' : map_similariry 
         })
         map_data = map_data.drop_duplicates(subset=['from_node', 'to_node'])
-        
+
         ## end -----------------------------------------------------------------------------------
-    
+
         ## adds number of records to columns -----------------------------------------------------
         num = self.documents_by_terms(column_r, sep_r)
         new_names = {}
@@ -1005,6 +1005,82 @@ class RecordsDataFrame(pd.DataFrame):
             'value' : values})
 
 
+        ## cluster computation -------------------------------------------------------------------
+        
+        tdf_r = self.tdf(column, sep, top_n)
+        tdf_c = tdf_r
+
+        ## number of clusters
+        mtx = Matrix(result.copy(), rtype='cross-matrix')
+        mtx = mtx.tomatrix()
+        mtx = mtx.applymap(lambda x: 1 if x > 0 else 0)
+        mtx = mtx.transpose()
+        mtx = mtx.drop_duplicates()
+        mtx = mtx.transpose()
+        clusters = mtx.columns
+
+        ## dataframe with relationships among items
+        map_cluster = []
+        map_from = []
+        map_to = []
+        map_similariry = []
+
+        ## similarity computation
+        for cluster_term in clusters:
+
+            ## terms in r selected in the current cluster
+            cluster_index = mtx.index[mtx[cluster_term] > 0]
+
+            for idx0_r, term0_r in enumerate(cluster_index):
+                for idx1_r, term1_r in enumerate(cluster_index):
+
+                    if idx1_r  <= idx0_r:
+                        continue
+                    
+                    ## docs related to term0 and term1
+                    idx = (tdf_r[term0_r] > 0) | (tdf_r[term1_r] > 0)
+
+                    tdf_similarity = tdf_c[idx]
+
+                    jaccard = 0.0
+                    n_jaccard = 0
+
+                    for idx_i, doc_i in tdf_similarity.iterrows():
+                        for idx_j, doc_j in tdf_similarity.iterrows():
+                    
+                            if idx_i == idx_j:
+                                break
+
+                            terms_i = doc_i.tolist()
+                            terms_j = doc_j.tolist()
+                            intersection = [i*j for i, j in zip(terms_i, terms_j)]
+
+                            len_i = sum(terms_i)
+                            len_j = sum(terms_j)
+                            len_c = sum(intersection)
+
+                            jaccard += float(len_c) / (len_i + len_j - len_c)
+                            n_jaccard += 1
+
+                    if n_jaccard == 0:
+                        jaccard = 1.0
+                    else:
+                        jaccard = jaccard / n_jaccard
+
+                    map_cluster += [cluster_term]
+                    map_from += [term0_r]
+                    map_to += [term1_r]
+                    map_similariry += [jaccard]
+
+        map_data = pd.DataFrame({
+            'cluster' : map_cluster,
+            'from_node' : map_from,
+            'to_node' : map_to,
+            'similarity' : map_similariry 
+        })
+        map_data = map_data.drop_duplicates(subset=['from_node', 'to_node'])
+        ## end -----------------------------------------------------------------------------------
+
         ## adds number of records to columns
         num = self.documents_by_terms(column, sep)
         new_names = {}
@@ -1015,9 +1091,12 @@ class RecordsDataFrame(pd.DataFrame):
         result[column] = result[column].map(lambda x: new_names[x])
         ## end 
 
+        ## >>> adds number of records to cluster nodes ------------------------------------------------
+        map_data['from_node'] = map_data['from_node'].map(lambda x: new_names[x])
+        map_data['to_node'] = map_data['to_node'].map(lambda x: new_names[x])
+        ## <<< end ------------------------------------------------------------------------------------
 
-        return Matrix(result, rtype='factor-matrix')
-
+        return Matrix(result, rtype='factor-matrix', cluster_data=map_data)
 
     #----------------------------------------------------------------------------------------------
     def most_cited_documents(self, top_n=10, minmax=None):
