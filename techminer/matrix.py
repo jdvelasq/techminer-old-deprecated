@@ -118,9 +118,13 @@ class Matrix(pd.DataFrame):
     """Class implementing a dataframe with results of analysis.
     """
     #---------------------------------------------------------------------------------------------
-    def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False, rtype=None):
+    def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False, rtype=None, 
+            cluster_data=None):
+        
         super().__init__(data, index, columns, dtype, copy)
         self._rtype = rtype
+        self._cluster_data = None
+        self._cluster_data = cluster_data
 
     #----------------------------------------------------------------------------------------------
     @property
@@ -250,7 +254,7 @@ class Matrix(pd.DataFrame):
         Available cmaps:
 
         https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
-        
+
             'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds',
             'YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu',
             'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn'
@@ -412,6 +416,151 @@ class Matrix(pd.DataFrame):
             index = x.index)
 
         return centers, clusters
+
+
+
+    #---------------------------------------------------------------------------------------------
+    def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
+            font_size=12, factor=None, size=(25,300)):
+
+        ## cluster dataset
+        cluster_data = self._cluster_data.copy()
+
+        ## figure properties
+        plt.figure(figsize=figsize)
+
+        ## graph
+        graph = nx.Graph()
+
+        ## adds nodes to graph
+        clusters = list(set(cluster_data.cluster))
+
+        nodes = list(set(self.tomatrix().index))
+        graph.add_nodes_from(clusters)
+        graph.add_nodes_from(nodes)
+
+
+        ## adds edges and properties
+        weigth = []
+        style = []
+        value = []
+        for _, row in cluster_data.iterrows():
+            graph.add_edge(row[1], row[2])
+            if row[3] >= 0.75:
+                weigth += [4]
+                style += ['solid']
+                value += [row[3]]
+            elif row[3] >= 0.50:
+                weigth += [2]
+                style += ['solid']
+                value += [row[3]]
+            elif row[3] >= 0.25:
+                weigth += [1]
+                style += ['dashed']
+                value += [row[3]]
+            else:
+                weigth += [1]
+                style += ['dotted']
+                value += [row[3]]
+
+
+        edges = pd.DataFrame({
+            'edges' : graph.edges(),
+            'weight' : weigth,
+            'style' : style,
+            'value' : value
+        })
+
+        
+        ## edges from center of cluster to nodes.
+        for _, row in cluster_data.iterrows():
+            graph.add_edge(row[0], row[1]) 
+            graph.add_edge(row[0], row[2])
+        
+
+        ## graph layout
+        path_length = nx.shortest_path_length(graph)
+        distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
+        for row, data in path_length:
+            for col, dist in data.items():
+                distances.loc[row,col] = dist
+        distances = distances.fillna(distances.max().max())
+        layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+
+        ## nodes drawing
+        node_size = [x[(x.find('[')+1):-1] for x in nodes]
+        node_size = [float(x) for x in node_size]
+        max_node_size = max(node_size)
+        min_node_size = min(node_size)
+        node_size = [size[0] + x / (max_node_size - min_node_size) * size[1] for x in node_size]
+
+        nx.draw_networkx_nodes(
+            graph, 
+            layout, 
+            nodelist=nodes, 
+            node_size=node_size,
+            node_color='red')
+
+        ## edges drawing
+        for style in list(set(edges['style'].tolist())):
+
+            edges_set = edges[edges['style'] == style]
+
+            if len(edges_set) == 0:
+                continue
+
+            nx.draw_networkx_edges(
+                graph, 
+                layout,
+                edgelist=edges_set['edges'].tolist(), 
+                style=style,
+                width=edges_set['weight'].tolist(),
+                edge_color='black')
+
+
+        ## node labels
+        x_left, x_right = plt.xlim()
+        y_left, y_right = plt.ylim()
+        delta_x = (x_right - x_left) * 0.01
+        delta_y = (y_right - y_left) * 0.01
+        for node in nodes:
+            x_pos, y_pos = layout[node]
+            plt.text(
+                x_pos + delta_x, 
+                y_pos + delta_y, 
+                node, 
+                size=font_size,
+                ha='left',
+                va='bottom',
+                bbox=dict(
+                    boxstyle="square",
+                    ec='lightgray',
+                    fc='white',
+                    ))
+
+        # node_labels = dict(zip(nodes, nodes))
+        # nx.draw_networkx_labels(
+        #     graph,
+        #     layout,
+        #     labels=node_labels,
+        #     font_size=font_size,
+        #     ha='left',
+        #     va='bottom',
+        #     bbox=dict(boxstyle="square",
+        #            ec='gray',
+        #            fc='white',
+        #            ))
+
+        if factor is not None:
+            left, right = plt.xlim()
+            width = (right - left) * factor / 2.0
+            plt.xlim(left - width, right + width)
+
+        plt.axis('off')
+
+
+
+
 
     #---------------------------------------------------------------------------------------------
     def map(self, min_value=None, top_links=None, figsize = (10,10)):

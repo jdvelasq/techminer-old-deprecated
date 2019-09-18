@@ -648,7 +648,7 @@ class RecordsDataFrame(pd.DataFrame):
 
     #----------------------------------------------------------------------------------------------
     #
-    #  Analytical functions --- Analysis
+    #  Analytical functions --- Clustering
     #
     #----------------------------------------------------------------------------------------------
     def tdf(self, column, sep, top_n=20):
@@ -693,7 +693,7 @@ class RecordsDataFrame(pd.DataFrame):
         return tdf
 
     #----------------------------------------------------------------------------------------------
-    def autocorr(self, column, sep=None, top_n=20):
+    def autocorr(self, column, sep=None, top_n=20, cut_value=0):
         """
 
             
@@ -754,12 +754,13 @@ class RecordsDataFrame(pd.DataFrame):
         8       c       b         0.288675
 
         """
-        result = self.crosscorr(column_r=column, column_c=column, sep_r=sep, sep_c=sep, top_n=top_n)
+        result = self.crosscorr(
+            column_r=column, column_c=column, sep_r=sep, sep_c=sep, top_n=top_n, cut_value=cut_value)
         result._rtype = 'auto-matrix'
         return result
 
     #----------------------------------------------------------------------------------------------
-    def crosscorr(self, column_r, column_c=None, sep_r=None, sep_c=None, top_n=20):
+    def crosscorr(self, column_r, column_c=None, sep_r=None, sep_c=None, top_n=20, cut_value=0):
         """Computes autocorrelation and crosscorrelation.
 
 
@@ -826,11 +827,11 @@ class RecordsDataFrame(pd.DataFrame):
             sep_c = None
             column_c = None
 
-        tdf_rows = self.tdf(column_r, sep_r, top_n)
+        tdf_r = self.tdf(column_r, sep_r, top_n)
         if column_c is not None:
-            tdf_cols = self.tdf(column_c, sep_c, top_n)
+            tdf_c = self.tdf(column_c, sep_c, top_n)
         else:
-            tdf_cols = tdf_rows.copy()
+            tdf_c = tdf_r.copy()
             
         if column_c is not None:
             col0 = column_r
@@ -841,23 +842,23 @@ class RecordsDataFrame(pd.DataFrame):
             col1 = column_r + ' (col)'
             col2 = 'Autocorrelation'
 
-        termsA = tdf_rows.columns.tolist()
-        termsB = tdf_cols.columns.tolist()
+        terms_r = tdf_r.columns.tolist()
+        terms_c = tdf_c.columns.tolist()
 
         result =  pd.DataFrame({
-            col0 : [None] * (len(termsA) * len(termsB)),
-            col1 : [None] * (len(termsA) * len(termsB)),
-            col2 : [0.0] * (len(termsA) * len(termsB))   
+            col0 : [None] * (len(terms_r) * len(terms_c)),
+            col1 : [None] * (len(terms_r) * len(terms_c)),
+            col2 : [0.0] * (len(terms_r) * len(terms_c))   
         })
 
         result['ID'] = None
 
         idx = 0
-        for a in termsA:
-            for b in termsB:
+        for a in terms_r:
+            for b in terms_c:
 
-                s1 = tdf_rows[a]
-                s2 = tdf_cols[b]
+                s1 = tdf_r[a]
+                s2 = tdf_c[b]
 
                 num = np.sum((s1 * s2))
                 den = np.sqrt(np.sum(s1**2) * np.sum(s2**2))
@@ -872,7 +873,82 @@ class RecordsDataFrame(pd.DataFrame):
 
                 idx += 1
 
-        ## adds number of records to columns
+
+        ## cluster computation -------------------------------------------------------------------
+        
+        ## number of clusters
+        mtx = Matrix(result.copy(), rtype='cross-matrix')
+        mtx = mtx.tomatrix()
+        mtx = mtx.applymap(lambda x: 1 if x > 0 else 0)
+        mtx = mtx.transpose()
+        mtx = mtx.drop_duplicates()
+        mtx = mtx.transpose()
+        clusters = mtx.columns
+
+        ## dataframe with relationships among items
+        map_cluster = []
+        map_from = []
+        map_to = []
+        map_similariry = []
+
+        ## similarity computation
+        for cluster_term in clusters:
+
+            ## terms in r selected in the current cluster
+            cluster_index = mtx.index[mtx[cluster_term] > 0]
+
+            for idx0_r, term0_r in enumerate(cluster_index):
+                for idx1_r, term1_r in enumerate(cluster_index):
+
+                    if idx1_r  <= idx0_r:
+                        continue
+                    
+                    ## docs related to term0 and term1
+                    idx = (tdf_r[term0_r] > 0) | (tdf_r[term1_r] > 0)
+
+                    tdf_similarity = tdf_c[ (idx) & (tdf_c[cluster_term] > 0)]
+
+                    jaccard = 0.0
+                    n_jaccard = 0
+
+                    for idx_i, doc_i in tdf_similarity.iterrows():
+                        for idx_j, doc_j in tdf_similarity.iterrows():
+                    
+                            if idx_i == idx_j:
+                                break
+
+                            terms_i = doc_i.tolist()
+                            terms_j = doc_j.tolist()
+                            intersection = [i*j for i, j in zip(terms_i, terms_j)]
+
+                            len_i = sum(terms_i)
+                            len_j = sum(terms_j)
+                            len_c = sum(intersection)
+
+                            jaccard += float(len_c) / (len_i + len_j - len_c)
+                            n_jaccard += 1
+
+                    if n_jaccard == 0:
+                        jaccard = 1.0
+                    else:
+                        jaccard = jaccard / n_jaccard
+
+                    map_cluster += [cluster_term]
+                    map_from += [term0_r]
+                    map_to += [term1_r]
+                    map_similariry += [jaccard]
+
+        map_data = pd.DataFrame({
+            'cluster' : map_cluster,
+            'from_node' : map_from,
+            'to_node' : map_to,
+            'similarity' : map_similariry 
+        })
+        map_data = map_data.drop_duplicates(subset=['from_node', 'to_node'])
+        
+        ## end -----------------------------------------------------------------------------------
+    
+        ## adds number of records to columns -----------------------------------------------------
         num = self.documents_by_terms(column_r, sep_r)
         new_names = {}
         for idx, row in num.iterrows():
@@ -881,6 +957,11 @@ class RecordsDataFrame(pd.DataFrame):
             new_names[old_name] = new_name
 
         result[col0] = result[col0].map(lambda x: new_names[x])
+
+        ## >>> adds number of records to cluster nodes ------------------------------------------------
+        map_data['from_node'] = map_data['from_node'].map(lambda x: new_names[x])
+        map_data['to_node'] = map_data['to_node'].map(lambda x: new_names[x])
+        ## <<< end ------------------------------------------------------------------------------------
 
         if column_c is not None:
             num = self.documents_by_terms(column_c, sep_c)
@@ -891,14 +972,11 @@ class RecordsDataFrame(pd.DataFrame):
                 new_names[old_name] = new_name
 
         result[col1] = result[col1].map(lambda x: new_names[x])
-
-
-
-        ## end adds numbers of records to columns
+        ## end ------------------------------------------------------------------------------------
 
         result = result.sort_values(col2, ascending=False)
         result.index = range(len(result))
-        return Matrix(result, rtype='cross-matrix')
+        return Matrix(result, rtype='cross-matrix', cluster_data=map_data)
 
     #----------------------------------------------------------------------------------------------
     def factor_analysis(self, column, sep=None, n_components=None, top_n=10):
