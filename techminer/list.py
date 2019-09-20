@@ -35,12 +35,16 @@ class List(pd.DataFrame):
 
         columns = self.columns.tolist()
 
+        data = self.copy()
+        for idx, row in data.iterrows():
+            data.at[idx, data.columns[0]] = row[0] + ' [' + str(row[1]) + ']'
+
         if library is None:
-            return self.plot.barh(columns[0], columns[1], color='gray')
+            return data.plot.barh(columns[0], columns[1], color='gray')
 
         if library == 'altair':
             columns = self.columns.tolist()
-            return alt.Chart(self).mark_bar().encode(
+            return alt.Chart(data).mark_bar().encode(
                 alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
                 alt.X(columns[1] + ':Q'),
                 alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys')))
@@ -49,7 +53,7 @@ class List(pd.DataFrame):
             return sns.barplot(
                 x=columns[1],
                 y=columns[0],
-                data=self,
+                data=data,
                 label=columns[0],
                 color="gray")
 

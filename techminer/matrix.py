@@ -20,6 +20,11 @@ from sklearn.cluster import KMeans
 
 
 #---------------------------------------------------------------------------------------------
+def cut_text(w):
+    if isinstance(w, (int, float)):
+        return w
+    return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
+#---------------------------------------------------------------------------------------------
 def chord_diagram(labels, edges, figsize=(12, 12), minval=None, R=3, n_bezier=100, dist=0.2):
     
     def bezier(p0, p1, p2, linewidth, linestyle, n_bezier=100):
@@ -260,8 +265,7 @@ class Matrix(pd.DataFrame):
             'GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn'
         """
 
-        def cut_text(w):
-            return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
+
 
         if library is None:
 

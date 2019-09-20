@@ -11,8 +11,20 @@ import numpy as np
 from sklearn.decomposition import PCA
 from techminer.list import List
 from techminer.matrix import Matrix
+import matplotlib.pyplot as plt
+import networkx as nx
+from collections import OrderedDict 
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from scipy.optimize import minimize
+from shapely.geometry import Point, LineString
 
 
+#---------------------------------------------------------------------------------------------
+def cut_text(w):
+    if isinstance(w, (int, float)):
+        return w
+    return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
+#---------------------------------------------------------------------------------------------
 
 class RecordsDataFrame(pd.DataFrame):
     """Class to represent a dataframe of bibliographic records.
@@ -1126,3 +1138,83 @@ class RecordsDataFrame(pd.DataFrame):
     def num_of_sources(self):
         return len(self['Source title'].unique())
 
+#----------------------------------------------------------------------------------------------
+    def aduna_map(self, column, sep=None, top_n=None, figsize=(12,10), font_size=10):
+        """
+        """
+        # computes the number of documents by term
+        tdf_matrix = self.tdf(column, sep, top_n)        
+        tdf_matrix.columns = [cut_text(w) for w in tdf_matrix.columns]
+
+        ## figure properties
+        plt.figure(figsize=figsize)
+
+        ## graph
+        graph = nx.Graph()
+
+        ## adds nodes to graph
+        terms = list(set(tdf_matrix.columns.tolist()))
+        docs = [str(i) for i in range(len(tdf_matrix.index.tolist()))]
+        
+
+        graph.add_nodes_from(terms)
+        graph.add_nodes_from(docs)
+
+        for col in terms:
+            for idx in tdf_matrix.index:
+
+                if tdf_matrix.at[idx, col] > 0:
+                    graph.add_edge(col, str(idx)) 
+
+        ## graph layout
+        path_length = nx.shortest_path_length(graph)
+        distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
+        for row, data in path_length:
+            for col, dist in data.items():
+                distances.loc[row,col] = dist
+        distances = distances.fillna(distances.max().max())
+        layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+
+        ## draw terms nodes
+        nx.draw_networkx_nodes(
+            graph, 
+            layout, 
+            nodelist=terms, 
+            node_size=300,
+            node_color='red')
+
+        nx.draw_networkx_nodes(
+            graph, 
+            layout, 
+            nodelist=docs, 
+            node_size=200,
+            edgecolors='black',
+            node_color='lightgray') 
+
+        x_left, x_right = plt.xlim()
+        y_left, y_right = plt.ylim()
+        delta_x = (x_right - x_left) * 0.01
+        delta_y = (y_right - y_left) * 0.01
+        # for node in terms:
+        #     x_pos, y_pos = layout[node]
+        #     plt.text(
+        #         x_pos + delta_x, 
+        #         y_pos + delta_y, 
+        #         node, 
+        #         size=font_size,
+        #         ha='left',
+        #         va='bottom',
+        #         bbox=dict(
+        #             boxstyle="square",
+        #             ec='gray',
+        #             fc='white',
+        #             ))
+
+        ## edges
+        nx.draw_networkx_edges(
+            graph, 
+            layout,
+            width=1
+        )
+
+        plt.axis('off')
