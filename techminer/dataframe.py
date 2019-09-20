@@ -11,6 +11,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from techminer.list import List
 from techminer.matrix import Matrix
+from techminer.aux import cut_text
 import matplotlib.pyplot as plt
 import networkx as nx
 from collections import OrderedDict 
@@ -20,10 +21,7 @@ from shapely.geometry import Point, LineString
 
 
 #---------------------------------------------------------------------------------------------
-def cut_text(w):
-    if isinstance(w, (int, float)):
-        return w
-    return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
+
 #---------------------------------------------------------------------------------------------
 
 class RecordsDataFrame(pd.DataFrame):

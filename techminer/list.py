@@ -10,6 +10,7 @@ import pandas as pd
 import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from wordcloud import WordCloud, ImageColorGenerator
+from techminer.aux import cut_text
 
 class List(pd.DataFrame):
     """Class implementing a dataframe with results of first level analysis.
@@ -35,9 +36,15 @@ class List(pd.DataFrame):
 
         columns = self.columns.tolist()
 
-        data = self.copy()
+        data = List(self.copy())
+
         for idx, row in data.iterrows():
-            data.at[idx, data.columns[0]] = row[0] + ' [' + str(row[1]) + ']'
+            #print(row)
+            #print(idx)
+            #data.at[idx, data.columns[0]] = str(row[0]) + ' [' + str(row[1]) + ']'
+            pass
+
+        #data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
         if library is None:
             return data.plot.barh(columns[0], columns[1], color='gray')
