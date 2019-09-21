@@ -45,29 +45,42 @@ class List(pd.DataFrame):
         if library is None:
             if color is None:
                 color = 'gray'
-            return data.plot.barh(columns[0], columns[1], color=color)
+            if columns[0] == 'Year':
+                data =  data.sort_values(by=columns[0], ascending=True)
+            else:
+                data =  data.sort_values(by=columns[1], ascending=True)
+            data.plot.barh(columns[0], columns[1], color=color)
+            plt.gca().xaxis.grid(True)
+            return
+            
 
         if library == 'altair':
             if color is None:
                 color = 'Greys'
             columns = self.columns.tolist()
+            if columns[0] == 'Year':
+                data = data.sort_values(by=columns[0], ascending=False)
             return alt.Chart(data).mark_bar().encode(
                 alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(
-                    field=columns[1] + ':Q', order='descending')),
+                    field=columns[1] + ':Q')),
                 alt.X(columns[1] + ':Q'),
                 alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme=color)))
 
         if library == 'seaborn':
             if color is None:
                 color = 'gray'
-            return sns.barplot(
+            if columns[0] == 'Year':
+                data = data.sort_values(by=columns[0], ascending=False)
+            else:
+                data = data.sort_values(by=columns[1], ascending=False)
+            sns.barplot(
                 x=columns[1],
                 y=columns[0],
                 data=data,
                 label=columns[0],
-                order=sorted(data[columns[0]], reverse = True),
                 color=color)
-
+            plt.gca().xaxis.grid(True)
+            return
 
     #----------------------------------------------------------------------------------------------
     def barplot(self, library=None):
