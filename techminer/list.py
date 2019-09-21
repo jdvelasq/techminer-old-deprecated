@@ -52,7 +52,8 @@ class List(pd.DataFrame):
                 color = 'Greys'
             columns = self.columns.tolist()
             return alt.Chart(data).mark_bar().encode(
-                alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
+                alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(
+                    field=columns[1] + ':Q', order='descending')),
                 alt.X(columns[1] + ':Q'),
                 alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme=color)))
 
@@ -64,6 +65,7 @@ class List(pd.DataFrame):
                 y=columns[0],
                 data=data,
                 label=columns[0],
+                order=sorted(data[columns[0]], reverse = True),
                 color=color)
 
 
