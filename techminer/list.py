@@ -30,7 +30,7 @@ class List(pd.DataFrame):
             print()
 
     #----------------------------------------------------------------------------------------------
-    def barhplot(self, library=None):
+    def barhplot(self, library=None, color=None):
         """Plots a pandas.DataFrame using Altair.
         """
 
@@ -38,31 +38,33 @@ class List(pd.DataFrame):
 
         data = List(self.copy())
 
-        for idx, row in data.iterrows():
-            #print(row)
-            #print(idx)
-            #data.at[idx, data.columns[0]] = str(row[0]) + ' [' + str(row[1]) + ']'
-            pass
+        data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
 
-        #data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+        data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
         if library is None:
-            return data.plot.barh(columns[0], columns[1], color='gray')
+            if color is None:
+                color = 'gray'
+            return data.plot.barh(columns[0], columns[1], color=color)
 
         if library == 'altair':
+            if color is None:
+                color = 'Greys'
             columns = self.columns.tolist()
             return alt.Chart(data).mark_bar().encode(
                 alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
                 alt.X(columns[1] + ':Q'),
-                alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys')))
+                alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme=color)))
 
         if library == 'seaborn':
+            if color is None:
+                color = 'gray'
             return sns.barplot(
                 x=columns[1],
                 y=columns[0],
                 data=data,
                 label=columns[0],
-                color="gray")
+                color=color)
 
 
     #----------------------------------------------------------------------------------------------
@@ -73,7 +75,7 @@ class List(pd.DataFrame):
         columns = self.columns.tolist()
 
         if library is None:
-            return self.plot.bar(columns[0], columns[1], color='gray');
+            return self.plot.bar(columns[0], columns[1], color='gray')
 
         if library == 'altair':
         
