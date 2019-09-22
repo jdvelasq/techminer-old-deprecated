@@ -18,9 +18,8 @@ from collections import OrderedDict
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.optimize import minimize
 from shapely.geometry import Point, LineString
-
-
-#---------------------------------------------------------------------------------------------
+import matplotlib.colors as colors
+import matplotlib.cm as cm
 
 #---------------------------------------------------------------------------------------------
 
@@ -973,9 +972,13 @@ class RecordsDataFrame(pd.DataFrame):
         map_from = []
         map_to = []
         map_similariry = []
+        map_color = []
+
+        norm = colors.Normalize(vmin=0, vmax=len(clusters))
+        cmap = cm.get_cmap('tab20')
 
         ## similarity computation
-        for cluster_term in clusters:
+        for idx_cluster, cluster_term in enumerate(clusters):
 
             ## terms in r selected in the current cluster
             cluster_index = mtx.index[mtx[cluster_term] > 0]
@@ -1020,14 +1023,40 @@ class RecordsDataFrame(pd.DataFrame):
                     map_from += [term0_r]
                     map_to += [term1_r]
                     map_similariry += [jaccard]
+                    map_color += [cmap(norm(idx_cluster))]
 
         map_data = pd.DataFrame({
             'cluster' : map_cluster,
             'from_node' : map_from,
             'to_node' : map_to,
-            'similarity' : map_similariry 
+            'similarity' : map_similariry,
+            'color' : map_color 
         })
         map_data = map_data.drop_duplicates(subset=['from_node', 'to_node'])
+
+        ## end -----------------------------------------------------------------------------------
+
+        ## line style for diagrams ---------------------------------------------------------------
+        map_data['linewidth'] = None
+        map_data['linestyle'] = None
+
+        for idx, row in map_data.iterrows():
+
+                if row[3] >= 0.75:
+                    map_data.at[idx, 'linewidth'] = 4
+                    map_data.at[idx, 'linestyle'] = '-' 
+                elif row[3] >= 0.50:
+                    map_data.at[idx, 'linewidth'] = 2
+                    map_data.at[idx, 'linestyle'] = '-' 
+                elif row[3] >= 0.25:
+                    map_data.at[idx, 'linewidth'] = 2
+                    map_data.at[idx, 'linestyle'] = '--' 
+                elif row[3] < 0.25:
+                    map_data.at[idx, 'linewidth'] = 1
+                    map_data.at[idx, 'linestyle'] = ':'
+                else: 
+                    map_data.at[idx, 'linewidth'] = 0
+                    map_data.at[idx, 'linestyle'] = '-'
 
         ## end -----------------------------------------------------------------------------------
 
