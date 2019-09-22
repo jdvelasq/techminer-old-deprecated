@@ -288,16 +288,20 @@ class Matrix(pd.DataFrame):
             x.columns = [cut_text(w) for w in x.columns]
             x.index = [cut_text(w) for w in x.index]
 
+            plt.figure(figsize=figsize)
+
             if self._rtype == 'factor-matrix':
                 x = self.tomatrix(ascending_r, ascending_c)
                 x = x.transpose()
-                x = x.apply(lambda w: abs(w))
+                ## x = x.apply(lambda w: abs(w))
+                plt.pcolor(np.transpose(abs(x.values)), cmap=cmap)
+            else:
+                plt.pcolor(np.transpose(x.values), cmap=cmap)
 
-            plt.figure(figsize=figsize)
-            plt.pcolor(np.transpose(x.values), cmap=cmap)
+            #plt.pcolor(np.transpose(x.values), cmap=cmap)
             plt.xticks(np.arange(len(x.index))+0.5, x.index, rotation='vertical')
             plt.yticks(np.arange(len(x.columns))+0.5, x.columns)
-            #plt.gca().set_aspect('equal', 'box')
+            ## plt.gca().set_aspect('equal', 'box')
             plt.gca().invert_yaxis()
 
             ## changes the color of rectangle for autocorrelation heatmaps ---------------------------
@@ -312,13 +316,12 @@ class Matrix(pd.DataFrame):
 
 
             ## annotation
-            max_value = x.values.max() / 2.0
             for idx_row, row in enumerate(x.index):
                 for idx_col, col in enumerate(x.columns):
 
                     if self._rtype == 'coo-matrix' and x.at[row, col] > 0:
                         
-                        if x.at[row, col] > max_value:
+                        if x.at[row, col] > x.values.max() / 2.0:
                             color = 'white'
                         else:
                             color = 'black'
@@ -331,9 +334,9 @@ class Matrix(pd.DataFrame):
                             va="center", 
                             color=color)
 
-                    elif self._rtype in ['auto-matrix', 'cross-matrix']:
+                    elif self._rtype in ['auto-matrix', 'cross-matrix', 'factor-matrix']:
 
-                        if x.at[row, col] > x.values.max() / 2.0:
+                        if abs(x.at[row, col]) > x.values.max() / 2.0:
                             color = 'white'
                         else:
                             color = 'black'
@@ -346,20 +349,20 @@ class Matrix(pd.DataFrame):
                             va="center", 
                             color=color)
 
-                    elif self._rtype in ['factor-matrix']:
+                    # elif self._rtype in ['factor-matrix']:
 
-                        if x.at[row, col] > x.values.max() / 2.0:
-                            color = 'white'
-                        else:
-                            color = 'black'
+                    #     if abs(x.at[row, col]) > x.values.max() / 2.0:
+                    #         color = 'white'
+                    #     else:
+                    #         color = 'black'
 
-                        plt.text(
-                            idx_row + 0.5, 
-                            idx_col + 0.5, 
-                            "{:3.2f}".format(x.at[row, col]),
-                            ha="center", 
-                            va="center", 
-                            color=color)
+                    #     plt.text(
+                    #         idx_row + 0.5, 
+                    #         idx_col + 0.5, 
+                    #         "{:3.2f}".format(x.at[row, col]),
+                    #         ha="center", 
+                    #         va="center", 
+                    #         color=color)
 
             ## ends annotation
 
