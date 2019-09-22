@@ -711,6 +711,19 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
 
+        ## counts the number of ddcuments only in the results matrix -----------------------
+
+        count = self.documents_by_terms(column, sep)
+        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
+        result[column] = result[column].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+
+        count = self.documents_by_year()
+        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
+        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+ 
+        ## end -----------------------------------------------------------------------------
+
+
         return Matrix(result, rtype='coo-matrix')
 
 
