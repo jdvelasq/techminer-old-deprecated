@@ -392,8 +392,6 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## end -----------------------------------------------------------------------------
 
-
-
         ## adds number of records to columns
         # num = self.documents_by_terms(column_r, sep_r)
         # new_names = {}
@@ -412,6 +410,7 @@ class RecordsDataFrame(pd.DataFrame):
         #     new_names[old_name] = new_name
 
         # result[column_c] = result[column_c].map(lambda x: new_names[x])
+        ## end -----------------------------------------------------------------------------
 
         return Matrix(result, rtype='coo-matrix')
 
@@ -532,6 +531,23 @@ class RecordsDataFrame(pd.DataFrame):
             ]['ID']
             if len(selected_IDs):
                 result.at[idx, 'ID'] = selected_IDs.tolist()
+
+        ## counts the number of ddcuments only in the results matrix -----------------------
+
+        count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+
+        count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        count = result.groupby(by='Year', as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        ## end -----------------------------------------------------------------------------
+
 
         return Matrix(result, rtype='coo-matrix-year')
 
