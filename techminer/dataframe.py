@@ -380,24 +380,38 @@ class RecordsDataFrame(pd.DataFrame):
 
         result.index = range(len(result))
 
+        ## counts the number of ddcuments only in the results matrix -----------------------
+
+        count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+
+        count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        ## end -----------------------------------------------------------------------------
+
+
+
         ## adds number of records to columns
-        num = self.documents_by_terms(column_r, sep_r)
-        new_names = {}
-        for idx, row in num.iterrows():
-            old_name = row[0]
-            new_name = old_name + ' [' + str(row[1]) + ']'
-            new_names[old_name] = new_name
+        # num = self.documents_by_terms(column_r, sep_r)
+        # new_names = {}
+        # for idx, row in num.iterrows():
+        #     old_name = row[0]
+        #     new_name = old_name + ' [' + str(row[1]) + ']'
+        #     new_names[old_name] = new_name
 
-        result[column_r] = result[column_r].map(lambda x: new_names[x])
+        # result[column_r] = result[column_r].map(lambda x: new_names[x])
 
-        num = self.documents_by_terms(column_c, sep_c)
-        new_names = {}
-        for idx, row in num.iterrows():
-            old_name = row[0]
-            new_name = old_name + ' [' + str(row[1]) + ']'
-            new_names[old_name] = new_name
+        # num = self.documents_by_terms(column_c, sep_c)
+        # new_names = {}
+        # for idx, row in num.iterrows():
+        #     old_name = row[0]
+        #     new_name = old_name + ' [' + str(row[1]) + ']'
+        #     new_names[old_name] = new_name
 
-        result[column_c] = result[column_c].map(lambda x: new_names[x])
+        # result[column_c] = result[column_c].map(lambda x: new_names[x])
 
         return Matrix(result, rtype='coo-matrix')
 
