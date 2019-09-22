@@ -598,6 +598,14 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[1]] >= minval ]
             result = result[ result[result.columns[1]] <= maxval ]
 
+        ## counts the number of documents --------------------------------------------------------
+
+        count = self.documents_by_terms(column, sep)
+        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
+        result[column] = result[column].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        ## end -----------------------------------------------------------------------------------
+
         return List(result)
 
     #----------------------------------------------------------------------------------------------
