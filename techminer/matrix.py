@@ -17,7 +17,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.optimize import minimize
 from shapely.geometry import Point, LineString
 from sklearn.cluster import KMeans
-
+from matplotlib.patches import Rectangle
 
 #---------------------------------------------------------------------------------------------
 def cut_text(w):
@@ -266,6 +266,19 @@ class Matrix(pd.DataFrame):
         """
 
 
+        ## force the same order of cells in rows and cols ------------------------------------------
+        if self._rtype == 'auto-matrix':
+            if ascending_r is None and ascending_c is None:
+                ascending_r = True
+                ascending_c = True
+            elif ascending_r is not None and ascending_r != ascending_c:
+                ascending_c = ascending_r
+            elif ascending_c is not None and ascending_c != ascending_r:
+                ascending_r = ascending_c
+            else:
+                pass
+        ## end -------------------------------------------------------------------------------------
+
 
         if library is None:
 
@@ -279,12 +292,24 @@ class Matrix(pd.DataFrame):
                 x = self.tomatrix(ascending_r, ascending_c)
                 x = x.transpose()
                 x = x.apply(lambda w: abs(w))
+
             plt.figure(figsize=figsize)
             plt.pcolor(np.transpose(x.values), cmap=cmap)
             plt.xticks(np.arange(len(x.index))+0.5, x.index, rotation='vertical')
             plt.yticks(np.arange(len(x.columns))+0.5, x.columns)
             #plt.gca().set_aspect('equal', 'box')
             plt.gca().invert_yaxis()
+
+            ## changes the color of rectangle for autocorrelation heatmaps ---------------------------
+            
+            # if self._rtype == 'auto-matrix':
+            #     for idx in np.arange(len(x.index)):
+            #         plt.gca().add_patch(
+            #             Rectangle((idx, idx), 1, 1, fill=False, edgecolor='red')
+            #         )
+
+            ## end ------------------------------------------------------------------------------------
+
 
             ## annotation
             max_value = x.values.max() / 2.0
@@ -308,7 +333,7 @@ class Matrix(pd.DataFrame):
 
                     elif self._rtype in ['auto-matrix', 'cross-matrix']:
 
-                        if x.at[row, col] > 0.5:
+                        if x.at[row, col] > x.values.max() / 2.0:
                             color = 'white'
                         else:
                             color = 'black'
@@ -323,8 +348,7 @@ class Matrix(pd.DataFrame):
 
                     elif self._rtype in ['factor-matrix']:
 
-                        max_value = x.values.max() / 2.0
-                        if x.at[row, col] > max_value:
+                        if x.at[row, col] > x.values.max() / 2.0:
                             color = 'white'
                         else:
                             color = 'black'

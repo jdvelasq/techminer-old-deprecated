@@ -955,6 +955,7 @@ class RecordsDataFrame(pd.DataFrame):
 
                 idx += 1
 
+        #result = result.style.format('{0:.4}')
 
         ## cluster computation -------------------------------------------------------------------
         
