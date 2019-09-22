@@ -273,6 +273,18 @@ class RecordsDataFrame(pd.DataFrame):
 
         result.index = range(len(result))
 
+        ## adds the number of documents to text ---------------------------------------------------
+
+        count = result.groupby(by=column, as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result[column] = result[column].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+
+        count = result.groupby(by='Year', as_index=True)[result.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        ## ends -----------------------------------------------------------------------------------
+
         return Matrix(result, rtype='coo-matrix')
 
     #----------------------------------------------------------------------------------------------

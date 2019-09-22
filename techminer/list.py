@@ -37,9 +37,7 @@ class List(pd.DataFrame):
         columns = self.columns.tolist()
 
         data = List(self.copy())
-
         data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
-
         data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
         if library is None:
@@ -89,24 +87,28 @@ class List(pd.DataFrame):
 
         columns = self.columns.tolist()
 
+        data = List(self.copy())
+        data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+        data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+
         if library is None:
-            self.plot.bar(columns[0], columns[1], color='gray')
+            data.plot.bar(columns[0], columns[1], color='gray')
             plt.gca().yaxis.grid(True)
             return
 
         if library == 'altair':
         
-            return alt.Chart(self).mark_bar().encode(
+            return alt.Chart(data).mark_bar().encode(
                 alt.X(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
                 alt.Y(columns[1] + ':Q'),
                 alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys')))
 
         if library == 'seaborn':
-            columns = self.columns.tolist()
+            columns = data.columns.tolist()
             result = sns.barplot(
                 y=columns[1],
                 x=columns[0],
-                data=self,
+                data=data,
                 label=columns[0],
                 color="gray")
             _, labels = plt.xticks()

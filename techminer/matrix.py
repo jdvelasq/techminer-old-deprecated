@@ -1421,12 +1421,24 @@ class Matrix(pd.DataFrame):
 
 
         if self.columns[0] == 'Year':
-            termA_unique = range(min(self.Year), max(self.Year)+1)
+            year = self.Year.copy()
+            dict_year = { x[0:x.find(' [')] : x for x in year}
+            year = year.map(lambda x: int(x[0:x.find('[')]))
+            year = [str(x) for x in range(min(year), max(year)+1)]
+            year = [y + ' [0]' if y not in dict_year.keys() else dict_year[y]  for y in year]
+            termA_unique = year
+            # termA_unique = range(min(self.Year), max(self.Year)+1)
         else:
             termA_unique = self.iloc[:,0].unique()
             
         if self.columns[1] == 'Year':
-            termB_unique = range(min(self.Year), max(self.Year)+1)
+            year = self.Year.copy()
+            dict_year = {x[0:x.find(' [')] : x   for x in year}
+            year = year.map(lambda x: int(x[0:x.find('[')]))
+            year = [str(x) for x in range(min(year), max(year)+1)]
+            year = [y + ' [0]' if y not in dict_year.keys() else dict_year[y]  for y in year]
+            termB_unique = year
+            # termB_unique = range(min(self.Year), max(self.Year)+1)
         else:
             termB_unique = self.iloc[:,1].unique()
             
