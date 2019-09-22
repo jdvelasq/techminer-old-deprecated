@@ -90,7 +90,9 @@ class List(pd.DataFrame):
         columns = self.columns.tolist()
 
         if library is None:
-            return self.plot.bar(columns[0], columns[1], color='gray')
+            self.plot.bar(columns[0], columns[1], color='gray')
+            plt.gca().yaxis.grid(True)
+            return
 
         if library == 'altair':
         
@@ -109,7 +111,8 @@ class List(pd.DataFrame):
                 color="gray")
             _, labels = plt.xticks()
             result.set_xticklabels(labels, rotation=90)
-            return result
+            plt.gca().yaxis.grid(True)
+            return
 
     #----------------------------------------------------------------------------------------------
     def wordcloud(self, figsize=(14, 7), max_font_size=50, max_words=100, 
