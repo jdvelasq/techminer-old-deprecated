@@ -37,8 +37,9 @@ class List(pd.DataFrame):
         columns = self.columns.tolist()
 
         data = List(self.copy())
-        data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
-        data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+        if data.columns[1] != 'Cited by':
+            data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+            data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
         if library is None:
             if color is None:

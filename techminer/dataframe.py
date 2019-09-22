@@ -645,6 +645,15 @@ class RecordsDataFrame(pd.DataFrame):
         if cumulative is True:
             result['Cited by'] = result['Cited by'].cumsum()
 
+       ## counts the number of documents --------------------------------------------------------
+
+        count = self.documents_by_year(cumulative=cumulative)
+        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
+        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        ## end -----------------------------------------------------------------------------------
+
+
         return List(result)
 
     #----------------------------------------------------------------------------------------------
