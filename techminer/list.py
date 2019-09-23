@@ -10,7 +10,7 @@ import pandas as pd
 import seaborn as sns
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from wordcloud import WordCloud, ImageColorGenerator
-from techminer.aux import cut_text
+from techminer.common import cut_text
 
 class List(pd.DataFrame):
     """Class implementing a dataframe with results of first level analysis.

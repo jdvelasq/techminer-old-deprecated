@@ -12,124 +12,13 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from techminer.common import *
 from collections import OrderedDict 
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy.optimize import minimize
 from shapely.geometry import Point, LineString
 from sklearn.cluster import KMeans
 from matplotlib.patches import Rectangle
-
-#---------------------------------------------------------------------------------------------
-def cut_text(w):
-    if isinstance(w, (int, float)):
-        return w
-    return w if len(w) < 35 else w[:31] + '... ' + w[w.find('['):]
-#---------------------------------------------------------------------------------------------
-def chord_diagram(labels, edges, figsize=(12, 12), minval=None, R=3, n_bezier=100, dist=0.2, size=(40, 200)):
-    
-    def bezier(p0, p1, p2, linewidth, linestyle, n_bezier=100, color='black'):
-
-        x0, y0 = p0
-        x1, y1 = p1
-        x2, y2 = p2
-        
-        xb = [(1 - t)**2 * x0 + 2 * t * (1-t)*x1 + t**2 * x2 for t in np.linspace(0.0, 1.0, n_bezier)]
-        yb = [(1 - t)**2 * y0 + 2 * t * (1-t)*y1 + t**2 * y2 for t in np.linspace(0.0, 1.0, n_bezier)]
-    
-        plt.plot(xb, yb, color=color, linewidth=linewidth, linestyle=linestyle)
-    
-    #
-    # rutina ppal
-    #
-
-    plt.figure(figsize=figsize)
-    n_nodes = len(labels)
-
-    theta = np.linspace(0.0, 2 * np.pi, n_nodes, endpoint=False)
-    points_x = [R * np.cos(t) for t in theta]
-    points_y = [R * np.sin(t) for t in theta]
-    
-
-    ## tamaños de los circulos
-    node_size = [x[(x.find('[')+1):-1] for x in labels]
-    node_size = [float(x) for x in node_size]
-    max_node_size = max(node_size)
-    min_node_size = min(node_size)
-    node_size = [size[0] + (x - min_node_size) / (max_node_size - min_node_size) * size[1] for x in node_size]
-
-
-    # dibuja los puntos sobre la circunferencia
-    plt.scatter(points_x, points_y, s=node_size, color='black', zorder=10)
-    plt.xlim(-6, 6)
-    plt.ylim(-6, 6)
-    plt.gca().set_aspect('equal', 'box')
-    
-    # arcos de las relaciones    
-    data = {label:(points_x[idx], points_y[idx], theta[idx]) for idx, label in enumerate(labels)}
-    
-    ## labels
-    lbl_x = [(R+dist) * np.cos(t) for t in theta]
-    lbl_y = [(R+dist) * np.sin(t) for t in theta]
-    lbl_theta = [t / (2 * np.pi) * 360 for t in theta]
-    lbl_theta = [t - 180 if t > 180 else t for t in lbl_theta]
-    lbl_theta = [t - 180 if t > 90 else t for t in lbl_theta]
-        
-    for txt, xt, yt, angletxt, angle  in zip(labels, lbl_x, lbl_y, lbl_theta, theta):
-            
-        if xt >= 0:
-            ha = 'left'
-        else:
-            ha = 'right'
-    
-        plt.text(
-            xt, 
-            yt, 
-            txt, 
-            fontsize=10,
-            rotation=angletxt,
-            va = 'center',
-            ha = ha, # 'center'
-            rotation_mode = 'anchor',
-            backgroundcolor='white')
-                
-    plt.gca().set_xticks([])
-    plt.gca().set_yticks([])
-    for txt in ['bottom', 'top', 'left', 'right']:
-        plt.gca().spines[txt].set_color('white')
-
-    for index, r in edges.iterrows():
-
-        row = r['from_node']
-        col = r['to_node']
-        linewidth = r['linewidth']
-        linestyle = r['linestyle']
-        color = r['color']
-
-        if row != col:
-
-            x0, y0, a0 = data[row]
-            x2, y2, a2 = data[col]            
-            
-            angle = a0 + (a2 - a0) / 2
-            
-            if angle > np.pi:
-                angle_corr = angle - np.pi
-            else:
-                angle_corr = angle
-                
-            distance = np.abs(a2 - a0)
-            if distance > np.pi:
-                distance = distance - np.pi
-            distance = (1.0 - 1.0 * distance / np.pi) * R / 2.5
-            x1 = distance * np.cos(angle)
-            y1 = distance * np.sin(angle)
-            x1 = 0
-            y1 = 0
-
-            ## dibuja los arcos            
-            bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle, color=color)
-
-    plt.tight_layout()
 
 #---------------------------------------------------------------------------------------------
 class Matrix(pd.DataFrame):
@@ -150,36 +39,54 @@ class Matrix(pd.DataFrame):
         return self
 
     #----------------------------------------------------------------------------------------------
-    def print_IDs(self):
-        """Auxiliary function to print IDs of documents. 
+    def altair_circle(self, ascending_r=None, ascending_c=None, filename=None, **kwds):
+        """Altair scatter plot with filled circles for visualizing relationships.
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.autocorr(
+        ...     column='Authors',
+        ...     sep=',',
+        ...     top_n=30
+        ... ).altair_circle()
+        alt.Chart(...)
+
+        .. image:: ../figs//altair_circle.png
+            :width: 800px
+            :align: center
+
         """
-
-        if self._rtype in ['coo-matrix', 'cross-matrix', 'auto-matrix']:
-
-            for idx, row in self.iterrows():
-                if row[-1] is not None:
-                    print(row[0], ', ', row[1], ' (', len(row[-1]), ')', ' : ', sep='', end='')
-                    for i in row[-1]:
-                        print(i, sep='', end='')
-                    print()
-
-        elif self._rtype == 'coo-matrix-year':
-
-            for idx, row in self.iterrows():
-                if row[-1] is not None:
-                    print(row[0], ', ', row[1], ', ', row[2], ' (', len(row[-1]), ')', ' : ', sep='', end='')
-                    for i in row[-1]:
-                        print(i, sep='', end='')
-                    print()
-
-        elif self._rtype == 'factor-matrix':
-            pass
+        if ascending_r is None or ascending_r is True:
+            sort_X = 'ascending'
         else:
-            pass
+            sort_X = 'descending'
+
+        if ascending_c is None or ascending_c is True:
+            sort_Y = 'ascending'
+        else:
+            sort_Y = 'descending'
+
+        chart = alt.Chart(self).mark_circle().encode(
+            alt.X(self.columns[0] + ':N',
+                axis=alt.Axis(labelAngle=270), 
+                sort=sort_X),
+            alt.Y(self.columns[1] + ':N',
+                sort=sort_Y),
+            size=self.columns[2],
+            color=self.columns[2])
+
+        if filename is not None:
+            char.save(filename)
+
+        return chart
 
     #---------------------------------------------------------------------------------------------
     def chord_diagram(self, figsize=(12, 12), minval=None, R=3, n_bezier=100, dist=0.2):
-        """Creates a chord diagram for presenting clusters.
+        """Creates a chord diagram for representing clusters.
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
@@ -194,10 +101,8 @@ class Matrix(pd.DataFrame):
         >>> plt.savefig('./figs/chord-diagram.jpg')
         
         .. image:: ../figs//chord-diagram.jpg
-            :width: 600px
+            :width: 800px
             :align: center
-
-
 
         """
 
@@ -211,61 +116,31 @@ class Matrix(pd.DataFrame):
             dist=dist)
 
     #---------------------------------------------------------------------------------------------
-    def circlerel(self, ascending_r=None, ascending_c=None, library=None):
-        """
+    def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
+            font_size=12, factor=None, size=(25,300)):
 
-        >>> import pandas as pd
-        >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
-        >>> rdf.autocorr(
-        ...     column='Authors',
-        ...     sep=',',
-        ...     top_n=30
-        ... ).circlerel()
-        alt.Chart(...)
-        >>> plt.savefig('./figs/circlerel.jpg')
+
+        if self._rtype == 'coo-matrix':
+
+            self.__cluster_map_coocurrence(
+                min_value=min_value, 
+                top_links=top_links, 
+                figsize=figsize, 
+                font_size=font_size, 
+                factor=factor, 
+                size=size)
+
+        else:
+
+            self.__cluster_map_correlation(
+                min_value=min_value, 
+                top_links=top_links, 
+                figsize=figsize, 
+                font_size=font_size, 
+                factor=factor, 
+                size=size)
+
         
-        .. image:: ../figs//circlerel.jpg
-            :width: 600px
-            :align: center
-
-        """
-
-        if library is None or library == 'altair':
-            if ascending_r is None or ascending_r is True:
-                sort_X = 'ascending'
-            else:
-                sort_X = 'descending'
-
-            if ascending_c is None or ascending_c is True:
-                sort_Y = 'ascending'
-            else:
-                sort_Y = 'descending'
-
-            return alt.Chart(self).mark_circle().encode(
-                alt.X(self.columns[0] + ':N',
-                    axis=alt.Axis(labelAngle=270), 
-                    sort=sort_X),
-                alt.Y(self.columns[1] + ':N',
-                    sort=sort_Y),
-                size=self.columns[2],
-                color=self.columns[2])
-
-        if library == 'seaborn':
-            sns.relplot(
-                x = self.columns[0],
-                y = self.columns[1],
-                size = self.columns[2],
-                #sizes = (10, 500),
-                alpha = 0.8,
-                palette = 'viridis',
-                data = df)
-            plt.xticks(rotation=90)
-            return
-
     #---------------------------------------------------------------------------------------------
     def heatmap(self, ascending_r=None, ascending_c=None, figsize=(10, 10), library=None, 
         cmap='Blues'):
@@ -448,6 +323,36 @@ class Matrix(pd.DataFrame):
             _self.index = [cut_text(w) for w in _self.index]
 
             return sns.heatmap(_self)
+    
+
+    #----------------------------------------------------------------------------------------------
+    def print_IDs(self):
+        """Auxiliary function to print IDs of documents. 
+        """
+
+        if self._rtype in ['coo-matrix', 'cross-matrix', 'auto-matrix']:
+
+            for idx, row in self.iterrows():
+                if row[-1] is not None:
+                    print(row[0], ', ', row[1], ' (', len(row[-1]), ')', ' : ', sep='', end='')
+                    for i in row[-1]:
+                        print(i, sep='', end='')
+                    print()
+
+        elif self._rtype == 'coo-matrix-year':
+
+            for idx, row in self.iterrows():
+                if row[-1] is not None:
+                    print(row[0], ', ', row[1], ', ', row[2], ' (', len(row[-1]), ')', ' : ', sep='', end='')
+                    for i in row[-1]:
+                        print(i, sep='', end='')
+                    print()
+
+        elif self._rtype == 'factor-matrix':
+            pass
+        else:
+            pass
+
 
     #---------------------------------------------------------------------------------------------
     def sankey_plot(self, figsize=(7,10), minval=None):
@@ -539,6 +444,191 @@ class Matrix(pd.DataFrame):
         plt.tight_layout()
     
 
+    #---------------------------------------------------------------------------------------------
+    def seaborn_relplot(self, ascending_r=None, ascending_c=None, filename=None):
+        """Seaborn relplot plot with filled circles for visualizing relationships.
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.autocorr(
+        ...     column='Authors',
+        ...     sep=',',
+        ...     top_n=30
+        ... ).seaborn_relplot(filename='./figs/seaborn_relplot.png')
+
+        .. image:: ../figs//seaborn_relplot.png
+            :width: 600px
+            :align: center
+        """
+
+        sns_plot = sns.relplot(
+            x = self.columns[0],
+            y = self.columns[1],
+            size = self.columns[2],
+            alpha = 0.8,
+            palette = 'viridis',
+            data = self)
+        plt.xticks(rotation=90)
+        if filename is not None:
+            sns_plot.savefig(filename)
+        
+
+    #---------------------------------------------------------------------------------------------
+    def tomatrix(self, ascending_r=None, ascending_c=None):
+        """Displays a term by term dataframe as a matrix.
+
+        >>> mtx = Matrix({
+        ...   'rows':['r0', 'r1', 'r2', 'r0', 'r1', 'r2'],
+        ...   'cols':['c0', 'c1', 'c0', 'c1', 'c0', 'c1'],
+        ...   'vals':[ 1.0,  2.0,  3.0,  4.0,  5.0,  6.0]
+        ... })
+        >>> mtx
+          rows cols  vals
+        0   r0   c0   1.0
+        1   r1   c1   2.0
+        2   r2   c0   3.0
+        3   r0   c1   4.0
+        4   r1   c0   5.0
+        5   r2   c1   6.0
+
+        >>> mtx.tomatrix() # doctest: +NORMALIZE_WHITESPACE
+             c0   c1
+        r0  1.0  4.0
+        r1  5.0  2.0
+        r2  3.0  6.0    
+
+        """
+
+        # if self._rtype not in [
+        #     'coo-matrix',
+        #     'cross-matrix',
+        #     'auto-matrix']:
+
+        #     raise Exception('Invalid function call for type: ' + self._rtype )
+
+
+        if self.columns[0] == 'Year':
+            year = self.Year.copy()
+            dict_year = { x[0:x.find(' [')] : x for x in year}
+            year = year.map(lambda x: int(x[0:x.find('[')]))
+            year = [str(x) for x in range(min(year), max(year)+1)]
+            year = [y + ' [0]' if y not in dict_year.keys() else dict_year[y]  for y in year]
+            termA_unique = year
+            # termA_unique = range(min(self.Year), max(self.Year)+1)
+        else:
+            termA_unique = self.iloc[:,0].unique()
+            
+        if self.columns[1] == 'Year':
+            year = self.Year.copy()
+            dict_year = {x[0:x.find(' [')] : x   for x in year}
+            year = year.map(lambda x: int(x[0:x.find('[')]))
+            year = [str(x) for x in range(min(year), max(year)+1)]
+            year = [y + ' [0]' if y not in dict_year.keys() else dict_year[y]  for y in year]
+            termB_unique = year
+            # termB_unique = range(min(self.Year), max(self.Year)+1)
+        else:
+            termB_unique = self.iloc[:,1].unique()
+            
+        if ascending_r is not None:
+            termA_unique = sorted(termA_unique, reverse = not ascending_r)
+
+        if ascending_c is not None:
+            termB_unique = sorted(termB_unique, reverse = not ascending_c)
+
+        if self._rtype == 'coo-matrix':
+            result = pd.DataFrame(
+                np.full((len(termA_unique), len(termB_unique)), 0)
+            )
+
+        else:
+            result = pd.DataFrame(
+                np.zeros((len(termA_unique), len(termB_unique)))
+            )
+        
+        result.columns = termB_unique
+        result.index = termA_unique
+
+        for index, r in self.iterrows():
+            row = r[0]
+            col = r[1]
+            val = r[2]
+            result.loc[row, col] = val
+            
+        return Matrix(result, rtype='matrix')
+
+    #---------------------------------------------------------------------------------------------
+    def transpose(self, *args, **kwargs):
+        result = Matrix(super().transpose())
+        result._rtype = self._rtype
+        return result    
+
+
+
+    #---------------------------------------------------------------------------------------------
+    # def circlerel(self, ascending_r=None, ascending_c=None, library=None):
+    #     """
+
+    #     >>> import pandas as pd
+    #     >>> import matplotlib.pyplot as plt
+    #     >>> from techminer.dataframe import  *
+    #     >>> rdf = RecordsDataFrame(
+    #     ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+    #     ... )
+    #     >>> rdf.autocorr(
+    #     ...     column='Authors',
+    #     ...     sep=',',
+    #     ...     top_n=30
+    #     ... ).circlerel()
+    #     alt.Chart(...)
+    #     >>> plt.savefig('./figs/circlerel.jpg')
+        
+    #     .. image:: ../figs//circlerel.jpg
+    #         :width: 600px
+    #         :align: center
+
+    #     """
+
+    #     if library is None or library == 'altair':
+    #         if ascending_r is None or ascending_r is True:
+    #             sort_X = 'ascending'
+    #         else:
+    #             sort_X = 'descending'
+
+    #         if ascending_c is None or ascending_c is True:
+    #             sort_Y = 'ascending'
+    #         else:
+    #             sort_Y = 'descending'
+
+    #         return alt.Chart(self).mark_circle().encode(
+    #             alt.X(self.columns[0] + ':N',
+    #                 axis=alt.Axis(labelAngle=270), 
+    #                 sort=sort_X),
+    #             alt.Y(self.columns[1] + ':N',
+    #                 sort=sort_Y),
+    #             size=self.columns[2],
+    #             color=self.columns[2])
+
+    #     if library == 'seaborn':
+    #         sns.relplot(
+    #             x = self.columns[0],
+    #             y = self.columns[1],
+    #             size = self.columns[2],
+    #             alpha = 0.8,
+    #             palette = 'viridis',
+    #             data = df)
+    #         plt.xticks(rotation=90)
+
+
+
+
+
+
+
+    
 
     #---------------------------------------------------------------------------------------------
     def __cluster_map_correlation(self, min_value=None, top_links=None, figsize = (10,10), 
@@ -799,32 +889,6 @@ class Matrix(pd.DataFrame):
     
 
 
-    #---------------------------------------------------------------------------------------------
-    def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
-            font_size=12, factor=None, size=(25,300)):
-
-
-        if self._rtype == 'coo-matrix':
-
-            self.__cluster_map_coocurrence(
-                min_value=min_value, 
-                top_links=top_links, 
-                figsize=figsize, 
-                font_size=font_size, 
-                factor=factor, 
-                size=size)
-
-        else:
-
-            self.__cluster_map_correlation(
-                min_value=min_value, 
-                top_links=top_links, 
-                figsize=figsize, 
-                font_size=font_size, 
-                factor=factor, 
-                size=size)
-
-        
 
     #---------------------------------------------------------------------------------------------
     def map(self, min_value=None, top_links=None, figsize = (10,10)):
@@ -1276,95 +1340,6 @@ class Matrix(pd.DataFrame):
 
         return None
 
-
-    #---------------------------------------------------------------------------------------------
-    def tomatrix(self, ascending_r=None, ascending_c=None):
-        """Displays a term by term dataframe as a matrix.
-
-        >>> mtx = Matrix({
-        ...   'rows':['r0', 'r1', 'r2', 'r0', 'r1', 'r2'],
-        ...   'cols':['c0', 'c1', 'c0', 'c1', 'c0', 'c1'],
-        ...   'vals':[ 1.0,  2.0,  3.0,  4.0,  5.0,  6.0]
-        ... })
-        >>> mtx
-          rows cols  vals
-        0   r0   c0   1.0
-        1   r1   c1   2.0
-        2   r2   c0   3.0
-        3   r0   c1   4.0
-        4   r1   c0   5.0
-        5   r2   c1   6.0
-
-        >>> mtx.tomatrix() # doctest: +NORMALIZE_WHITESPACE
-             c0   c1
-        r0  1.0  4.0
-        r1  5.0  2.0
-        r2  3.0  6.0    
-
-        """
-
-        # if self._rtype not in [
-        #     'coo-matrix',
-        #     'cross-matrix',
-        #     'auto-matrix']:
-
-        #     raise Exception('Invalid function call for type: ' + self._rtype )
-
-
-        if self.columns[0] == 'Year':
-            year = self.Year.copy()
-            dict_year = { x[0:x.find(' [')] : x for x in year}
-            year = year.map(lambda x: int(x[0:x.find('[')]))
-            year = [str(x) for x in range(min(year), max(year)+1)]
-            year = [y + ' [0]' if y not in dict_year.keys() else dict_year[y]  for y in year]
-            termA_unique = year
-            # termA_unique = range(min(self.Year), max(self.Year)+1)
-        else:
-            termA_unique = self.iloc[:,0].unique()
-            
-        if self.columns[1] == 'Year':
-            year = self.Year.copy()
-            dict_year = {x[0:x.find(' [')] : x   for x in year}
-            year = year.map(lambda x: int(x[0:x.find('[')]))
-            year = [str(x) for x in range(min(year), max(year)+1)]
-            year = [y + ' [0]' if y not in dict_year.keys() else dict_year[y]  for y in year]
-            termB_unique = year
-            # termB_unique = range(min(self.Year), max(self.Year)+1)
-        else:
-            termB_unique = self.iloc[:,1].unique()
-            
-        if ascending_r is not None:
-            termA_unique = sorted(termA_unique, reverse = not ascending_r)
-
-        if ascending_c is not None:
-            termB_unique = sorted(termB_unique, reverse = not ascending_c)
-
-        if self._rtype == 'coo-matrix':
-            result = pd.DataFrame(
-                np.full((len(termA_unique), len(termB_unique)), 0)
-            )
-
-        else:
-            result = pd.DataFrame(
-                np.zeros((len(termA_unique), len(termB_unique)))
-            )
-        
-        result.columns = termB_unique
-        result.index = termA_unique
-
-        for index, r in self.iterrows():
-            row = r[0]
-            col = r[1]
-            val = r[2]
-            result.loc[row, col] = val
-            
-        return Matrix(result, rtype='matrix')
-
-    #---------------------------------------------------------------------------------------------
-    def transpose(self, *args, **kwargs):
-        result = Matrix(super().transpose())
-        result._rtype = self._rtype
-        return result    
 
     #---------------------------------------------------------------------------------------------
 

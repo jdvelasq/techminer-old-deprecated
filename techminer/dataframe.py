@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from techminer.list import List
 from techminer.matrix import Matrix
-from techminer.aux import cut_text
+from techminer.common import cut_text
 import matplotlib.pyplot as plt
 import networkx as nx
 from collections import OrderedDict 
