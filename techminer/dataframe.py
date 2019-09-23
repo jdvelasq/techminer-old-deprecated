@@ -53,13 +53,16 @@ class RecordsDataFrame(pd.DataFrame):
 
     #----------------------------------------------------------------------------------------------
     def get_records_by_IDs(self, IDs):
+        """Extracts records using the ID number.
         """
-        """
-        selected = self[['ID']]
-        selected['Selected'] = False
+        result = None
         for ID in IDs:
-            selected['Selected'] = selected['Selected'] | (self['ID'] == ID)
-        return self[selected]
+            rdf = self[self['ID'] == ID].copy()
+            if result is None:
+                result = rdf
+            else:
+                result = result.append(rdf)
+        return result
 
     #----------------------------------------------------------------------------------------------
     #
@@ -69,20 +72,9 @@ class RecordsDataFrame(pd.DataFrame):
     def documents_by_terms(self, column, sep=None, top_n=None, minmax=None):
         """Computes the number of documents per term.
 
-
-        >>> rdf = RecordsDataFrame({'letters': ['a', 'b', 'c', 'a', None, 'c']})
-        >>> rdf.documents_by_terms('letters')
-          letters  Num Documents
-        0       a              2
-        2       c              2
-        1       b              1
-        >>> rdf = RecordsDataFrame({'letters': ['a|b', 'b|d|a', 'c', 'a', None, 'c']})
-        >>> rdf.documents_by_terms('letters', sep='|')
-          letters  Num Documents
-        0       a              3
-        1       b              2
-        2       c              2
-        3       d              1
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('../data/cleaned.json', orient='records', lines=True))
+        >>> rdf.documents_by_terms('Authors', sep=',').head(5)
 
         """
 
@@ -567,15 +559,38 @@ class RecordsDataFrame(pd.DataFrame):
     def citations_by_terms(self, column, sep=None, top_n=None, minmax=None):
         """Computes the number of citations to docuement per year.
 
-        >>> rdf = RecordsDataFrame({
-        ...   'term':     ['a;b', 'a', 'b', 'c', None, 'b'],
-        ...   'Cited by': [   1,   2,   3,   4,     3,  7]
-        ... })
-        >>> rdf.citations_by_terms('term', sep=';')
-          term  Cited by
-        0    b        11
-        1    c         4
-        2    a         3
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.citations_by_terms(column='Authors', sep=',', top_n=10)
+                    Authors  Cited by
+        0     Yeh W.-C. [1]     188.0
+        1   Hsieh T.-J. [1]     188.0
+        2   Hsiao H.-F. [1]     188.0
+        3  Hussain A.J. [2]      52.0
+        4     Krauss C. [1]      49.0
+        5    Fischer T. [1]      49.0
+        6       Wang J. [7]      46.0
+        7    Liatsis P. [1]      42.0
+        8    Ghazali R. [1]      42.0
+        9  Yoshihara A. [1]      37.0
+        >>> rdf.citations_by_terms(column='Authors', sep=',', minmax=(30,50))
+                       Authors  Cited by
+        4        Krauss C. [1]      49.0
+        5       Fischer T. [1]      49.0
+        6          Wang J. [7]      46.0
+        7       Liatsis P. [1]      42.0
+        8       Ghazali R. [1]      42.0
+        9     Yoshihara A. [1]      37.0
+        10    Matsubara T. [1]      37.0
+        11        Akita R. [1]      37.0
+        12       Uehara K. [1]      37.0
+        13     Passalis N. [3]      31.0
+        14      Gabbouj M. [3]      31.0
+        15   Kanniainen J. [3]      31.0
+        16        Tefas A. [3]      31.0
+        17  Tsantekidis A. [2]      31.0
+        18    Iosifidis A. [3]      31.0
+        
         """
         citations = self[[column, 'Cited by']]
         citations = citations.dropna()
@@ -785,62 +800,36 @@ class RecordsDataFrame(pd.DataFrame):
     def autocorr(self, column, sep=None, top_n=20, cut_value=0):
         """
 
-            
-        >>> rdf = RecordsDataFrame({
-        ... 'A':['a;b', 'b', 'c;a', 'b;a', 'c', 'd', 'e','a;b;c', 'e;a', None]
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-               A
-        0    a;b
-        1      b
-        2    c;a
-        3    b;a
-        4      c
-        5      d
-        6      e
-        7  a;b;c
-        8    e;a  
-        9   None
-
-        >>> rdf.autocorr(column='A', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-           A (row) A (col)  Autocorrelation
-        0        a       a         1.000000
-        1        b       b         1.000000
-        2        e       e         1.000000
-        3        c       c         1.000000
-        4        d       d         1.000000
-        5        a       b         0.670820
-        6        b       a         0.670820
-        7        a       c         0.516398
-        8        c       a         0.516398
-        9        a       e         0.316228
-        10       e       a         0.316228
-        11       b       c         0.288675
-        12       c       b         0.288675
-        13       d       e         0.000000
-        14       d       c         0.000000
-        15       d       b         0.000000
-        16       d       a         0.000000
-        17       e       d         0.000000
-        18       a       d         0.000000
-        19       e       c         0.000000
-        20       e       b         0.000000
-        21       c       e         0.000000
-        22       b       d         0.000000
-        23       b       e         0.000000
-        24       c       d         0.000000
-
-        >>> rdf.autocorr(column='A', sep=';', top_n=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-          A (row) A (col)  Autocorrelation
-        0       a       a         1.000000
-        1       b       b         1.000000
-        2       c       c         1.000000
-        3       a       b         0.670820
-        4       b       a         0.670820
-        5       a       c         0.516398
-        6       c       a         0.516398
-        7       b       c         0.288675
-        8       c       b         0.288675
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.autocorr(column='Authors', sep=',', top_n=5) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+               Authors (row)     Authors (col)  Autocorrelation                                                ID
+        0        Wang J. [7]       Wang J. [7]              1.0  [[*3*], [*10*], [*15*], [*80*], [*87*], [*128*]]
+        1       Zhang G. [4]      Zhang G. [4]              1.0                [[*27*], [*78*], [*117*], [*119*]]
+        2   Hernandez G. [3]  Hernandez G. [3]              1.0                         [[*52*], [*94*], [*100*]]
+        3         Yan X. [3]        Yan X. [3]              1.0                          [[*13*], [*44*], [*85*]]
+        4       Tefas A. [3]      Tefas A. [3]              1.0                         [[*8*], [*110*], [*114*]]
+        5   Hernandez G. [3]       Wang J. [7]              0.0                                              None
+        6       Tefas A. [3]  Hernandez G. [3]              0.0                                              None
+        7       Tefas A. [3]        Yan X. [3]              0.0                                              None
+        8       Tefas A. [3]      Zhang G. [4]              0.0                                              None
+        9       Tefas A. [3]       Wang J. [7]              0.0                                              None
+        10  Hernandez G. [3]      Tefas A. [3]              0.0                                              None
+        11       Wang J. [7]        Yan X. [3]              0.0                                              None
+        12  Hernandez G. [3]        Yan X. [3]              0.0                                              None
+        13  Hernandez G. [3]      Zhang G. [4]              0.0                                              None
+        14       Wang J. [7]      Tefas A. [3]              0.0                                              None
+        15      Zhang G. [4]       Wang J. [7]              0.0                                              None
+        16        Yan X. [3]  Hernandez G. [3]              0.0                                              None
+        17       Wang J. [7]      Zhang G. [4]              0.0                                              None
+        18        Yan X. [3]      Zhang G. [4]              0.0                                              None
+        19        Yan X. [3]       Wang J. [7]              0.0                                              None
+        20      Zhang G. [4]      Tefas A. [3]              0.0                                              None
+        21      Zhang G. [4]  Hernandez G. [3]              0.0                                              None
+        22      Zhang G. [4]        Yan X. [3]              0.0                                              None
+        23       Wang J. [7]  Hernandez G. [3]              0.0                                              None
+        24        Yan X. [3]      Tefas A. [3]              0.0                                              None
+       
 
         """
         result = self.crosscorr(
