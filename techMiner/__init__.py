@@ -8,7 +8,7 @@ from techminer.records import *
 from techminer.strings import *
 from techminer.thesaurus import *
 from techminer.transform import *
-from techminer.aux import *
+from techminer.common import *
 
 
 
