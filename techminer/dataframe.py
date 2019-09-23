@@ -73,7 +73,7 @@ class RecordsDataFrame(pd.DataFrame):
         """Computes the number of documents per term.
 
         >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(pd.read_json('../data/cleaned.json', orient='records', lines=True))
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
         >>> rdf.documents_by_terms('Authors', sep=',').head(5)
 
         """
@@ -590,7 +590,7 @@ class RecordsDataFrame(pd.DataFrame):
         16        Tefas A. [3]      31.0
         17  Tsantekidis A. [2]      31.0
         18    Iosifidis A. [3]      31.0
-        
+
         """
         citations = self[[column, 'Cited by']]
         citations = citations.dropna()
@@ -634,11 +634,9 @@ class RecordsDataFrame(pd.DataFrame):
     def citations_by_year(self, cumulative=False):
         """Computes the number of citations to docuement per year.
 
-        >>> rdf = RecordsDataFrame({
-        ...   'Year': [2014, 2014, 2016, 2017, None, 2019],
-        ...   'Cited by': [1, 2, 3, 4, 3, 7]
-        ... })
-        >>> rdf.citations_by_year()
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.citations_by_year().head()
            Year  Cited by
         0  2014         3
         1  2015         0
@@ -682,20 +680,17 @@ class RecordsDataFrame(pd.DataFrame):
     def citations_by_terms_by_year(self, column, sep=None, top_n=None, minmax=None):
         """Computes the number of citations to docuement per year.
 
-        >>> rdf = RecordsDataFrame({
-        ...   'Year' :     [  2014, 2014, 2016,  2017, None, 2019 ],
-        ...   'term' :     [ 'a;b', 'a;c',  'b',  'c', None,   'b'],
-        ...   'Cited by' : [     1,    2,     3,    4,    3,     7]
-        ... })
-
-        >>> rdf.citations_by_terms_by_year('term', sep=';')
-          term  Year  Cited by
-        0    a  2014         3
-        1    b  2014         1
-        2    b  2016         3
-        3    b  2019         7
-        4    c  2014         2
-        5    c  2017         4
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.citations_by_terms_by_year('Authors', sep=',', top_n=5)
+                      Authors       Year  Cited by
+        59   Hernandez G. [3]  2018 [52]       1.0
+        157      Tefas A. [3]  2017 [19]      31.0
+        167       Wang J. [7]   2016 [5]      38.0
+        168       Wang J. [7]  2018 [52]       8.0
+        193      Zhang G. [4]  2017 [19]       8.0
+        194      Zhang G. [4]  2018 [52]       1.0
+        195      Zhang G. [4]  2019 [53]       3.0
 
         """
         citations = self[[column, 'Cited by', 'Year']]
