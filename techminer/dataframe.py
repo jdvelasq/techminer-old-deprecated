@@ -27,12 +27,10 @@ class RecordsDataFrame(pd.DataFrame):
     """Class to represent a dataframe of bibliographic records.
     """
 
-
     #----------------------------------------------------------------------------------------------
     @property
     def _constructor_expanddim(self):
         return self
-
 
     #----------------------------------------------------------------------------------------------
     def years_list(self):
@@ -52,8 +50,6 @@ class RecordsDataFrame(pd.DataFrame):
         self['ID'] = [ '[*'+str(x)+ '*]' for x in range(len(self))]
         self.index = self['ID']
         return self
-
-
 
     #----------------------------------------------------------------------------------------------
     def get_records_by_IDs(self, IDs):
@@ -287,7 +283,7 @@ class RecordsDataFrame(pd.DataFrame):
         return Matrix(result, rtype='coo-matrix')
 
     #----------------------------------------------------------------------------------------------
-    def terms_by_terms(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
+    def co_ocurrence(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """
 
     
@@ -318,9 +314,17 @@ class RecordsDataFrame(pd.DataFrame):
         0  0  a              2
         1  1  b              2
         """
-        
-        ## computes the number of documents by term by term
+
+        ## computes the number of documents by term by term        
         data = self[[column_r, column_c, 'ID']].dropna()
+
+        top_r = self.documents_by_terms(column_r, sep_r)
+        top_c = self.documents_by_terms(column_c, sep_c)
+
+        data.columns = [column_r + ' (row)', column_c + ' (col)', 'ID' ]
+        column_r +=  ' (row)'
+        column_c +=  ' (col)'
+
         if sep_r is not None:
             data[column_r] = data[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
             data[column_r] = data[column_r].map(
@@ -335,6 +339,8 @@ class RecordsDataFrame(pd.DataFrame):
             )
             data = data.explode(column_c)   
             data.index = range(len(data))
+
+        ## number of documents
         numdocs = data.groupby(by=[column_r, column_c]).size()
 
         ## results dataframe
@@ -349,17 +355,17 @@ class RecordsDataFrame(pd.DataFrame):
         ## compute top_n terms
         if top_n is not None:
             ## rows
-            top = self.documents_by_terms(column_r, sep_r)
-            if len(top) > top_n:
-                top = top[0:top_n][column_r].tolist()
-                selected = [True if row[0] in top else False for idx, row in result.iterrows()] 
+            # top = self.documents_by_terms(column_r, sep_r)
+            if len(top_r) > top_n:
+                top_r = top_r[0:top_n][top_r.columns[0]].tolist()
+                selected = [True if row[0] in top_r else False for idx, row in result.iterrows()] 
                 result = result[selected]
 
             ## cols
-            top = self.documents_by_terms(column_c, sep_c)
-            if len(top) > top_n:
-                top = top[0:top_n][column_c].tolist()
-                selected = [True if row[1] in top else False for idx, row in result.iterrows()] 
+            # top = self.documents_by_terms(column_c, sep_c)
+            if len(top_c) > top_n:
+                top_c = top_c[0:top_n][top_c.columns[0]].tolist()
+                selected = [True if row[1] in top_c else False for idx, row in result.iterrows()] 
                 result = result[selected]
             
         if minmax is not None:
@@ -469,7 +475,9 @@ class RecordsDataFrame(pd.DataFrame):
         """
         
         ## computes the number of documents by term by term
+
         data = self[[column_r, column_c, 'Year', 'ID']].dropna()
+
         if sep_r is not None:
             data[column_r] = data[column_r].map(lambda x: x.split(sep_r))
             data[column_r] = data[column_r].map(
@@ -1238,7 +1246,7 @@ class RecordsDataFrame(pd.DataFrame):
     def num_of_sources(self):
         return len(self['Source title'].unique())
 
-#----------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
     def aduna_map(self, column, sep=None, top_n=None, figsize=(12,10), font_size=10):
         """
         """

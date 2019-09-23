@@ -419,152 +419,158 @@ class Matrix(pd.DataFrame):
         return centers, clusters
 
 
-
     #---------------------------------------------------------------------------------------------
-    def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
+    def __cluster_map_correlation(self, min_value=None, top_links=None, figsize = (10,10), 
             font_size=12, factor=None, size=(25,300)):
 
-        #----------------------------------------------------------------------------------------
-        def correlation_map():
-            ## cluster dataset
-            cluster_data = self._cluster_data.copy()
+        ## cluster dataset
+        cluster_data = self._cluster_data.copy()
 
-            ## figure properties
-            plt.figure(figsize=figsize)
+        ## figure properties
+        plt.figure(figsize=figsize)
 
-            ## graph
-            graph = nx.Graph()
+        ## graph
+        graph = nx.Graph()
 
-            ## adds nodes to graph
-            clusters = list(set(cluster_data.cluster))
-            nodes = list(set(self.tomatrix().index))
+        ## adds nodes to graph
+        clusters = list(set(cluster_data.cluster))
+        nodes = list(set(self.tomatrix().index))
 
-            graph.add_nodes_from(clusters)
-            graph.add_nodes_from(nodes)
+        graph.add_nodes_from(clusters)
+        graph.add_nodes_from(nodes)
 
 
-            ## adds edges and properties
-            weigth = []
-            style = []
-            value = []
-            for _, row in cluster_data.iterrows():
-                graph.add_edge(row[1], row[2])
-                if row[3] >= 0.75:
-                    weigth += [4]
-                    style += ['solid']
-                    value += [row[3]]
-                elif row[3] >= 0.50:
-                    weigth += [2]
-                    style += ['solid']
-                    value += [row[3]]
-                elif row[3] >= 0.25:
-                    weigth += [1]
-                    style += ['dashed']
-                    value += [row[3]]
-                else:
-                    weigth += [1]
-                    style += ['dotted']
-                    value += [row[3]]
+        ## adds edges and properties
+        weigth = []
+        style = []
+        value = []
+        for _, row in cluster_data.iterrows():
+            graph.add_edge(row[1], row[2])
+            if row[3] >= 0.75:
+                weigth += [4]
+                style += ['solid']
+                value += [row[3]]
+            elif row[3] >= 0.50:
+                weigth += [2]
+                style += ['solid']
+                value += [row[3]]
+            elif row[3] >= 0.25:
+                weigth += [1]
+                style += ['dashed']
+                value += [row[3]]
+            else:
+                weigth += [1]
+                style += ['dotted']
+                value += [row[3]]
 
 
-            edges = pd.DataFrame({
-                'edges' : graph.edges(),
-                'weight' : weigth,
-                'style' : style,
-                'value' : value
-            })
+        edges = pd.DataFrame({
+            'edges' : graph.edges(),
+            'weight' : weigth,
+            'style' : style,
+            'value' : value
+        })
 
-            edges = edges.sort_values(by='value', ascending=False)
+        edges = edges.sort_values(by='value', ascending=False)
 
-            if top_links is not None and top_links < len(edges):
-                    edges = edges[0:top_links]
+        if top_links is not None and top_links < len(edges):
+                edges = edges[0:top_links]
 
-            if min_value is not None:
-                edges = edges[edges['value'] >= min_value]
+        if min_value is not None:
+            edges = edges[edges['value'] >= min_value]
 
-            ## edges from center of cluster to nodes.
-            for _, row in cluster_data.iterrows():
-                graph.add_edge(row[0], row[1]) 
-                graph.add_edge(row[0], row[2])
-            
+        ## edges from center of cluster to nodes.
+        for _, row in cluster_data.iterrows():
+            graph.add_edge(row[0], row[1]) 
+            graph.add_edge(row[0], row[2])
+        
 
-            ## graph layout
-            path_length = nx.shortest_path_length(graph)
-            distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
-            for row, data in path_length:
-                for col, dist in data.items():
-                    distances.loc[row,col] = dist
-            distances = distances.fillna(distances.max().max())
-            layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+        ## graph layout
+        path_length = nx.shortest_path_length(graph)
+        distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
+        for row, data in path_length:
+            for col, dist in data.items():
+                distances.loc[row,col] = dist
+        distances = distances.fillna(distances.max().max())
+        layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
 
-            ## nodes drawing
-            node_size = [x[(x.find('[')+1):-1] for x in nodes]
-            node_size = [float(x) for x in node_size]
-            max_node_size = max(node_size)
-            min_node_size = min(node_size)
-            node_size = [size[0] + x / (max_node_size - min_node_size) * size[1] for x in node_size]
+        ## nodes drawing
+        node_size = [x[(x.find('[')+1):-1] for x in nodes]
+        node_size = [float(x) for x in node_size]
+        max_node_size = max(node_size)
+        min_node_size = min(node_size)
+        node_size = [size[0] + x / (max_node_size - min_node_size) * size[1] for x in node_size]
 
-            nx.draw_networkx_nodes(
+        nx.draw_networkx_nodes(
+            graph, 
+            layout, 
+            nodelist=nodes, 
+            node_size=node_size,
+            node_color='red')
+
+        ## edges drawing
+        for style in list(set(edges['style'].tolist())):
+
+            edges_set = edges[edges['style'] == style]
+
+            if len(edges_set) == 0:
+                continue
+
+            nx.draw_networkx_edges(
                 graph, 
-                layout, 
-                nodelist=nodes, 
-                node_size=node_size,
-                node_color='red')
-
-            ## edges drawing
-            for style in list(set(edges['style'].tolist())):
-
-                edges_set = edges[edges['style'] == style]
-
-                if len(edges_set) == 0:
-                    continue
-
-                nx.draw_networkx_edges(
-                    graph, 
-                    layout,
-                    edgelist=edges_set['edges'].tolist(), 
-                    style=style,
-                    width=edges_set['weight'].tolist(),
-                    edge_color='black')
+                layout,
+                edgelist=edges_set['edges'].tolist(), 
+                style=style,
+                width=edges_set['weight'].tolist(),
+                edge_color='black')
 
 
-            ## node labels
-            x_left, x_right = plt.xlim()
-            y_left, y_right = plt.ylim()
-            delta_x = (x_right - x_left) * 0.01
-            delta_y = (y_right - y_left) * 0.01
-            for node in nodes:
-                x_pos, y_pos = layout[node]
-                plt.text(
-                    x_pos + delta_x, 
-                    y_pos + delta_y, 
-                    node, 
-                    size=font_size,
-                    ha='left',
-                    va='bottom',
-                    bbox=dict(
-                        boxstyle="square",
-                        ec='lightgray',
-                        fc='white',
-                        ))
+        ## node labels
+        x_left, x_right = plt.xlim()
+        y_left, y_right = plt.ylim()
+        delta_x = (x_right - x_left) * 0.01
+        delta_y = (y_right - y_left) * 0.01
+        for node in nodes:
+            x_pos, y_pos = layout[node]
+            plt.text(
+                x_pos + delta_x, 
+                y_pos + delta_y, 
+                node, 
+                size=font_size,
+                ha='left',
+                va='bottom',
+                bbox=dict(
+                    boxstyle="square",
+                    ec='lightgray',
+                    fc='white',
+                    ))
 
-            if factor is not None:
-                left, right = plt.xlim()
-                width = (right - left) * factor / 2.0
-                plt.xlim(left - width, right + width)
+        if factor is not None:
+            left, right = plt.xlim()
+            width = (right - left) * factor / 2.0
+            plt.xlim(left - width, right + width)
 
-        #----------------------------------------------------------------------------------------
-        def co_ocurrence_map():
-            
-            ## figure properties
-            plt.figure(figsize=figsize)
+        plt.axis('off')
 
-            ## graph
-            graph = nx.Graph()
 
-            terms_r = list(set(self.tomatrix().index.tolist()))
-            terms_c = list(set(self.tomatrix().columns.tolist()))
-            graph.add_nodes_from(terms_r + terms_c)
+    #---------------------------------------------------------------------------------------------
+    def __cluster_map_coocurrence(self, min_value=None, top_links=None, figsize = (10,10), 
+            font_size=12, factor=None, size=(300,1000)):
+
+        ## figure properties
+        plt.figure(figsize=figsize)
+
+        ## graph
+        graph = nx.Graph()
+
+        terms_r = list(set(self.tomatrix().index.tolist()))
+        terms_c = list(set(self.tomatrix().columns.tolist()))
+
+        nodes = list(set(terms_r + terms_c))
+        nodes = [cut_text(x) for x in nodes]
+        graph.add_nodes_from(nodes)
+
+        if sorted(terms_r) != sorted(terms_c):
 
             numnodes = [str(i) for i in range(len(self))]
             graph.add_nodes_from(numnodes)
@@ -573,84 +579,131 @@ class Matrix(pd.DataFrame):
                 graph.add_edge(row[0], str(idx))
                 graph.add_edge(row[1], str(idx))
 
-            ## graph layout
-            path_length = nx.shortest_path_length(graph)
-            distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
-            for row, data in path_length:
-                for col, dist in data.items():
-                    distances.loc[row,col] = dist
-            distances = distances.fillna(distances.max().max())
-            layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+            labels={str(idx):row[2] for idx, row in self.iterrows()}
 
-            ## draw terms nodes
-            nx.draw_networkx_nodes(
-                graph, 
-                layout, 
-                nodelist=terms_r, 
-                node_size=300,
-                node_color='red')
-
-            nx.draw_networkx_nodes(
-                graph, 
-                layout, 
-                nodelist=terms_c, 
-                node_size=300,
-                node_color='blue')
-
-            x_left, x_right = plt.xlim()
-            y_left, y_right = plt.ylim()
-            delta_x = (x_right - x_left) * 0.01
-            delta_y = (y_right - y_left) * 0.01
-            for node in terms_r + terms_c:
-                x_pos, y_pos = layout[node]
-                plt.text(
-                    x_pos + delta_x, 
-                    y_pos + delta_y, 
-                    node, 
-                    size=font_size,
-                    ha='left',
-                    va='bottom',
-                    bbox=dict(
-                        boxstyle="square",
-                        ec='gray',
-                        fc='white',
-                        ))
-
-            # nx.draw_networkx_labels(
-            #     graph,
-            #     layout,
-            #     labels={t:t for t in terms},
-            #     bbox=dict(facecolor='none', edgecolor='lightgray', boxstyle='round'))
-
-            ## draw quantity nodes
-            nx.draw_networkx_nodes(
-                graph, 
-                layout, 
-                nodelist=numnodes, 
-                node_size=300,
-                node_color='lightblue')
-
-            nx.draw_networkx_labels(
-                graph,
-                layout,
-                labels={str(idx):row[2] for idx, row in self.iterrows()},
-                font_color='black')
-
-            ## edges
-            nx.draw_networkx_edges(
-                graph, 
-                layout,
-                width=1
-            )
-
-
-        #----------------------------------------------------------------------------------------
-        if self._rtype == 'coo-matrix':
-            co_ocurrence_map()
         else:
-            correlation_map()
+            
+            mtx = self.tomatrix()
+            edges = []
+            labels = {}
 
+            n = 0
+            for idx_r, row in enumerate(mtx.index.tolist()):
+                for idx_c, col in enumerate(mtx.columns.tolist()):
+
+                    if idx_c < idx_r:
+                        continue
+
+                    if mtx.at[row, col] > 0:
+                        edges += [(row, str(n)), (col, str(n))]
+                        labels[str(n)] = mtx.at[row, col]
+                        n += 1
+                        
+
+            numnodes = [str(i) for i in range(n)]
+            graph.add_nodes_from(numnodes)
+
+            for a, b in edges:
+                graph.add_edge(a, b)
+            
+            
+
+        ## graph layout
+        path_length = nx.shortest_path_length(graph)
+        distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
+        for row, data in path_length:
+            for col, dist in data.items():
+                distances.loc[row,col] = dist
+        distances = distances.fillna(distances.max().max())
+        layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+
+        ## draw terms nodes
+        node_size = [int(n[n.find('[')+1:-1])  for n in nodes]
+        node_size = [ size[0] + (n - min(node_size)) / (max(node_size) - min(node_size)) * (size[1] - size[0])    for n in node_size]
+        nx.draw_networkx_nodes(
+            graph, 
+            layout, 
+            nodelist=nodes, 
+            node_size=node_size,
+            node_color='red')
+
+        x_left, x_right = plt.xlim()
+        y_left, y_right = plt.ylim()
+        delta_x = (x_right - x_left) * 0.01
+        delta_y = (y_right - y_left) * 0.01
+        for node in nodes:
+            x_pos, y_pos = layout[node]
+            plt.text(
+                x_pos + delta_x, 
+                y_pos + delta_y, 
+                node, 
+                size=font_size,
+                ha='left',
+                va='bottom',
+                bbox=dict(
+                    boxstyle="square",
+                    ec='gray',
+                    fc='white',
+                    ))
+
+        # nx.draw_networkx_labels(
+        #     graph,
+        #     layout,
+        #     labels={t:t for t in terms},
+        #     bbox=dict(facecolor='none', edgecolor='lightgray', boxstyle='round'))
+
+        ## draw quantity nodes
+        node_size = [int(labels[n]) for n in labels.keys()]
+        node_size = [ size[0] + (n - min(node_size)) / (max(node_size) - min(node_size)) * (size[1] - size[0])    for n in node_size]        
+        nx.draw_networkx_nodes(
+            graph, 
+            layout, 
+            nodelist=numnodes, 
+            node_size=node_size,
+            node_color='lightblue')
+
+        nx.draw_networkx_labels(
+            graph,
+            layout,
+            labels=labels,
+            font_color='black')
+
+        ## edges
+        nx.draw_networkx_edges(
+            graph, 
+            layout,
+            width=1
+        )
         plt.axis('off')
+    
+
+
+    #---------------------------------------------------------------------------------------------
+    def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
+            font_size=12, factor=None, size=(25,300)):
+
+
+        if self._rtype == 'coo-matrix':
+
+            self.__cluster_map_coocurrence(
+                min_value=min_value, 
+                top_links=top_links, 
+                figsize=figsize, 
+                font_size=font_size, 
+                factor=factor, 
+                size=size)
+
+        else:
+
+            self.__cluster_map_correlation(
+                min_value=min_value, 
+                top_links=top_links, 
+                figsize=figsize, 
+                font_size=font_size, 
+                factor=factor, 
+                size=size)
+
+        
 
 
 
