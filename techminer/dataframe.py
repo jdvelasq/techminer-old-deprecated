@@ -75,6 +75,12 @@ class RecordsDataFrame(pd.DataFrame):
         >>> import pandas as pd
         >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
         >>> rdf.documents_by_terms('Authors', sep=',').head(5)
+                Authors  Num Documents                                                 ID
+        0       Wang J.              7  [[*3*], [*10*], [*15*], [*80*], [*87*], [*128*...
+        1      Zhang G.              4                 [[*27*], [*78*], [*117*], [*119*]]
+        2        Yan X.              3                           [[*13*], [*44*], [*85*]]
+        3  Hernandez G.              3                          [[*52*], [*94*], [*100*]]
+        4      Tefas A.              3                          [[*8*], [*110*], [*114*]]
 
         """
 
@@ -122,23 +128,22 @@ class RecordsDataFrame(pd.DataFrame):
     def documents_by_year(self, cumulative=False):
         """Computes the number of documents per year.
 
-        >>> rdf = RecordsDataFrame({'Year': [2014, 2014, 2016, 2017, None, 2019]})
-        >>> rdf.documents_by_year()
-           Year  Num Documents
-        0  2014              2
-        1  2015              0
-        2  2016              1
-        3  2017              1
-        4  2018              0
-        5  2019              1
-        >>> rdf.documents_by_year(cumulative=True)
-           Year  Num Documents
-        0  2014              2
-        1  2015              2
-        2  2016              3
-        3  2017              4
-        4  2018              4
-        5  2019              5
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.documents_by_year().head()
+           Year  Num Documents                                    ID
+        0  2010              3           [[*141*], [*142*], [*143*]]
+        1  2011              2                    [[*139*], [*140*]]
+        2  2012              2                    [[*137*], [*138*]]
+        3  2013              4  [[*133*], [*134*], [*135*], [*136*]]
+        4  2014              2                    [[*131*], [*132*]]
+        >>> rdf.documents_by_year(cumulative=True).head()
+           Year  Num Documents                                    ID
+        0  2010              3           [[*141*], [*142*], [*143*]]
+        1  2011              5                    [[*139*], [*140*]]
+        2  2012              7                    [[*137*], [*138*]]
+        3  2013             11  [[*133*], [*134*], [*135*], [*136*]]
+        4  2014             13                    [[*131*], [*132*]]
 
         """
 
@@ -170,50 +175,31 @@ class RecordsDataFrame(pd.DataFrame):
     def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
         """
 
-        >>> rdf = RecordsDataFrame({
-        ...   'Year':[2014,  2014, 2015, 2015, 2018, 2018, 2018 ],
-        ...   'term':[   'a;b;a', 'b;c', 'c;b', 'd;a',  'e;b',  'a;a',  'b']
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-           Year   term
-        0  2014  a;b;a
-        1  2014    b;c
-        2  2015    c;b
-        3  2015    d;a
-        4  2018    e;b
-        5  2018    a;a
-        6  2018      b
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.terms_by_year(column='Author Keywords', sep=';', top_n=5).head()
+              Author Keywords       Year  Num Documents                                                ID
+        0  Deep Learning [10]  2018 [37]              6  [[*54*], [*78*], [*79*], [*86*], [*95*], [*97*]]
+        1  Deep Learning [10]  2019 [27]              4                  [[*15*], [*23*], [*26*], [*36*]]
+        2  Deep learning [34]   2013 [3]              1                                         [[*134*]]
+        3  Deep learning [34]   2016 [2]              1                                         [[*125*]]
+        4  Deep learning [34]   2017 [7]              2                                [[*117*], [*120*]]
 
-        >>> rdf.terms_by_year('term', sep=';')
-          term  Year  Num Documents
-        0    a  2014              2
-        1    a  2015              1
-        2    a  2018              2
-        3    b  2014              2
-        4    b  2015              1
-        5    b  2018              2
-        6    c  2014              1
-        7    c  2015              1
-        8    d  2015              1
-        9    e  2018              1
+        >>> rdf.terms_by_year('Author Keywords',  minmax=(2,3), sep=';').head()
+                             Author Keywords       Year  Num Documents                  ID
+        0                          ARIMA [2]  2017 [13]              2  [[*115*], [*122*]]
+        1                            CNN [4]  2018 [47]              2    [[*72*], [*89*]]
+        2                            CNN [4]  2019 [33]              2    [[*18*], [*50*]]
+        3  Convolutional Neural Networks [2]  2018 [47]              2    [[*78*], [*79*]]
+        4   Convolutional neural network [4]  2018 [47]              2    [[*64*], [*77*]]
 
-        >>> rdf.terms_by_year('term',  minmax=(2,8), sep=';')
-          term  Year  Num Documents
-        0    a  2014              2
-        2    a  2018              2
-        3    b  2014              2
-        5    b  2018              2
-
-        >>> rdf.terms_by_year('term',  top_n=3, minmax=(1,8), sep=';')
-          term  Year  Num Documents
-        0    a  2014              2
-        1    a  2015              1
-        2    a  2018              2
-        3    b  2014              2
-        4    b  2015              1
-        5    b  2018              2
-        6    c  2014              1
-        7    c  2015              1
+        >>> rdf.terms_by_year('Author Keywords',  top_n=3, minmax=(1,3), sep=';').head()
+             Author Keywords      Year  Num Documents                  ID
+        0  Deep learning [4]  2013 [3]              1           [[*134*]]
+        1  Deep learning [4]  2016 [1]              1           [[*125*]]
+        2  Deep learning [4]  2017 [5]              2  [[*117*], [*120*]]
+        3           LSTM [6]  2013 [3]              2  [[*133*], [*135*]]
+        4           LSTM [6]  2015 [1]              1           [[*130*]]
         """
 
         ## computes the number of documents by year
@@ -278,33 +264,20 @@ class RecordsDataFrame(pd.DataFrame):
     def co_ocurrence(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """
 
-    
-        >>> rdf = RecordsDataFrame({
-        ...   'A':[0, 1, 2, 3, 4, 0, 1],
-        ...   'B':['a', 'b', 'c', 'd', 'e', 'a', 'b']
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-           A  B
-        0  0  a
-        1  1  b
-        2  2  c
-        3  3  d
-        4  4  e
-        5  0  a
-        6  1  b    
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.co_ocurrence(column_r='Authors', sep_r=',', column_c='Document Type', top_n=5)
+              Authors (row)    Document Type (col)  Num Documents                                         ID
+        0  Hernandez G. [3]  Conference Paper [12]              3                  [[*52*], [*94*], [*100*]]
+        1      Tefas A. [3]  Conference Paper [12]              3                  [[*8*], [*110*], [*114*]]
+        2       Wang J. [7]            Article [8]              5  [[*3*], [*10*], [*80*], [*128*], [*128*]]
+        3       Wang J. [7]  Conference Paper [12]              2                           [[*15*], [*87*]]
+        4        Yan X. [3]            Article [8]              1                                   [[*44*]]
+        5        Yan X. [3]  Conference Paper [12]              2                           [[*13*], [*85*]]
+        6      Zhang G. [4]            Article [8]              2                          [[*27*], [*117*]]
+        7      Zhang G. [4]  Conference Paper [12]              2                          [[*78*], [*119*]]
+        
 
-        >>> rdf.terms_by_terms('A', 'B')
-           A  B  Num Documents
-        0  0  a              2
-        1  1  b              2
-        2  2  c              1
-        3  3  d              1
-        4  4  e              1
-
-        >>> rdf.terms_by_terms('A', 'B', minmax=(2,8))
-           A  B  Num Documents
-        0  0  a              2
-        1  1  b              2
         """
 
         ## computes the number of documents by term by term        
@@ -415,54 +388,21 @@ class RecordsDataFrame(pd.DataFrame):
     def terms_by_terms_by_year(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """
 
-    
-        >>> rdf = RecordsDataFrame({
-        ...   'Year'  : [   2013,   2013,  2014,    2014,  2015,  2016, 2016],
-        ...   'term0' : [ '0;1;2', '1;2', '2;1',     '3',   '4',   '0',  '1'],
-        ...   'term1' : [     'a',   'a',   'c', 'd,a,b', 'e,b', 'a,b',  'b']
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-           Year  term0  term1
-        0  2013  0;1;2      a
-        1  2013    1;2      a
-        2  2014    2;1      c
-        3  2014      3  d,a,b
-        4  2015      4    e,b
-        5  2016      0    a,b
-        6  2016      1      b          
-
-        >>> rdf.terms_by_terms_by_year('term0', 'term1', sep_r=';', sep_c=',')
-           term0 term1  Year  Num Documents
-        0      0     a  2013              1
-        1      0     a  2016              1
-        2      0     b  2016              1
-        3      1     a  2013              2
-        4      1     b  2016              1
-        5      1     c  2014              1
-        6      2     a  2013              2
-        7      2     c  2014              1
-        8      3     a  2014              1
-        9      3     b  2014              1
-        10     3     d  2014              1
-        11     4     b  2015              1
-        12     4     e  2015              1
-
-        >>> rdf.terms_by_terms_by_year('term0', 'term1', sep_r=';', sep_c=',', top_n=3)
-          term0 term1  Year  Num Documents
-        0     0     a  2013              1
-        1     0     a  2016              1
-        2     0     b  2016              1
-        3     1     a  2013              2
-        4     1     b  2016              1
-        5     1     c  2014              1
-        6     2     a  2013              2
-        7     2     c  2014              1
-
-        >>> rdf.terms_by_terms_by_year('term0', 'term1', minmax=(2,8), sep_r=';', sep_c=',')
-          term0 term1  Year  Num Documents
-        3     1     a  2013              2
-        6     2     a  2013              2
-
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.terms_by_terms_by_year(column_r='Authors', sep_r=',', column_c='Author Keywords', sep_c=';', top_n=5)
+                       Authors            Author Keywords      Year  Num Documents                 ID
+        519   Hernandez G. [2]          Deep learning [7]  2018 [4]              2  [[*94*], [*100*]]
+        1582       Wang J. [3]          Deep Learning [2]  2019 [5]              1           [[*15*]]
+        1583       Wang J. [3]          Deep learning [7]  2018 [4]              1           [[*87*]]
+        1584       Wang J. [3]          Deep learning [7]  2019 [5]              1            [[*3*]]
+        1741        Yan X. [2]          Deep learning [7]  2019 [5]              1           [[*13*]]
+        1745        Yan X. [2]  Financial time series [2]  2019 [5]              1           [[*13*]]
+        1853      Zhang G. [4]          Deep Learning [2]  2018 [4]              1           [[*78*]]
+        1854      Zhang G. [4]          Deep learning [7]  2017 [2]              1          [[*117*]]
+        1855      Zhang G. [4]          Deep learning [7]  2019 [5]              1           [[*27*]]
+        1856      Zhang G. [4]  Financial time series [2]  2017 [2]              1          [[*119*]]
+        
 
         """
         
@@ -637,13 +577,12 @@ class RecordsDataFrame(pd.DataFrame):
         >>> import pandas as pd
         >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
         >>> rdf.citations_by_year().head()
-           Year  Cited by
-        0  2014         3
-        1  2015         0
-        2  2016         3
-        3  2017         4
-        4  2018         0
-        5  2019         7
+               Year  Cited by
+        0  2010 [3]      21.0
+        1  2011 [2]     230.0
+        2  2012 [2]      16.0
+        3  2013 [4]      36.0
+        4  2014 [2]      23.0
 
         """
 
@@ -753,18 +692,16 @@ class RecordsDataFrame(pd.DataFrame):
     def tdf(self, column, sep, top_n=20):
         """
 
-        >>> rdf = RecordsDataFrame({
-        ...   'col0': ['a', 'a;b', 'b', 'b;c', None, 'c']
-        ... })
-        >>> rdf.tdf('col0', sep=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-             b    a    c
-        0  0.0  1.0  0.0
-        1  1.0  1.0  0.0
-        2  1.0  0.0  0.0
-        3  1.0  0.0  1.0
-        4  0.0  0.0  0.0
-        5  0.0  0.0  1.0        
-        
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.tdf('Authors', sep=',', top_n=5).head() # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+           Wang J.  Zhang G.  Yan X.  Hernandez G.  Tefas A.
+        0      0.0       0.0     0.0           0.0       0.0
+        1      0.0       0.0     0.0           0.0       0.0
+        2      0.0       0.0     0.0           0.0       0.0
+        3      1.0       0.0     0.0           0.0       0.0
+        4      0.0       0.0     0.0           0.0       0.0
+
         """
 
         ## computa los N terminos mas frecuentes
@@ -836,63 +773,37 @@ class RecordsDataFrame(pd.DataFrame):
     def crosscorr(self, column_r, column_c=None, sep_r=None, sep_c=None, top_n=20, cut_value=0):
         """Computes autocorrelation and crosscorrelation.
 
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> rdf.crosscorr(column_r='Authors', sep_r=',', column_c='Author Keywords', sep_c=';', top_n=5)
+                     Authors               Author Keywords  Crosscorrelation                 ID
+        0         Yan X. [3]     Financial time series [7]          0.218218           [[*13*]]
+        1   Hernandez G. [3]            Deep learning [34]          0.198030  [[*94*], [*100*]]
+        2       Zhang G. [4]     Financial time series [7]          0.188982          [[*119*]]
+        3       Zhang G. [4]            Deep learning [34]          0.171499  [[*27*], [*117*]]
+        4       Zhang G. [4]            Deep Learning [10]          0.158114           [[*78*]]
+        5        Wang J. [7]            Deep learning [34]          0.140028    [[*3*], [*87*]]
+        6        Wang J. [7]            Deep Learning [10]          0.129099           [[*15*]]
+        7         Yan X. [3]            Deep learning [34]          0.099015           [[*13*]]
+        8   Hernandez G. [3]                     LSTM [18]          0.000000               None
+        9       Tefas A. [3]  Recurrent neural network [8]          0.000000               None
+        10      Tefas A. [3]            Deep Learning [10]          0.000000               None
+        11      Tefas A. [3]                     LSTM [18]          0.000000               None
+        12      Tefas A. [3]            Deep learning [34]          0.000000               None
+        13  Hernandez G. [3]     Financial time series [7]          0.000000               None
+        14  Hernandez G. [3]  Recurrent neural network [8]          0.000000               None
+        15  Hernandez G. [3]            Deep Learning [10]          0.000000               None
+        16        Yan X. [3]            Deep Learning [10]          0.000000               None
+        17        Yan X. [3]  Recurrent neural network [8]          0.000000               None
+        18       Wang J. [7]                     LSTM [18]          0.000000               None
+        19        Yan X. [3]                     LSTM [18]          0.000000               None
+        20      Zhang G. [4]  Recurrent neural network [8]          0.000000               None
+        21      Zhang G. [4]                     LSTM [18]          0.000000               None
+        22       Wang J. [7]     Financial time series [7]          0.000000               None
+        23       Wang J. [7]  Recurrent neural network [8]          0.000000               None
+        24      Tefas A. [3]     Financial time series [7]          0.000000               None
 
-        >>> rdf = RecordsDataFrame({
-        ... 'c1':['a;b',   'b', 'c;a', 'b;a', 'c',   'd', 'e', 'a;b;c', 'e;a', None,  None],
-        ... 'c2':['A;B;C', 'B', 'B;D', 'B;C', 'C;B', 'A', 'A', 'B;C',    None, 'B;E', None]
-        ... })
-        >>> rdf # doctest: +NORMALIZE_WHITESPACE
-               c1     c2
-        0     a;b  A;B;C
-        1       b      B
-        2     c;a    B;D
-        3     b;a    B;C
-        4       c    C;B
-        5       d      A
-        6       e      A
-        7   a;b;c    B;C
-        8     e;a   None
-        9    None    B;E
-        10   None   None
-
-        >>> rdf.crosscorr(column_r='c1', column_c='c2', sep_r=';', sep_c=';') # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-           c1 c2  Crosscorrelation
-        0   b  B          0.755929
-        1   b  C          0.750000
-        2   a  B          0.676123
-        3   a  C          0.670820
-        4   c  B          0.654654
-        5   c  D          0.577350
-        6   c  C          0.577350
-        7   d  A          0.577350
-        8   a  D          0.447214
-        9   e  A          0.408248
-        10  b  A          0.288675
-        11  a  A          0.258199
-        12  d  C          0.000000
-        13  d  D          0.000000
-        14  d  B          0.000000
-        15  e  E          0.000000
-        16  e  D          0.000000
-        17  c  A          0.000000
-        18  e  C          0.000000
-        19  e  B          0.000000
-        20  c  E          0.000000
-        21  b  E          0.000000
-        22  b  D          0.000000
-        23  a  E          0.000000
-        24  d  E          0.000000
-        >>> rdf.crosscorr(column_r='c1', column_c='c2', sep_r=';', sep_c=';', top_n=3) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-          c1 c2  Crosscorrelation
-        0  b  B          0.755929
-        1  b  C          0.750000
-        2  a  B          0.676123
-        3  a  C          0.670820
-        4  c  B          0.654654
-        5  c  C          0.577350
-        6  b  A          0.288675
-        7  a  A          0.258199
-        8  c  A          0.000000
+        
 
         """ 
  

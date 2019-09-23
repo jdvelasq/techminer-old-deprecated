@@ -1,4 +1,4 @@
-.. automodule:: techminer.second_level
+.. automodule:: techminer.list
     :members:
     :undoc-members:
     :show-inheritance:

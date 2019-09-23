@@ -5,10 +5,10 @@ Modules
     :maxdepth: 1
     
     dataframe
-    first_level
     keywords
+    list
+    matrix
     records
-    second_level
     strings
     thesaurus
     transform

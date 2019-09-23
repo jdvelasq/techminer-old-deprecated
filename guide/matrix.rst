@@ -1,4 +1,4 @@
-.. automodule:: techminer.first_level
+.. automodule:: techminer.matrix
     :members:
     :undoc-members:
     :show-inheritance:
