@@ -99,38 +99,6 @@ def display_records(df):
         parsed = json.loads(y)
         print(json.dumps(parsed, indent=2, sort_keys=True))
 
-#----------------------------------------------------------------------------------------------
-def coverage(df):
-    """Counts the number of None.
-
-    Args:
-        df (pandas.DataFrame): Generic pandas.DataFrame.
-
-    Returns:
-        None.
-
-    **Examples**
-
-    >>> import pandas as pd
-    >>> df = pd.DataFrame({
-    ... 'f0': ['a', None, 'a', None,    'a', 'e'],
-    ... 'f1': [  1,    2,   2,    3,   None,   5]
-    ... })
-    >>> coverage(df)
-      Field  Number of items  Coverage
-    0    f0                4  0.666667
-    1    f1                5  0.833333
-
-
-    """
-
-    result = pd.DataFrame({
-        'Field': df.columns,
-        'Number of items': [len(df) - df[col].isnull().sum() for col in df.columns],
-        'Coverage': [(len(df) - df[col].isnull().sum()) / len(df) for col in df.columns]
-    })
-
-    return result
         
 #----------------------------------------------------------------------------------------------
 def remove_duplicate_records(df, fields, match_type='strict'):
