@@ -263,37 +263,37 @@ class RecordsDataFrame(pd.DataFrame):
         ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
         ... )
         >>> rdf.citations_by_terms_by_year('Authors', sep=',', top_n=5)
-                      Authors       Year  Cited by
-        59   Hernandez G. [3]  2018 [52]       1.0
-        157      Tefas A. [3]  2017 [19]      31.0
-        167       Wang J. [7]   2016 [5]      38.0
-        168       Wang J. [7]  2018 [52]       8.0
-        193      Zhang G. [4]  2017 [19]       8.0
-        194      Zhang G. [4]  2018 [52]       1.0
-        195      Zhang G. [4]  2019 [53]       3.0
+                    Authors       Year  Cited by                  ID
+        0  Hernandez G. [3]  2018 [52]       1.0           [[*100*]]
+        1      Tefas A. [3]  2017 [19]      31.0  [[*110*], [*114*]]
+        2       Wang J. [7]   2016 [5]      38.0  [[*128*], [*128*]]
+        3       Wang J. [7]  2018 [52]       8.0    [[*80*], [*87*]]
+        4      Zhang G. [4]  2017 [19]       8.0  [[*117*], [*119*]]
+        5      Zhang G. [4]  2018 [52]       1.0            [[*78*]]
+        6      Zhang G. [4]  2019 [53]       3.0            [[*27*]]
 
         """
-        citations = self[[column, 'Cited by', 'Year']]
-        citations = citations.dropna()
-        citations['Year'] = citations['Year'].map(int)
+        data = self[[column, 'Cited by', 'Year', 'ID']]
+        data = data.dropna()
+        data['Year'] = data['Year'].map(int)
         if sep is not None:
-            citations[column] = citations[column].map(lambda x: x.split(sep) if x is not None else None)
-            citations[column] = citations[column].map(
+            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
+            data[column] = data[column].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            citations = citations.explode(column)
-            citations.index = range(len(citations))
-        citations = citations.groupby(by=[column, 'Year'], as_index=True).agg({
+            data = data.explode(column)
+            data.index = range(len(data))
+        numcitations = data.groupby(by=[column, 'Year'], as_index=True).agg({
             'Cited by': np.sum
         })
 
         ## results dataframe
-        a = [t for t,_ in citations.index]
-        b = [t for _,t in citations.index]
+        a = [t for t,_ in numcitations.index]
+        b = [t for _,t in numcitations.index]
         result = pd.DataFrame({
             column : a,
             'Year' : b,
-            'Cited by' : citations['Cited by'].tolist()
+            'Cited by' : numcitations['Cited by'].tolist()
         })
 
         ## rows
@@ -308,6 +308,13 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[2]] >= minval ]
             result = result[ result[result.columns[2]] <= maxval ]
 
+        result['ID'] = None
+        for idx, row in result.iterrows():
+            selected_IDs = data[(data[column] == row[0]) & (data['Year'] == row[1])]['ID']
+            if len(selected_IDs):
+                result.at[idx, 'ID'] = selected_IDs.tolist()
+            
+    
         ## counts the number of ddcuments only in the results matrix -----------------------
 
         count = self.documents_by_terms(column, sep)
@@ -320,6 +327,7 @@ class RecordsDataFrame(pd.DataFrame):
  
         ## end -----------------------------------------------------------------------------
 
+        result.index = list(range(len(result)))
 
         return Matrix(result, rtype='coo-matrix')
 
@@ -332,20 +340,20 @@ class RecordsDataFrame(pd.DataFrame):
         ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
         ... )
         >>> rdf.citations_by_year().head()
-               Year  Cited by
-        0  2010 [3]      21.0
-        1  2011 [2]     230.0
-        2  2012 [2]      16.0
-        3  2013 [4]      36.0
-        4  2014 [2]      23.0
+               Year  Cited by                                    ID
+        0  2010 [3]      21.0                    [[*142*], [*143*]]
+        1  2011 [2]     230.0                    [[*139*], [*140*]]
+        2  2012 [2]      16.0                    [[*137*], [*138*]]
+        3  2013 [4]      36.0  [[*133*], [*134*], [*135*], [*136*]]
+        4  2014 [2]      23.0                    [[*131*], [*132*]]
 
         """
 
         ## computes number of citations
-        citations = self[['Year', 'Cited by']]
-        citations = citations.dropna()
-        citations['Year'] = citations['Year'].map(int)
-        citations = citations.groupby(['Year'], as_index=True).agg({
+        data = self[['Year', 'Cited by', 'ID']]
+        data = data.dropna()
+        data['Year'] = data['Year'].map(int)
+        citations = data.groupby(['Year'], as_index=True).agg({
             'Cited by': np.sum
         })
 
@@ -355,6 +363,15 @@ class RecordsDataFrame(pd.DataFrame):
         result['Cited by'] = 0
         result.at[citations.index, 'Cited by'] = citations['Cited by'].tolist()
         result.index = range(len(result))
+
+        ## IDs ---------------------------------------------------------------------------------
+        result['ID'] = None
+        for idx, row in result.iterrows():
+            selected_IDs = data[(data['Year'] == row[0]) & (data['Cited by'] > 0)]['ID']
+            if len(selected_IDs):
+                result.at[idx, 'ID'] = selected_IDs.tolist()
+
+        ## end ----------------------------------------------------------------------------------
 
         if cumulative is True:
             result['Cited by'] = result['Cited by'].cumsum()
