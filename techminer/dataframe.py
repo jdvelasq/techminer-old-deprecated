@@ -177,55 +177,55 @@ class RecordsDataFrame(pd.DataFrame):
         ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
         ... )
         >>> rdf.citations_by_terms(column='Authors', sep=',', top_n=10)
-                    Authors  Cited by
-        0     Yeh W.-C. [1]     188.0
-        1   Hsieh T.-J. [1]     188.0
-        2   Hsiao H.-F. [1]     188.0
-        3  Hussain A.J. [2]      52.0
-        4     Krauss C. [1]      49.0
-        5    Fischer T. [1]      49.0
-        6       Wang J. [7]      46.0
-        7    Liatsis P. [1]      42.0
-        8    Ghazali R. [1]      42.0
-        9  Yoshihara A. [1]      37.0
+                    Authors  Cited by                                  ID
+        0     Yeh W.-C. [1]     188.0                           [[*140*]]
+        1   Hsieh T.-J. [1]     188.0                           [[*140*]]
+        2   Hsiao H.-F. [1]     188.0                           [[*140*]]
+        3  Hussain A.J. [2]      52.0                  [[*125*], [*139*]]
+        4     Krauss C. [1]      49.0                            [[*62*]]
+        5    Fischer T. [1]      49.0                            [[*62*]]
+        6       Wang J. [7]      46.0  [[*80*], [*87*], [*128*], [*128*]]
+        7    Liatsis P. [1]      42.0                           [[*139*]]
+        8    Ghazali R. [1]      42.0                           [[*139*]]
+        9  Yoshihara A. [1]      37.0                           [[*124*]]
         >>> rdf.citations_by_terms(column='Authors', sep=',', minmax=(30,50))
-                       Authors  Cited by
-        4        Krauss C. [1]      49.0
-        5       Fischer T. [1]      49.0
-        6          Wang J. [7]      46.0
-        7       Liatsis P. [1]      42.0
-        8       Ghazali R. [1]      42.0
-        9     Yoshihara A. [1]      37.0
-        10    Matsubara T. [1]      37.0
-        11        Akita R. [1]      37.0
-        12       Uehara K. [1]      37.0
-        13     Passalis N. [3]      31.0
-        14      Gabbouj M. [3]      31.0
-        15   Kanniainen J. [3]      31.0
-        16        Tefas A. [3]      31.0
-        17  Tsantekidis A. [2]      31.0
-        18    Iosifidis A. [3]      31.0
+                       Authors  Cited by                                  ID
+        0        Krauss C. [1]      49.0                            [[*62*]]
+        1       Fischer T. [1]      49.0                            [[*62*]]
+        2          Wang J. [7]      46.0  [[*80*], [*87*], [*128*], [*128*]]
+        3       Liatsis P. [1]      42.0                           [[*139*]]
+        4       Ghazali R. [1]      42.0                           [[*139*]]
+        5     Yoshihara A. [1]      37.0                           [[*124*]]
+        6     Matsubara T. [1]      37.0                           [[*124*]]
+        7         Akita R. [1]      37.0                           [[*124*]]
+        8        Uehara K. [1]      37.0                           [[*124*]]
+        9      Passalis N. [3]      31.0                  [[*110*], [*114*]]
+        10      Gabbouj M. [3]      31.0                  [[*110*], [*114*]]
+        11   Kanniainen J. [3]      31.0                  [[*110*], [*114*]]
+        12        Tefas A. [3]      31.0                  [[*110*], [*114*]]
+        13  Tsantekidis A. [2]      31.0                  [[*110*], [*114*]]
+        14    Iosifidis A. [3]      31.0                  [[*110*], [*114*]]
 
         """
-        citations = self[[column, 'Cited by']]
-        citations = citations.dropna()
+        data = self[[column, 'Cited by', 'ID']]
+        data = data.dropna()
         if sep is not None:
-            citations[column] = citations[column].map(lambda x: x.split(sep) if x is not None else None)
-            citations[column] = citations[column].map(
+            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
+            data[column] = data[column].map(
                 lambda x: [z.strip() for z in x] if isinstance(x, list) else x
             )
-            citations = citations.explode(column)
-            citations.index = range(len(citations))
-        citations = citations.groupby([column], as_index=True).agg({
+            data = data.explode(column)
+            data.index = range(len(data))
+        numcitations = data.groupby([column], as_index=True).agg({
             'Cited by': np.sum
         })
 
         result = pd.DataFrame({
-            column : citations.index,
-            'Cited by' : citations['Cited by'].tolist()
+            column : numcitations.index,
+            'Cited by' : numcitations['Cited by'].tolist()
         })
         result = result.sort_values(by='Cited by', ascending=False)
-        result.index = range(len(result))
+        result.index = result[column]
 
         if top_n is not None and len(result) > top_n:
             result = result.head(top_n)
@@ -235,6 +235,13 @@ class RecordsDataFrame(pd.DataFrame):
             result = result[ result[result.columns[1]] >= minval ]
             result = result[ result[result.columns[1]] <= maxval ]
 
+
+        result['ID'] = None
+        for current_term in result[result.columns[0]]:
+            selected_IDs = data[data[column] == current_term]['ID']
+            if len(selected_IDs):
+                result.at[current_term,'ID'] = selected_IDs.tolist()
+
         ## counts the number of documents --------------------------------------------------------
 
         count = self.documents_by_terms(column, sep)
@@ -242,6 +249,8 @@ class RecordsDataFrame(pd.DataFrame):
         result[column] = result[column].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
 
         ## end -----------------------------------------------------------------------------------
+        
+        result.index = list(range(len(result)))
 
         return List(result)
 
