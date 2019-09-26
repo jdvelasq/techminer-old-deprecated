@@ -548,34 +548,34 @@ class RecordsDataFrame(pd.DataFrame):
         ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
         ... )
         >>> rdf.coverage()
-                         Field  Number of items  Coverage
-        0              Authors              144  1.000000
-        1         Author(s) ID              144  1.000000
-        2                Title              144  1.000000
-        3                 Year              144  1.000000
-        4         Source title              144  1.000000
-        5               Volume               97  0.673611
-        6                Issue               27  0.187500
-        7             Art. No.               49  0.340278
-        8           Page start              119  0.826389
-        9             Page end              119  0.826389
-        10          Page count                0  0.000000
-        11            Cited by               68  0.472222
-        12                 DOI              133  0.923611
-        13        Affiliations              143  0.993056
-        14       Document Type              144  1.000000
-        15         Access Type               16  0.111111
-        16              Source              144  1.000000
-        17                 EID              144  1.000000
-        18            Abstract              144  1.000000
-        19     Author Keywords              124  0.861111
-        20      Index Keywords              123  0.854167
-        21          References              137  0.951389
-        22            keywords              144  1.000000
-        23                CONF              144  1.000000
-        24  keywords (cleaned)              144  1.000000
-        25            SELECTED              144  1.000000
-        26                  ID              144  1.000000
+                         Field  Number of items Coverage (%)
+        0              Authors              144      100.00%
+        1         Author(s) ID              144      100.00%
+        2                Title              144      100.00%
+        3                 Year              144      100.00%
+        4         Source title              144      100.00%
+        5               Volume               97       67.36%
+        6                Issue               27       18.75%
+        7             Art. No.               49       34.03%
+        8           Page start              119       82.64%
+        9             Page end              119       82.64%
+        10          Page count                0        0.00%
+        11            Cited by               68       47.22%
+        12                 DOI              133       92.36%
+        13        Affiliations              143       99.31%
+        14       Document Type              144      100.00%
+        15         Access Type               16       11.11%
+        16              Source              144      100.00%
+        17                 EID              144      100.00%
+        18            Abstract              144      100.00%
+        19     Author Keywords              124       86.11%
+        20      Index Keywords              123       85.42%
+        21          References              137       95.14%
+        22            keywords              144      100.00%
+        23                CONF              144      100.00%
+        24  keywords (cleaned)              144      100.00%
+        25            SELECTED              144      100.00%
+        26                  ID              144      100.00%
 
 
         """
@@ -583,7 +583,7 @@ class RecordsDataFrame(pd.DataFrame):
         result = pd.DataFrame({
             'Field': self.columns,
             'Number of items': [len(self) - self[col].isnull().sum() for col in self.columns],
-            'Coverage': [(len(self) - self[col].isnull().sum()) / len(self) for col in self.columns]
+            'Coverage (%)': [ '{:5.2%}'.format((len(self) - self[col].isnull().sum()) / len(self)) for col in self.columns]
         })
 
         return result
@@ -1085,12 +1085,28 @@ class RecordsDataFrame(pd.DataFrame):
     #----------------------------------------------------------------------------------------------
     def most_cited_documents(self, top_n=10, minmax=None):
         """ Returns the top N most cited documents and citations > min_value .
+        
         Args:
             top_n (int) : number of documents to be returned.
-            min_value (int) : minimal number of citations
+            minmax ((int, int) tuple) : minimal number of citations
 
         Results:
             pandas.DataFrame
+
+
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.most_cited_documents(top_n=5)[['Authors', 'Title']]
+                                                     Authors                                              Title
+        140              Hsieh T.-J., Hsiao H.-F., Yeh W.-C.  Forecasting stock markets using wavelet transf...
+        62                             Fischer T., Krauss C.  Deep learning with long short-term memory netw...
+        139             Ghazali R., Hussain A.J., Liatsis P.  Dynamic Ridge Polynomial Neural Network: Forec...
+        124  Akita R., Yoshihara A., Matsubara T., Uehara K.  Deep learning for stock prediction using numer...
+        134                         Sharma V., Srinivasan D.  A hybrid intelligent model based on recurrent ...
+
+
         """
         result = self.sort_values(by='Cited by', ascending=False)
 
@@ -1108,6 +1124,14 @@ class RecordsDataFrame(pd.DataFrame):
     @property
     def num_of_sources(self):
         """Returns the number of source titles in the dataframe.
+
+        >>> import pandas as pd
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.num_of_sources
+        103
+
         """
         return len(self['Source title'].unique())
 

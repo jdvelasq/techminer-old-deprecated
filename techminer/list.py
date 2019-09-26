@@ -22,64 +22,63 @@ class List(pd.DataFrame):
         return self
 
     #----------------------------------------------------------------------------------------------
-    def print_IDs(self):
-        for idx, row in self.iterrows():
-            print(row[0], ' (', len(row[-1]), ')',' : ', sep='', end='')
-            for i in row[-1]:
-                print(i, sep='', end='')
-            print()
+    def altair_barhplot(self, color='Greys'):
+        """
+
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().altair_barhplot()
+        alt.Chart(...)
+
+        .. image:: ../figs/altair_barhplot.jpg
+            :width: 800px
+            :align: center        
+        
+        """
+        columns = self.columns.tolist()
+        data = List(self.copy())
+        if data.columns[1] != 'Cited by':
+            data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+            data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+        if columns[0] == 'Year':
+            data = data.sort_values(by=columns[0], ascending=False)
+        return alt.Chart(data).mark_bar().encode(
+            alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(
+                field=columns[1] + ':Q')),
+            alt.X(columns[1] + ':Q'),
+            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme=color)))
+
+
 
     #----------------------------------------------------------------------------------------------
     def barhplot(self, library=None, color=None):
         """Plots a pandas.DataFrame using Altair.
+
+
         """
 
         columns = self.columns.tolist()
-
         data = List(self.copy())
         if data.columns[1] != 'Cited by':
             data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
             data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
-        if library is None:
-            if color is None:
-                color = 'gray'
-            if columns[0] == 'Year':
-                data =  data.sort_values(by=columns[0], ascending=True)
-            else:
-                data =  data.sort_values(by=columns[1], ascending=True)
-            data.plot.barh(columns[0], columns[1], color=color)
-            plt.gca().xaxis.grid(True)
-            return
-            
+        if color is None:
+            color = 'gray'
+        if columns[0] == 'Year':
+            data =  data.sort_values(by=columns[0], ascending=True)
+        else:
+            data =  data.sort_values(by=columns[1], ascending=True)
+        data.plot.barh(columns[0], columns[1], color=color)
+        plt.gca().xaxis.grid(True)
+        
 
-        if library == 'altair':
-            if color is None:
-                color = 'Greys'
-            columns = self.columns.tolist()
-            if columns[0] == 'Year':
-                data = data.sort_values(by=columns[0], ascending=False)
-            return alt.Chart(data).mark_bar().encode(
-                alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(
-                    field=columns[1] + ':Q')),
-                alt.X(columns[1] + ':Q'),
-                alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme=color)))
 
-        if library == 'seaborn':
-            if color is None:
-                color = 'gray'
-            if columns[0] == 'Year':
-                data = data.sort_values(by=columns[0], ascending=False)
-            else:
-                data = data.sort_values(by=columns[1], ascending=False)
-            sns.barplot(
-                x=columns[1],
-                y=columns[0],
-                data=data,
-                label=columns[0],
-                color=color)
-            plt.gca().xaxis.grid(True)
-            return
 
     #----------------------------------------------------------------------------------------------
     def barplot(self, library=None):
@@ -116,6 +115,65 @@ class List(pd.DataFrame):
             result.set_xticklabels(labels, rotation=90)
             plt.gca().yaxis.grid(True)
             return
+
+
+
+
+
+
+
+
+
+
+    #----------------------------------------------------------------------------------------------
+    def print_IDs(self):
+        for idx, row in self.iterrows():
+            print(row[0], ' (', len(row[-1]), ')',' : ', sep='', end='')
+            for i in row[-1]:
+                print(i, sep='', end='')
+            print()
+
+    #----------------------------------------------------------------------------------------------
+    def seaborn_barhplot(self, color='gray'):
+        """
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().seaborn_barhplot()
+        
+
+        .. image:: ../figs/seaborn_barhplot.jpg
+            :width: 600px
+            :align: center        
+
+        """
+        columns = self.columns.tolist()
+        data = List(self.copy())
+        if data.columns[1] != 'Cited by':
+            data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+            data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+
+        if columns[0] == 'Year':
+            data = data.sort_values(by=columns[0], ascending=False)
+        else:
+            data = data.sort_values(by=columns[1], ascending=False)
+        sns.barplot(
+            x=columns[1],
+            y=columns[0],
+            data=data,
+            label=columns[0],
+            color=color)
+        plt.gca().xaxis.grid(True)
+
+    #----------------------------------------------------------------------------------------------
+    def title_view(self, column_values=None):
+        """
+        """
+
 
     #----------------------------------------------------------------------------------------------
     def wordcloud(self, figsize=(14, 7), max_font_size=50, max_words=100, 
@@ -164,10 +222,6 @@ class List(pd.DataFrame):
         cax = divider.append_axes("right", size="5%", pad=0.1)
         world.plot(column='q', legend=True, ax=axx, cax=cax, cmap='Pastel2')
 
-    #----------------------------------------------------------------------------------------------
-    def title_view(self, column_values=None):
-        """
-        """
 
 
 
