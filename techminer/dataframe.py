@@ -21,8 +21,28 @@ from shapely.geometry import Point, LineString
 import matplotlib.colors as colors
 import matplotlib.cm as cm
 
-#---------------------------------------------------------------------------------------------
 
+#---------------------------------------------------------------------------------------------
+def _minmax(data, minmax):
+    """Selectet records among (minval, maxval) = minmax.
+
+    Arguments:
+        data : df
+
+    Returns:
+        techminer.
+
+
+    """ 
+    if minmax is None:
+        return data
+    minval, maxval = minmax
+    data = data[ data[data.columns[-1]] >= minval ]
+    data = data[ data[data.columns[-1]] <= maxval ]
+    return data
+
+
+#---------------------------------------------------------------------------------------------
 class RecordsDataFrame(pd.DataFrame):
     """Class to represent a dataframe of bibliographic records.
     """
@@ -230,10 +250,12 @@ class RecordsDataFrame(pd.DataFrame):
         if top_n is not None and len(result) > top_n:
             result = result.head(top_n)
 
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[1]] >= minval ]
-            result = result[ result[result.columns[1]] <= maxval ]
+
+        result = _minmax(result, minmax)
+        # if minmax is not None:
+        #     minval, maxval = minmax
+        #     result = result[ result[result.columns[1]] >= minval ]
+        #     result = result[ result[result.columns[1]] <= maxval ]
 
 
         result['ID'] = None
