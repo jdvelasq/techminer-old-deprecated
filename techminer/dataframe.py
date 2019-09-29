@@ -1304,23 +1304,6 @@ class RecordsDataFrame(pd.DataFrame):
         result.add_count_to_label('Year')
         return result
 
-        # count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
-        # count = {key : value for key, value in zip(count.index, count.tolist())}
-        # result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
-
-        # count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
-        # count = {key : value for key, value in zip(count.index, count.tolist())}
-        # result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
-
-        # count = result.groupby(by='Year', as_index=True)[result.columns[-2]].sum()
-        # count = {key : value for key, value in zip(count.index, count.tolist())}
-        # result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
-
-        # ## end -----------------------------------------------------------------------------
-
-
-        # return Result(result, call='terms_by_terms_by_year')
-
     #----------------------------------------------------------------------------------------------
     def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
         """
@@ -1391,17 +1374,11 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## adds the number of documents to text ---------------------------------------------------
 
-        count = result.groupby(by=column, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column] = result[column].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+        result = Result(result, call='terms_by_year')
+        result.add_count_to_label(column)
+        result.add_count_to_label('Year')
+        return result
 
-        count = result.groupby(by='Year', as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
-
-        ## ends -----------------------------------------------------------------------------------
-
-        return Result(result, call='terms_by_year')
 
 
 
