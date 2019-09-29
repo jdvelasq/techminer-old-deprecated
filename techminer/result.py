@@ -1,5 +1,5 @@
 """
-TechMiner.Matrix
+TechMiner.Result
 ==================================================================================================
 
 """
@@ -19,26 +19,99 @@ from scipy.optimize import minimize
 from shapely.geometry import Point, LineString
 from sklearn.cluster import KMeans
 from matplotlib.patches import Rectangle
+from wordcloud import WordCloud, ImageColorGenerator
 
-#---------------------------------------------------------------------------------------------
-class Matrix(pd.DataFrame):
+#--------------------------------------------------------------------------------------------------------
+class Result(pd.DataFrame):
     """Class implementing a dataframe with results of analysis.
     """
-    #---------------------------------------------------------------------------------------------
-    def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False, rtype=None, 
-            cluster_data=None):
+    #----------------------------------------------------------------------------------------------------
+    def __init__(self, data=None, index=None, columns=None, dtype=None, copy=False,  
+            cluster_data=None, call=None):
         
         super().__init__(data, index, columns, dtype, copy)
-        self._rtype = rtype
+        self._call = call
         self._cluster_data = None
         self._cluster_data = cluster_data
 
-    #----------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     @property
     def _constructor_expanddim(self):
         return self
 
+
     #----------------------------------------------------------------------------------------------
+    def add_count_to_label(self, column):
+
+        count = self.groupby(by=column, as_index=True)[self.columns[-2]].sum()
+        count = {key : value for key, value in zip(count.index, count.tolist())}
+        self[column] = self[column].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+    #----------------------------------------------------------------------------------------------
+    def altair_barhplot(self, color='Greys'):
+        """
+
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().altair_barhplot()
+        alt.Chart(...)
+
+        .. image:: ../figs/altair_barhplot.jpg
+            :width: 800px
+            :align: center        
+        
+        """
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        columns = self.columns.tolist()
+        data = pd.DataFrame(self.copy())
+        if data.columns[1] != 'Cited by':
+            data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+            data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+        if columns[0] == 'Year':
+            data = data.sort_values(by=columns[0], ascending=False)
+        return alt.Chart(data).mark_bar().encode(
+            alt.Y(columns[0] + ':N', sort=alt.EncodingSortField(
+                field=columns[1] + ':Q')),
+            alt.X(columns[1] + ':Q'),
+            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme=color)))
+
+    #----------------------------------------------------------------------------------------------
+    def altair_barplot(self):
+        """Vertical bar plot in Altair.
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().altair_barplot()
+
+        .. image:: ../figs/altair_barplot.jpg
+            :width: 500px
+            :align: center                
+        """
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        columns = self.columns.tolist()
+        data = pd.DataFrame(self.copy())
+        data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+        data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+
+        alt.Chart(data).mark_bar().encode(
+            alt.X(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
+            alt.Y(columns[1] + ':Q'),
+            alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys')))
+
+    #----------------------------------------------------------------------------------------------------
     def altair_circle(self, ascending_r=None, ascending_c=None, filename=None, **kwds):
         """Altair scatter plot with filled circles for visualizing relationships.
 
@@ -60,6 +133,9 @@ class Matrix(pd.DataFrame):
             :align: center
 
         """
+        if len(self.columns) != 4:
+            Exception('Invalid call for result of function:' + self._call)
+
         if ascending_r is None or ascending_r is True:
             sort_X = 'ascending'
         else:
@@ -85,7 +161,7 @@ class Matrix(pd.DataFrame):
         return chart
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def altair_heatmap(self, ascending_r=None, ascending_c=None, filename=None, **kwds):
         """Altair Heatmap
         Available cmaps:
@@ -106,8 +182,11 @@ class Matrix(pd.DataFrame):
 
         """
 
+        if len(self.columns) != 4:
+            Exception('Invalid call for result of function:' + self._call)
+
         ## force the same order of cells in rows and cols ------------------------------------------
-        if self._rtype == 'auto-matrix':
+        if self._call == 'auto_corr':
             if ascending_r is None and ascending_c is None:
                 ascending_r = True
                 ascending_c = True
@@ -138,7 +217,7 @@ class Matrix(pd.DataFrame):
             alt.Y(_self.columns[1] + ':O', sort=sort_Y),
             color=_self.columns[2] + ':Q')
 
-        if self._rtype == 'coo-matrix':
+        if self._call == 'co_ocurrence':
             text = graph.mark_text(
                 align='center',
                 baseline='middle',
@@ -153,8 +232,76 @@ class Matrix(pd.DataFrame):
 
         return graph
 
+    #----------------------------------------------------------------------------------------------
+    def barhplot(self, color=None, figsize=(12,8)):
+        """Plots a pandas.DataFrame using Altair.
 
-    #---------------------------------------------------------------------------------------------
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().barhplot()
+
+        .. image:: ../figs/barhplot.jpg
+            :width: 600px
+            :align: center   
+        """
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        plt.figure(figsize=figsize)
+
+        columns = self.columns.tolist()
+        data = pd.DataFrame(self.copy())
+        if data.columns[1] != 'Cited by':
+            data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+            data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+
+        if color is None:
+            color = 'gray'
+        if columns[0] == 'Year':
+            data =  data.sort_values(by=columns[0], ascending=True)
+        else:
+            data =  data.sort_values(by=columns[1], ascending=True)
+        data.plot.barh(columns[0], columns[1], color=color)
+        plt.gca().xaxis.grid(True)
+        
+
+
+
+    #----------------------------------------------------------------------------------------------
+    def barplot(self, color='gray', figsize=(8,12)):
+        """Vertical bar plot in matplotlib.
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().barplot()
+
+        .. image:: ../figs/barplot.jpg
+            :width: 600px
+            :align: center                
+        
+        """
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        columns = self.columns.tolist()
+
+        plt.figure(figsize=figsize)
+        data = pd.DataFrame(self.copy())
+        data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+        data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+        data.plot.bar(columns[0], columns[1], color=color)
+        plt.gca().yaxis.grid(True)
+
+
+    #----------------------------------------------------------------------------------------------------
     def chord_diagram(self, figsize=(12, 12), minval=None, R=3, n_bezier=100, dist=0.2):
         """Creates a chord diagram for representing clusters.
 
@@ -176,6 +323,9 @@ class Matrix(pd.DataFrame):
 
         """
 
+        if  self._cluster_data is None:
+            Exception('Invalid call for result of function:' + self._call)
+
         chord_diagram(
             self[self.columns[0]].unique(), 
             self._cluster_data, 
@@ -187,12 +337,14 @@ class Matrix(pd.DataFrame):
 
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
             font_size=12, factor=None, size=(25,300)):
 
+        if self._call not in ['co_ocurrence', 'cross_corr']:
+            Exception('Invalid call for result of function:' + self._call)
 
-        if self._rtype == 'coo-matrix':
+        if self._call == 'co_ocurrence':
 
             self.__cluster_map_coocurrence(
                 min_value=min_value, 
@@ -213,7 +365,7 @@ class Matrix(pd.DataFrame):
                 size=size)
 
         
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def heatmap(self, ascending_r=None, ascending_c=None, figsize=(10, 10), cmap='Blues'):
         """Heat map.
         
@@ -241,8 +393,12 @@ class Matrix(pd.DataFrame):
 
         """
 
+        if len(self.columns) != 4:
+            Exception('Invalid call for result of function:' + self._call)
+
+
         ## force the same order of cells in rows and cols ------------------------------------------
-        if self._rtype == 'auto-matrix':
+        if self._call == 'auto_corr':
             if ascending_r is None and ascending_c is None:
                 ascending_r = True
                 ascending_c = True
@@ -264,7 +420,7 @@ class Matrix(pd.DataFrame):
 
         plt.figure(figsize=figsize)
 
-        if self._rtype == 'factor-matrix':
+        if self._call == 'factor_analysis':
             x = self.tomatrix(ascending_r, ascending_c)
             x = x.transpose()
             ## x = x.apply(lambda w: abs(w))
@@ -280,7 +436,7 @@ class Matrix(pd.DataFrame):
 
         ## changes the color of rectangle for autocorrelation heatmaps ---------------------------
         
-        # if self._rtype == 'auto-matrix':
+        # if self._call == 'auto_corr':
         #     for idx in np.arange(len(x.index)):
         #         plt.gca().add_patch(
         #             Rectangle((idx, idx), 1, 1, fill=False, edgecolor='red')
@@ -293,7 +449,7 @@ class Matrix(pd.DataFrame):
         for idx_row, row in enumerate(x.index):
             for idx_col, col in enumerate(x.columns):
 
-                if self._rtype == 'coo-matrix' and x.at[row, col] > 0:
+                if self._call == 'co_ocurrence' and x.at[row, col] > 0:
                     
                     if x.at[row, col] > x.values.max() / 2.0:
                         color = 'white'
@@ -308,7 +464,7 @@ class Matrix(pd.DataFrame):
                         va="center", 
                         color=color)
 
-                elif self._rtype in ['auto-matrix', 'cross-matrix', 'factor-matrix']:
+                elif self._call in ['auto_corr', 'cross_corr', 'factor_analysis']:
 
                     if abs(x.at[row, col]) > x.values.max() / 2.0:
                         color = 'white'
@@ -323,7 +479,7 @@ class Matrix(pd.DataFrame):
                         va="center", 
                         color=color)
 
-                # elif self._rtype in ['factor-matrix']:
+                # elif self. in ['factor-matrix']:
 
                 #     if abs(x.at[row, col]) > x.values.max() / 2.0:
                 #         color = 'white'
@@ -344,7 +500,7 @@ class Matrix(pd.DataFrame):
         plt.show()
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def map(self, min_value=None, top_links=None, figsize = (10,10), 
             font_size=12, factor=None, size=(25,300)):
         """
@@ -368,6 +524,9 @@ class Matrix(pd.DataFrame):
             :align: center        
 
         """
+
+        if self._cluster_data is None:
+            Exception('Invalid call for result of function:' + self._call)
 
         ## cluster dataset
         cluster_data = self._cluster_data.copy()
@@ -501,7 +660,7 @@ class Matrix(pd.DataFrame):
 
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def ocurrence_map(self, min_value=None, top_links=None, figsize = (10,10), 
             font_size=12, factor=None, size=(300,1000)):
         """Cluster map for ocurrence and co-ocurrence matrices.
@@ -544,6 +703,10 @@ class Matrix(pd.DataFrame):
             :align: center
 
         """
+
+        if self._call not in  ['ocurrence', 'co_ocurrence']:
+            Exception('Invalid call for result of function:' + self._call)
+
 
         ## figure properties
         plt.figure(figsize=figsize)
@@ -657,12 +820,12 @@ class Matrix(pd.DataFrame):
         plt.axis('off')
     
 
-    #----------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def print_IDs(self):
         """Auxiliary function to print IDs of documents. 
         """
 
-        if self._rtype in ['coo-matrix', 'cross-matrix', 'auto-matrix']:
+        if self._call in ['co_ocurrence', 'cross_corr', 'auto_corr']:
 
             for idx, row in self.iterrows():
                 if row[-1] is not None:
@@ -671,7 +834,7 @@ class Matrix(pd.DataFrame):
                         print(i, sep='', end='')
                     print()
 
-        elif self._rtype == 'coo-matrix-year':
+        elif self._call == 'terms_by_terms_by_year':
 
             for idx, row in self.iterrows():
                 if row[-1] is not None:
@@ -680,13 +843,13 @@ class Matrix(pd.DataFrame):
                         print(i, sep='', end='')
                     print()
 
-        elif self._rtype == 'factor-matrix':
+        elif self._call == 'factor_analysis':
             pass
         else:
             pass
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def sankey_plot(self, figsize=(7,10), minval=None):
         """Cross-relation sankey plot.
 
@@ -708,8 +871,8 @@ class Matrix(pd.DataFrame):
 
 
         """
-        if self._rtype != 'cross-matrix':
-            Exception('Invalid matrix type:' + self._rtype)
+        if self._call != 'cross_corr':
+            Exception('Invalid call for result of function:' + self._call)
 
         x = self
         
@@ -775,9 +938,83 @@ class Matrix(pd.DataFrame):
 
         plt.tight_layout()
     
+    #----------------------------------------------------------------------------------------------
+    def seaborn_barhplot(self, color='gray'):
+        """
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().seaborn_barhplot()
+        
+
+        .. image:: ../figs/seaborn_barhplot.jpg
+            :width: 600px
+            :align: center        
+
+        """
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        columns = self.columns.tolist()
+        data = pd.DataFrame(self.copy())
+        if data.columns[1] != 'Cited by':
+            data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+            data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+
+        if columns[0] == 'Year':
+            data = data.sort_values(by=columns[0], ascending=False)
+        else:
+            data = data.sort_values(by=columns[1], ascending=False)
+        sns.barplot(
+            x=columns[1],
+            y=columns[0],
+            data=data,
+            label=columns[0],
+            color=color)
+        plt.gca().xaxis.grid(True)
+
+    #----------------------------------------------------------------------------------------------
+    def seaborn_barplot(self, color='gray'):
+        """Vertical bar plot in Seaborn.
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_year().altair_barplot()
+
+        .. image:: ../figs/seaborn_barhplot.jpg
+            :width: 800px
+            :align: center                
+        """
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        columns = self.columns.tolist()
+        data = List(self.copy())
+        data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
+        data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
+
+        columns = data.columns.tolist()
+        result = sns.barplot(
+            y=columns[1],
+            x=columns[0],
+            data=data,
+            label=columns[0],
+            color=color)
+        _, labels = plt.xticks()
+        result.set_xticklabels(labels, rotation=90)
+        plt.gca().yaxis.grid(True)
 
 
-    #---------------------------------------------------------------------------------------------
+
+    #----------------------------------------------------------------------------------------------------
     def seaborn_heatmap(self, ascending_r=None, ascending_c=None, filename=None):
         """Heat map.
         
@@ -805,8 +1042,11 @@ class Matrix(pd.DataFrame):
 
         """
 
+        if len(self.columns) != 4:
+            Exception('Invalid call for result of function:' + self._call)
+
         ## force the same order of cells in rows and cols ------------------------------------------
-        if self._rtype == 'auto-matrix':
+        if self._call == 'auto_corr':
             if ascending_r is None and ascending_c is None:
                 ascending_r = True
                 ascending_c = True
@@ -833,7 +1073,7 @@ class Matrix(pd.DataFrame):
         #return sns_plot
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def seaborn_relplot(self, ascending_r=None, ascending_c=None, filename=None):
         """Seaborn relplot plot with filled circles for visualizing relationships.
 
@@ -854,6 +1094,9 @@ class Matrix(pd.DataFrame):
             :align: center
         """
 
+        if len(self.columns) != 4:
+            Exception('Invalid call for result of function:' + self._call)
+
         sns_plot = sns.relplot(
             x = self.columns[0],
             y = self.columns[1],
@@ -866,11 +1109,11 @@ class Matrix(pd.DataFrame):
             sns_plot.savefig(filename)
         
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def tomatrix(self, ascending_r=None, ascending_c=None):
         """Displays a term by term dataframe as a matrix.
 
-        >>> mtx = Matrix({
+        >>> mtx = Result({
         ...   'rows':['r0', 'r1', 'r2', 'r0', 'r1', 'r2'],
         ...   'cols':['c0', 'c1', 'c0', 'c1', 'c0', 'c1'],
         ...   'vals':[ 1.0,  2.0,  3.0,  4.0,  5.0,  6.0]
@@ -892,12 +1135,12 @@ class Matrix(pd.DataFrame):
 
         """
 
-        # if self._rtype not in [
+        # if self._call not in [
         #     'coo-matrix',
         #     'cross-matrix',
         #     'auto-matrix']:
 
-        #     raise Exception('Invalid function call for type: ' + self._rtype )
+        #     raise Exception('Invalid function call for type: ' + self._call )
 
 
         if self.columns[0] == 'Year':
@@ -928,7 +1171,7 @@ class Matrix(pd.DataFrame):
         if ascending_c is not None:
             termB_unique = sorted(termB_unique, reverse = not ascending_c)
 
-        if self._rtype == 'coo-matrix':
+        if self._call == 'co_ocurrence':
             result = pd.DataFrame(
                 np.full((len(termA_unique), len(termB_unique)), 0)
             )
@@ -947,20 +1190,16 @@ class Matrix(pd.DataFrame):
             val = r[2]
             result.loc[row, col] = val
             
-        return Matrix(result, rtype='matrix')
+        return Result(result, call='Matrix')
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def transpose(self, *args, **kwargs):
         """Transpose results matrix.
         """
+        return Result(super().transpose(), call=self._call)
+    
 
-        result = Matrix(super().transpose())
-        result._rtype = self._rtype
-        return result    
-
-
-
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     # def circlerel(self, ascending_r=None, ascending_c=None, library=None):
     #     """
 
@@ -1025,7 +1264,7 @@ class Matrix(pd.DataFrame):
 
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     def map__(self, min_value=None, top_links=None, figsize = (10,10)):
 
         def add_group(group, cluster_number, weight, style):
@@ -1186,7 +1425,7 @@ class Matrix(pd.DataFrame):
 
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     # def map_to_chord(self, figsize = (10,10), minval=None, R=3):
 
     #     def add_group(group, linewidth, linestyle):
@@ -1256,7 +1495,7 @@ class Matrix(pd.DataFrame):
     #     chord_diagram(labels, edges) 
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     #TODO personalizar valor superior para escalar los pesos de los puentes
     #TODO map
     def network(self, save=False, name='network.png', corr_min=0.7, node_color='lightblue',
@@ -1286,16 +1525,16 @@ class Matrix(pd.DataFrame):
         
         """
 
-        if self._rtype not in [
-            'coo-matrix',
-            'cross-matrix',
-            'auto-matrix',
-            'factor-matrix']:
+        if self._call not in [
+            'co_ocurrence',
+            'cross_corr',
+            'auto_corr',
+            'factor_analysis']:
 
-            raise Exception('Invalid function call for type: ' + self._rtype )
+            raise Exception('Invalid function call for type: ' + self._call )
 
 
-        if self._rtype == 'factor-matrix':
+        if self._call == 'factor_analysis':
             x = self.copy()
         else:
             x = self.tomatrix()
@@ -1377,7 +1616,7 @@ class Matrix(pd.DataFrame):
         return None
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     #TODO networkmap validar como pasar lonlat,
     #que pasa si valores negativos???
     #personalizar tamaño de la figura, 
@@ -1476,22 +1715,114 @@ class Matrix(pd.DataFrame):
         return None
 
 
-    #---------------------------------------------------------------------------------------------
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------
+    def wordcloud(self, figsize=(14, 7), max_font_size=50, max_words=100, 
+            background_color="white"):
+        """
+
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf.documents_by_terms('Source title').wordcloud()
+
+        .. image:: ../figs/wordcloud.jpg
+            :width: 800px
+            :align: center                
+        """
+        
+        if len(self.columns) != 3:
+            Exception('Invalid call for result of function:' + self._call)
+
+        columns = self.columns.tolist()
+
+        words = [row[0]  for _, row in self.iterrows() for i in range(row[1])]
+
+        wordcloud = WordCloud(
+            max_font_size=max_font_size, 
+            max_words=max_words, 
+            background_color=background_color).generate(' '.join(words))
+
+        plt.figure(figsize=figsize)
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+        plt.show()
+
+    #----------------------------------------------------------------------------------------------
+    def worldmap(self, figsize=(14, 7)):
+        """Worldmap plot with the number of documents per country.
+
+        >>> import pandas as pd
+        >>> import matplotlib.pyplot as plt
+        >>> from techminer.dataframe import  *
+        >>> from techminer.strings import  *
+        >>> rdf = RecordsDataFrame(
+        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+        ... )
+        >>> rdf['Country'] = rdf['Affiliations'].map(lambda x: extract_country(x, sep=';'))
+        >>> rdf.documents_by_terms('Country', sep=';').head()
+                  Country  Num Documents                                                 ID
+        0           China             83  [[*3*], [*4*], [*6*], [*6*], [*7*], [*10*], [*...
+        1          Taiwan             20  [[*14*], [*14*], [*17*], [*17*], [*17*], [*17*...
+        2   United States             17  [[*3*], [*22*], [*23*], [*23*], [*26*], [*26*]...
+        3  United Kingdom             15  [[*5*], [*7*], [*11*], [*11*], [*11*], [*28*],...
+        4           India             15  [[*9*], [*50*], [*51*], [*56*], [*56*], [*57*]...
+
+        >>> rdf.documents_by_terms('Country', sep=';').worldmap()
+
+        .. image:: ../figs/worldmap.jpg
+            :width: 800px
+            :align: center
+        """
+
+        if 'Country' not in list(self.columns):
+            raise Exception('No country column found in data')
+
+        world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
+        world = world[world.name != "Antarctica"]
+        world['q'] = 0
+        world.index = world.name
+
+        rdf = self.copy()
+        rdf['Country'] = rdf['Country'].map(
+            lambda x: x.replace('United States', 'United States of America')
+        )
+
+        #rdf['Country'] = [w if w !=  else  for w in rdf['Country']]
+        rdf.index = rdf['Country']
+        for country in rdf['Country']:
+            if country in world.index:
+                world.at[country, 'q'] = rdf.loc[country, 'Num Documents']
+        _, axx = plt.subplots(1, 1, figsize=figsize)
+        divider = make_axes_locatable(axx)
+        cax = divider.append_axes("right", size="5%", pad=0.1)
+        world.plot(column='q', legend=True, ax=axx, cax=cax, cmap='Pastel2')
+
+
+
+
+
+    #----------------------------------------------------------------------------------------------------
+
+
+    #----------------------------------------------------------------------------------------------------
     # def kmeans(self, n_clusters=2):
     #     """Apply KMeans to a pandas dataframe.
     #     """
 
-    #     if self._rtype not in [
-    #         'coo-matrix',
-    #         'cross-matrix',
-    #         'auto-matrix']:
+    #     if self._call not in [
+    #         'co_ocurrence',
+    #         'cross_corr',
+    #         'auto_corr']:
 
-    #         raise Exception('Invalid function call for type: ' + self._rtype )
+    #         raise Exception('Invalid function call for type: ' + self._call )
 
-    #     if self._rtype == 'factor-matrix' is True:
+    #     if self._call == 'factor_analysis' is True:
     #         x = self.copy()
     #     else:
     #         x = self.tomatrix()
@@ -1510,7 +1841,7 @@ class Matrix(pd.DataFrame):
 
     #     return centers, clusters
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     # def xxmap(self, min_value=None, top_links=None, figsize = (10,10)):
     #     """
     #     """
@@ -1636,7 +1967,7 @@ class Matrix(pd.DataFrame):
     #     plt.axis('off')
 
 
-    #---------------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------------------
     # def _map(self, min_value=None, top_links=None, figsize = (10,10)):
     #     """
     #     """
@@ -1723,7 +2054,7 @@ class Matrix(pd.DataFrame):
     #     #nx.draw_spectral(graph)
     
 
-#-----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------
 def _compute_graph_layout(graph):
 
     path_length = nx.shortest_path_length(graph)

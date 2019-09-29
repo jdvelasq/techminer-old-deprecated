@@ -6,9 +6,8 @@ Modules
     
     dataframe
     keywords
-    list
-    matrix
     records
+    result
     strings
     thesaurus
     transform

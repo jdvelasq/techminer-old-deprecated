@@ -9,9 +9,8 @@ import pandas as pd
 import math
 import numpy as np
 from sklearn.decomposition import PCA
-from techminer.list import List
-from techminer.matrix import Matrix
 from techminer.common import cut_text
+from techminer.result import Result
 import matplotlib.pyplot as plt
 import networkx as nx
 from collections import OrderedDict 
@@ -42,6 +41,22 @@ def _minmax(data, minmax):
     return data
 
 
+#------------------------------------------------------------------------------------------------------------
+def _expand_column(data, column, sep):
+
+    if sep is None:
+        return data
+
+    data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
+    data[column] = data[column].map(
+        lambda x: [z.strip() for z in x] if isinstance(x, list) else x
+    )
+    data = data.explode(column)
+    data.index = range(len(data))
+    return data
+
+
+
 #---------------------------------------------------------------------------------------------
 class RecordsDataFrame(pd.DataFrame):
     """Class to represent a dataframe of bibliographic records.
@@ -51,6 +66,14 @@ class RecordsDataFrame(pd.DataFrame):
     @property
     def _constructor_expanddim(self):
         return self
+    
+    #----------------------------------------------------------------------------------------------
+    def _add_documents_by_terms_to_label(self, result, column, sep):
+
+        count = self.documents_by_terms(column, sep)
+        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
+        result[column] = result[column].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+        return result
 
     #----------------------------------------------------------------------------------------------
     def _years_list(self):
@@ -81,7 +104,6 @@ class RecordsDataFrame(pd.DataFrame):
         terms = list(set(tdf_matrix.columns.tolist()))
         docs = [str(i) for i in range(len(tdf_matrix.index.tolist()))]
         
-
         graph.add_nodes_from(terms)
         graph.add_nodes_from(docs)
 
@@ -184,7 +206,7 @@ class RecordsDataFrame(pd.DataFrame):
         """
         result = self.cross_corr(
             column_r=column, column_c=column, sep_r=sep, sep_c=sep, top_n=top_n, cut_value=cut_value)
-        result._rtype = 'auto-matrix'
+        result._call = 'auto_corr'
         return result
 
 
@@ -227,15 +249,9 @@ class RecordsDataFrame(pd.DataFrame):
         14    Iosifidis A. [3]      31.0                  [[*110*], [*114*]]
 
         """
-        data = self[[column, 'Cited by', 'ID']]
-        data = data.dropna()
-        if sep is not None:
-            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
-            data[column] = data[column].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column)
-            data.index = range(len(data))
+        data = self[[column, 'Cited by', 'ID']].dropna()
+        data = _expand_column(data, column, sep)
+
         numcitations = data.groupby([column], as_index=True).agg({
             'Cited by': np.sum
         })
@@ -252,10 +268,6 @@ class RecordsDataFrame(pd.DataFrame):
 
 
         result = _minmax(result, minmax)
-        # if minmax is not None:
-        #     minval, maxval = minmax
-        #     result = result[ result[result.columns[1]] >= minval ]
-        #     result = result[ result[result.columns[1]] <= maxval ]
 
 
         result['ID'] = None
@@ -266,15 +278,13 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## counts the number of documents --------------------------------------------------------
 
-        count = self.documents_by_terms(column, sep)
-        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
-        result[column] = result[column].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+        resul = self._add_documents_by_terms_to_label(result, column, sep)
 
         ## end -----------------------------------------------------------------------------------
         
         result.index = list(range(len(result)))
 
-        return List(result)
+        return Result(result, call='citations_by_terms')
 
     #----------------------------------------------------------------------------------------------
     def citations_by_terms_by_year(self, column, sep=None, top_n=None, minmax=None):
@@ -295,16 +305,10 @@ class RecordsDataFrame(pd.DataFrame):
         6      Zhang G. [4]  2019 [53]       3.0            [[*27*]]
 
         """
-        data = self[[column, 'Cited by', 'Year', 'ID']]
-        data = data.dropna()
+        data = self[[column, 'Cited by', 'Year', 'ID']].dropna()
         data['Year'] = data['Year'].map(int)
-        if sep is not None:
-            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
-            data[column] = data[column].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column)
-            data.index = range(len(data))
+        data = _expand_column(data, column, sep)
+
         numcitations = data.groupby(by=[column, 'Year'], as_index=True).agg({
             'Cited by': np.sum
         })
@@ -325,10 +329,8 @@ class RecordsDataFrame(pd.DataFrame):
             selected = [True if row[0] in top else False for idx, row in result.iterrows()] 
             result = result[selected]
 
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[2]] >= minval ]
-            result = result[ result[result.columns[2]] <= maxval ]
+        result = _minmax(result, minmax)
+        
 
         result['ID'] = None
         for idx, row in result.iterrows():
@@ -339,19 +341,10 @@ class RecordsDataFrame(pd.DataFrame):
     
         ## counts the number of ddcuments only in the results matrix -----------------------
 
-        count = self.documents_by_terms(column, sep)
-        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
-        result[column] = result[column].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
-
-        count = self.documents_by_year()
-        count = {key : value for key, value in zip(count[count.columns[0]], count[count.columns[1]])}
-        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
- 
-        ## end -----------------------------------------------------------------------------
-
+        resul = self._add_documents_by_terms_to_label(result, column, sep)
+        resul = self._add_documents_by_terms_to_label(result, 'Year', sep=None)
         result.index = list(range(len(result)))
-
-        return Matrix(result, rtype='coo-matrix')
+        return Result(result, call='citations_by_terms_by_year')
 
     #----------------------------------------------------------------------------------------------
     def citations_by_year(self, cumulative=False):
@@ -372,8 +365,7 @@ class RecordsDataFrame(pd.DataFrame):
         """
 
         ## computes number of citations
-        data = self[['Year', 'Cited by', 'ID']]
-        data = data.dropna()
+        data = self[['Year', 'Cited by', 'ID']].dropna()
         data['Year'] = data['Year'].map(int)
         citations = data.groupby(['Year'], as_index=True).agg({
             'Cited by': np.sum
@@ -384,7 +376,7 @@ class RecordsDataFrame(pd.DataFrame):
         result['Year'] = result.index
         result['Cited by'] = 0
         result.at[citations.index, 'Cited by'] = citations['Cited by'].tolist()
-        result.index = range(len(result))
+        result.index = list(range(len(result)))
 
         ## IDs ---------------------------------------------------------------------------------
         result['ID'] = None
@@ -406,7 +398,7 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## end -----------------------------------------------------------------------------------
 
-        return List(result)
+        return Result(result, call='citations_by_year')
 
     #----------------------------------------------------------------------------------------------
     def co_ocurrence(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
@@ -440,20 +432,8 @@ class RecordsDataFrame(pd.DataFrame):
         column_r +=  ' (row)'
         column_c +=  ' (col)'
 
-        if sep_r is not None:
-            data[column_r] = data[column_r].map(lambda x: x.split(sep_r) if x is not None else None)
-            data[column_r] = data[column_r].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column_r)
-            data.index = range(len(data))
-        if sep_c is not None:
-            data[column_c] = data[column_c].map(lambda x: x.split(sep_c) if x is not None else None)
-            data[column_c] = data[column_c].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column_c)   
-            data.index = range(len(data))
+        data = _expand_column(data, column_r, sep_r)
+        data = _expand_column(data, column_c, sep_c)
 
         ## number of documents
         numdocs = data.groupby(by=[column_r, column_c]).size()
@@ -483,10 +463,7 @@ class RecordsDataFrame(pd.DataFrame):
                 selected = [True if row[1] in top_c else False for idx, row in result.iterrows()] 
                 result = result[selected]
             
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[2]] >= minval ]
-            result = result[ result[result.columns[2]] <= maxval ]
+        result = _minmax(result, minmax)
 
 
         ## collects the references
@@ -498,41 +475,28 @@ class RecordsDataFrame(pd.DataFrame):
             if len(selected_IDs):
                 result.at[idx, 'ID'] = selected_IDs.tolist()
 
-        result.index = range(len(result))
+        result.index = list(range(len(result)))
 
         ## counts the number of ddcuments only in the results matrix -----------------------
 
-        count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+        result = Result(result, call='citations_by_year')
+        result.add_count_to_label(column_r)
+        result.add_count_to_label(column_c)
+        return result
 
-        count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+        # count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
+        # count = {key : value for key, value in zip(count.index, count.tolist())}
+        # result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+
+        # count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
+        # count = {key : value for key, value in zip(count.index, count.tolist())}
+        # result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
 
         ## end -----------------------------------------------------------------------------
 
-        ## adds number of records to columns
-        # num = self.documents_by_terms(column_r, sep_r)
-        # new_names = {}
-        # for idx, row in num.iterrows():
-        #     old_name = row[0]
-        #     new_name = old_name + ' [' + str(row[1]) + ']'
-        #     new_names[old_name] = new_name
 
-        # result[column_r] = result[column_r].map(lambda x: new_names[x])
 
-        # num = self.documents_by_terms(column_c, sep_c)
-        # new_names = {}
-        # for idx, row in num.iterrows():
-        #     old_name = row[0]
-        #     new_name = old_name + ' [' + str(row[1]) + ']'
-        #     new_names[old_name] = new_name
-
-        # result[column_c] = result[column_c].map(lambda x: new_names[x])
-        ## end -----------------------------------------------------------------------------
-
-        return Matrix(result, rtype='coo-matrix')
+        return Result(result, call='citations_by_year')
 
 
     #----------------------------------------------------------------------------------------------
@@ -683,7 +647,7 @@ class RecordsDataFrame(pd.DataFrame):
         ## cluster computation -------------------------------------------------------------------
         
         ## number of clusters
-        mtx = Matrix(result.copy(), rtype='cross-matrix')
+        mtx = Result(result.copy(), call='cross_corr')
         mtx = mtx.tomatrix()
         mtx = mtx.applymap(lambda x: 1 if x > 0 else 0)
         mtx = mtx.transpose()
@@ -811,8 +775,8 @@ class RecordsDataFrame(pd.DataFrame):
         ## end ------------------------------------------------------------------------------------
 
         result = result.sort_values(col2, ascending=False)
-        result.index = range(len(result))
-        return Matrix(result, rtype='cross-matrix', cluster_data=map_data)
+        result.index = list(range(len(result)))
+        return Result(result, call='cross_corr', cluster_data=map_data)
 
 
     #----------------------------------------------------------------------------------------------
@@ -835,16 +799,10 @@ class RecordsDataFrame(pd.DataFrame):
 
         # computes the number of documents by term
         data = self[[column, 'ID']].dropna()
-        if sep is not None:
-            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
-            data[column] = data[column].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column)
-            data.index = range(len(data))
+        data = _expand_column(data, column, sep)
+
         numdocs = data.groupby(column, as_index=False).size()
         
-
         ## dataframe with results
         result = pd.DataFrame({
             column : numdocs.index,
@@ -857,10 +815,8 @@ class RecordsDataFrame(pd.DataFrame):
         if top_n is not None and len(result) > top_n:
             result = result.head(top_n)
 
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[1]] >= minval ]
-            result = result[ result[result.columns[1]] <= maxval ]
+
+        result = _minmax(result, minmax)
 
 
         result['ID'] = None
@@ -869,9 +825,9 @@ class RecordsDataFrame(pd.DataFrame):
             if len(selected_IDs):
                 result.at[current_term,'ID'] = selected_IDs.tolist()
 
-        result.index = range(len(result))
+        result.index = list(range(len(result)))
 
-        return List(result)
+        return Result(result, call='documents_by_terms')
 
     #----------------------------------------------------------------------------------------------
     def documents_by_year(self, cumulative=False):
@@ -918,9 +874,9 @@ class RecordsDataFrame(pd.DataFrame):
             if len(selected_IDs):
                 result.at[current_term,'ID'] = selected_IDs.tolist()
 
-        result.index = range(len(result))
+        result.index = list(range(len(result)))
 
-        return List(result)
+        return Result(result, call='documents_by_year')
 
     #----------------------------------------------------------------------------------------------
     def factor_analysis(self, column, sep=None, n_components=None, top_n=10):
@@ -974,7 +930,7 @@ class RecordsDataFrame(pd.DataFrame):
         tdf_c = tdf_r
 
         ## number of clusters
-        mtx = Matrix(result.copy(), rtype='cross-matrix')
+        mtx = Result(result.copy(), call='factor_analysis')
         mtx = mtx.tomatrix()
         mtx = mtx.applymap(lambda x: 1 if x > 0 else 0)
         mtx = mtx.transpose()
@@ -1059,7 +1015,7 @@ class RecordsDataFrame(pd.DataFrame):
         map_data['to_node'] = map_data['to_node'].map(lambda x: new_names[x])
         ## <<< end ------------------------------------------------------------------------------------
 
-        return Matrix(result, rtype='factor-matrix', cluster_data=map_data)
+        return Result(result, call='factor_analysis', cluster_data=map_data)
 
     #----------------------------------------------------------------------------------------------
     def generate_ID(self):
@@ -1176,23 +1132,8 @@ class RecordsDataFrame(pd.DataFrame):
         column_c = column + ' (col)'
         data = data[[column_r, column_c, 'ID']]
 
-        if sep is not None:
-
-            ## column (row)
-            data[column_r] = data[column_r].map(lambda x: x.split(sep) if x is not None else None)
-            data[column_r] = data[column_r].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column_r)
-            data.index = range(len(data))
-        
-            ## column (col)
-            data[column_c] = data[column_c].map(lambda x: x.split(sep) if x is not None else None)
-            data[column_c] = data[column_c].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column_c)   
-            data.index = range(len(data))
+        data = _expand_column(data, column_r, sep)
+        data = _expand_column(data, column_c, sep)
 
         ## number of documents
         numdocs = data.groupby(by=[column_r, column_c]).size()
@@ -1220,10 +1161,8 @@ class RecordsDataFrame(pd.DataFrame):
                 selected = [True if row[1] in top else False for idx, row in result.iterrows()] 
                 result = result[selected]
             
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[2]] >= minval ]
-            result = result[ result[result.columns[2]] <= maxval ]
+
+        result = _minmax(result, minmax)
 
 
         ## collects the references
@@ -1235,42 +1174,14 @@ class RecordsDataFrame(pd.DataFrame):
             if len(selected_IDs):
                 result.at[idx, 'ID'] = selected_IDs.tolist()
 
-        result.index = range(len(result))
+        result.index = list(range(len(result)))
 
         ## counts the number of ddcuments only in the results matrix -----------------------
 
-        count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
-
-        count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
-
-        ## end -----------------------------------------------------------------------------
-
-        ## adds number of records to columns
-        # num = self.documents_by_terms(column_r, sep_r)
-        # new_names = {}
-        # for idx, row in num.iterrows():
-        #     old_name = row[0]
-        #     new_name = old_name + ' [' + str(row[1]) + ']'
-        #     new_names[old_name] = new_name
-
-        # result[column_r] = result[column_r].map(lambda x: new_names[x])
-
-        # num = self.documents_by_terms(column_c, sep_c)
-        # new_names = {}
-        # for idx, row in num.iterrows():
-        #     old_name = row[0]
-        #     new_name = old_name + ' [' + str(row[1]) + ']'
-        #     new_names[old_name] = new_name
-
-        # result[column_c] = result[column_c].map(lambda x: new_names[x])
-        ## end -----------------------------------------------------------------------------
-
-        return Matrix(result, rtype='coo-matrix')
-
+        result = Result(result, call='ocurrence')
+        result.add_count_to_label(column_r)
+        result.add_count_to_label(column_c)
+        return result
 
 
     #----------------------------------------------------------------------------------------------
@@ -1340,22 +1251,8 @@ class RecordsDataFrame(pd.DataFrame):
         ## computes the number of documents by term by term
 
         data = self[[column_r, column_c, 'Year', 'ID']].dropna()
-
-        if sep_r is not None:
-            data[column_r] = data[column_r].map(lambda x: x.split(sep_r))
-            data[column_r] = data[column_r].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column_r)
-            data.index = range(len(data))
-        if sep_c is not None:
-            #data = data[[column_c, column_r, 'Year']]
-            data[column_c] = data[column_c].map(lambda x: x.split(sep_c))
-            data[column_c] = data[column_c].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column_c)   
-            data.index = range(len(data))
+        data = _expand_column(data, column_r, sep_r)
+        data = _expand_column(data, column_c, sep_c)
         
         numdocs = data.groupby(by=[column_r, column_c, 'Year']).size()
 
@@ -1386,10 +1283,7 @@ class RecordsDataFrame(pd.DataFrame):
                 selected = [True if row[1] in top else False for idx, row in result.iterrows()] 
                 result = result[selected]
             
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[3]] >= minval ]
-            result = result[ result[result.columns[3]] <= maxval ]
+        result = _minmax(result, minmax)
 
         result['ID'] = None
         for idx, row in result.iterrows():
@@ -1404,22 +1298,28 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## counts the number of ddcuments only in the results matrix -----------------------
 
-        count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
+        result = Result(result, call='terms_by_terms_by_year')
+        result.add_count_to_label(column_r)
+        result.add_count_to_label(column_c)
+        result.add_count_to_label('Year')
+        return result
 
-        count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+        # count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
+        # count = {key : value for key, value in zip(count.index, count.tolist())}
+        # result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
 
-        count = result.groupby(by='Year', as_index=True)[result.columns[-2]].sum()
-        count = {key : value for key, value in zip(count.index, count.tolist())}
-        result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+        # count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
+        # count = {key : value for key, value in zip(count.index, count.tolist())}
+        # result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
 
-        ## end -----------------------------------------------------------------------------
+        # count = result.groupby(by='Year', as_index=True)[result.columns[-2]].sum()
+        # count = {key : value for key, value in zip(count.index, count.tolist())}
+        # result['Year'] = result['Year'].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
+
+        # ## end -----------------------------------------------------------------------------
 
 
-        return Matrix(result, rtype='coo-matrix-year')
+        # return Result(result, call='terms_by_terms_by_year')
 
     #----------------------------------------------------------------------------------------------
     def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
@@ -1456,13 +1356,8 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## computes the number of documents by year
         data = self[[column, 'Year', 'ID']].dropna()
-        if sep is not None:
-            data[column] = data[column].map(lambda x: x.split(sep) if x is not None else None)
-            data[column] = data[column].map(
-                lambda x: [z.strip() for z in x] if isinstance(x, list) else x
-            )
-            data = data.explode(column)    
-            data.index = range(len(data))
+        data = _expand_column(data, column, sep)
+
         numdocs = data.groupby(by=[column, 'Year'], as_index=False).size()
 
         ## dataframe with results
@@ -1482,11 +1377,7 @@ class RecordsDataFrame(pd.DataFrame):
                 selected = [True if row[0] in top else False for idx, row in result.iterrows()] 
                 result = result[selected]
 
-        ## range of values
-        if minmax is not None:
-            minval, maxval = minmax
-            result = result[ result[result.columns[2]] >= minval ]
-            result = result[ result[result.columns[2]] <= maxval ]
+        result = _minmax(result, minmax)
         
         result['ID'] = None
         for idx, row in result.iterrows():
@@ -1496,7 +1387,7 @@ class RecordsDataFrame(pd.DataFrame):
             if len(selected_IDs):
                 result.at[idx, 'ID'] = selected_IDs.tolist()
 
-        result.index = range(len(result))
+        result.index = list(range(len(result)))
 
         ## adds the number of documents to text ---------------------------------------------------
 
@@ -1510,7 +1401,7 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## ends -----------------------------------------------------------------------------------
 
-        return Matrix(result, rtype='coo-matrix')
+        return Result(result, call='terms_by_year')
 
 
 
