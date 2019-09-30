@@ -424,7 +424,6 @@ class RecordsDataFrame(pd.DataFrame):
 
         ## computes the number of documents by term by term        
         data = self[[column_r, column_c, 'ID']].dropna()
-
         top_r = self.documents_by_terms(column_r, sep_r)
         top_c = self.documents_by_terms(column_c, sep_c)
 
@@ -480,24 +479,9 @@ class RecordsDataFrame(pd.DataFrame):
         ## counts the number of ddcuments only in the results matrix -----------------------
 
         result = Result(result, call='citations_by_year')
-        result.add_count_to_label(column_r)
-        result.add_count_to_label(column_c)
+        result._add_count_to_label(column_r)
+        result._add_count_to_label(column_c)
         return result
-
-        # count = result.groupby(by=column_r, as_index=True)[result.columns[-2]].sum()
-        # count = {key : value for key, value in zip(count.index, count.tolist())}
-        # result[column_r] = result[column_r].map(lambda x: cut_text(x + ' [' + str(count[x]) + ']'))
-
-        # count = result.groupby(by=column_c, as_index=True)[result.columns[-2]].sum()
-        # count = {key : value for key, value in zip(count.index, count.tolist())}
-        # result[column_c] = result[column_c].map(lambda x: cut_text(str(x) + ' [' + str(count[x]) + ']'))
-
-        ## end -----------------------------------------------------------------------------
-
-
-
-        return Result(result, call='citations_by_year')
-
 
     #----------------------------------------------------------------------------------------------
     def coverage(self):
@@ -943,9 +927,14 @@ class RecordsDataFrame(pd.DataFrame):
         map_from = []
         map_to = []
         map_similariry = []
+        map_color = []
+
+        norm = colors.Normalize(vmin=0, vmax=len(clusters))
+        cmap = cm.get_cmap('tab20')
+
 
         ## similarity computation
-        for cluster_term in clusters:
+        for idx_cluster, cluster_term in enumerate(clusters):
 
             ## terms in r selected in the current cluster
             cluster_index = mtx.index[mtx[cluster_term] > 0]
@@ -990,15 +979,42 @@ class RecordsDataFrame(pd.DataFrame):
                     map_from += [term0_r]
                     map_to += [term1_r]
                     map_similariry += [jaccard]
+                    map_color += [cmap(norm(idx_cluster))]
 
         map_data = pd.DataFrame({
             'cluster' : map_cluster,
             'from_node' : map_from,
             'to_node' : map_to,
-            'similarity' : map_similariry 
+            'similarity' : map_similariry,
+            'color' : map_color  
         })
         map_data = map_data.drop_duplicates(subset=['from_node', 'to_node'])
         ## end -----------------------------------------------------------------------------------
+
+         ## line style for diagrams ---------------------------------------------------------------
+        map_data['linewidth'] = None
+        map_data['linestyle'] = None
+
+        for idx, row in map_data.iterrows():
+
+                if row[3] >= 0.75:
+                    map_data.at[idx, 'linewidth'] = 4
+                    map_data.at[idx, 'linestyle'] = '-' 
+                elif row[3] >= 0.50:
+                    map_data.at[idx, 'linewidth'] = 2
+                    map_data.at[idx, 'linestyle'] = '-' 
+                elif row[3] >= 0.25:
+                    map_data.at[idx, 'linewidth'] = 2
+                    map_data.at[idx, 'linestyle'] = '--' 
+                elif row[3] < 0.25:
+                    map_data.at[idx, 'linewidth'] = 1
+                    map_data.at[idx, 'linestyle'] = ':'
+                else: 
+                    map_data.at[idx, 'linewidth'] = 0
+                    map_data.at[idx, 'linestyle'] = '-'
+
+        ## end -----------------------------------------------------------------------------------
+
 
         ## adds number of records to columns
         num = self.documents_by_terms(column, sep)
@@ -1179,8 +1195,8 @@ class RecordsDataFrame(pd.DataFrame):
         ## counts the number of ddcuments only in the results matrix -----------------------
 
         result = Result(result, call='ocurrence')
-        result.add_count_to_label(column_r)
-        result.add_count_to_label(column_c)
+        result._add_count_to_label(column_r)
+        result._add_count_to_label(column_c)
         return result
 
 
@@ -1299,9 +1315,9 @@ class RecordsDataFrame(pd.DataFrame):
         ## counts the number of ddcuments only in the results matrix -----------------------
 
         result = Result(result, call='terms_by_terms_by_year')
-        result.add_count_to_label(column_r)
-        result.add_count_to_label(column_c)
-        result.add_count_to_label('Year')
+        result._add_count_to_label(column_r)
+        result._add_count_to_label(column_c)
+        result._add_count_to_label('Year')
         return result
 
     #----------------------------------------------------------------------------------------------
@@ -1375,8 +1391,8 @@ class RecordsDataFrame(pd.DataFrame):
         ## adds the number of documents to text ---------------------------------------------------
 
         result = Result(result, call='terms_by_year')
-        result.add_count_to_label(column)
-        result.add_count_to_label('Year')
+        result._add_count_to_label(column)
+        result._add_count_to_label('Year')
         return result
 
 

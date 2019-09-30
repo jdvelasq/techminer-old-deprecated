@@ -21,6 +21,18 @@ from sklearn.cluster import KMeans
 from matplotlib.patches import Rectangle
 from wordcloud import WordCloud, ImageColorGenerator
 
+#----------------------------------------------------------------------------------------------------
+def _compute_graph_layout(graph):
+
+    path_length = nx.shortest_path_length(graph)
+    distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
+    for row, data in path_length:
+        for col, dist in data.items():
+            distances.loc[row,col] = dist
+    distances = distances.fillna(distances.max().max())
+
+    return nx.kamada_kawai_layout(graph, dist=distances.to_dict())
+
 #--------------------------------------------------------------------------------------------------------
 class Result(pd.DataFrame):
     """Class implementing a dataframe with results of analysis.
@@ -41,7 +53,7 @@ class Result(pd.DataFrame):
 
 
     #----------------------------------------------------------------------------------------------
-    def add_count_to_label(self, column):
+    def _add_count_to_label(self, column):
 
         count = self.groupby(by=column, as_index=True)[self.columns[-2]].sum()
         count = {key : value for key, value in zip(count.index, count.tolist())}
@@ -93,6 +105,7 @@ class Result(pd.DataFrame):
         ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
         ... )
         >>> rdf.documents_by_year().altair_barplot()
+        alt.Chart(...)
 
         .. image:: ../figs/altair_barplot.jpg
             :width: 500px
@@ -106,7 +119,7 @@ class Result(pd.DataFrame):
         data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
         data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
-        alt.Chart(data).mark_bar().encode(
+        return alt.Chart(data).mark_bar().encode(
             alt.X(columns[0] + ':N', sort=alt.EncodingSortField(field=columns[1] + ':Q')),
             alt.Y(columns[1] + ':Q'),
             alt.Color(columns[1] + ':Q', scale=alt.Scale(scheme='greys')))
@@ -233,7 +246,7 @@ class Result(pd.DataFrame):
         return graph
 
     #----------------------------------------------------------------------------------------------
-    def barhplot(self, color=None, figsize=(12,8)):
+    def barhplot(self, color='gray', figsize=(12,8)):
         """Plots a pandas.DataFrame using Altair.
 
         >>> import pandas as pd
@@ -250,22 +263,20 @@ class Result(pd.DataFrame):
         """
         if len(self.columns) != 3:
             Exception('Invalid call for result of function:' + self._call)
-
-        plt.figure(figsize=figsize)
-
-        columns = self.columns.tolist()
+        
         data = pd.DataFrame(self.copy())
+        columns = data.columns.tolist()
         if data.columns[1] != 'Cited by':
             data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
             data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
-        if color is None:
-            color = 'gray'
         if columns[0] == 'Year':
             data =  data.sort_values(by=columns[0], ascending=True)
         else:
             data =  data.sort_values(by=columns[1], ascending=True)
-        data.plot.barh(columns[0], columns[1], color=color)
+        
+        #plt.figure(figsize=figsize)
+        data.plot.barh(columns[0], columns[1], color=color, figsize=figsize)
         plt.gca().xaxis.grid(True)
         
 
@@ -334,35 +345,6 @@ class Result(pd.DataFrame):
             R=R, 
             n_bezier=n_bezier, 
             dist=dist)
-
-
-
-    #----------------------------------------------------------------------------------------------------
-    def cluster_map(self, min_value=None, top_links=None, figsize = (10,10), 
-            font_size=12, factor=None, size=(25,300)):
-
-        if self._call not in ['co_ocurrence', 'cross_corr']:
-            Exception('Invalid call for result of function:' + self._call)
-
-        if self._call == 'co_ocurrence':
-
-            self.__cluster_map_coocurrence(
-                min_value=min_value, 
-                top_links=top_links, 
-                figsize=figsize, 
-                font_size=font_size, 
-                factor=factor, 
-                size=size)
-
-        else:
-
-            self.__cluster_map_correlation(
-                min_value=min_value, 
-                top_links=top_links, 
-                figsize=figsize, 
-                font_size=font_size, 
-                factor=factor, 
-                size=size)
 
         
     #----------------------------------------------------------------------------------------------------
@@ -449,22 +431,7 @@ class Result(pd.DataFrame):
         for idx_row, row in enumerate(x.index):
             for idx_col, col in enumerate(x.columns):
 
-                if self._call == 'co_ocurrence' and x.at[row, col] > 0:
-                    
-                    if x.at[row, col] > x.values.max() / 2.0:
-                        color = 'white'
-                    else:
-                        color = 'black'
-
-                    plt.text(
-                        idx_row + 0.5, 
-                        idx_col + 0.5, 
-                        x.at[row, col],
-                        ha="center", 
-                        va="center", 
-                        color=color)
-
-                elif self._call in ['auto_corr', 'cross_corr', 'factor_analysis']:
+                if self._call in ['auto_corr', 'cross_corr', 'factor_analysis']:
 
                     if abs(x.at[row, col]) > x.values.max() / 2.0:
                         color = 'white'
@@ -478,23 +445,23 @@ class Result(pd.DataFrame):
                         ha="center", 
                         va="center", 
                         color=color)
+                
+                else:
+                    if x.at[row, col] > 0:
+                    
+                        if x.at[row, col] > x.values.max() / 2.0:
+                            color = 'white'
+                        else:
+                            color = 'black'
 
-                # elif self. in ['factor-matrix']:
+                        plt.text(
+                            idx_row + 0.5, 
+                            idx_col + 0.5, 
+                            int(x.at[row, col]),
+                            ha="center", 
+                            va="center", 
+                            color=color)
 
-                #     if abs(x.at[row, col]) > x.values.max() / 2.0:
-                #         color = 'white'
-                #     else:
-                #         color = 'black'
-
-                #     plt.text(
-                #         idx_row + 0.5, 
-                #         idx_col + 0.5, 
-                #         "{:3.2f}".format(x.at[row, col]),
-                #         ha="center", 
-                #         va="center", 
-                #         color=color)
-
-        ## ends annotation
 
         plt.tight_layout()
         plt.show()
@@ -762,7 +729,7 @@ class Result(pd.DataFrame):
         
         ## draw terms nodes
         node_size = [int(n[n.find('[')+1:-1])  for n in nodes]
-        node_size = [ size[0] + (n - min(node_size)) / (max(node_size) - min(node_size)) * (size[1] - size[0])    for n in node_size]
+        node_size = [size[0] + (n - min(node_size)) / (max(node_size) - min(node_size)) * (size[1] - size[0]) for n in node_size]
         nx.draw_networkx_nodes(
             graph, 
             layout, 
@@ -797,7 +764,7 @@ class Result(pd.DataFrame):
 
         ## draw quantity nodes
         node_size = [int(labels[n]) for n in labels.keys()]
-        node_size = [ size[0] + (n - min(node_size)) / (max(node_size) - min(node_size)) * (size[1] - size[0])    for n in node_size]        
+        node_size = [size[0] + (n - min(node_size)) / (max(node_size) - min(node_size)) * (size[1] - size[0]) for n in node_size]        
         nx.draw_networkx_nodes(
             graph, 
             layout, 
@@ -987,7 +954,7 @@ class Result(pd.DataFrame):
         >>> rdf = RecordsDataFrame(
         ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
         ... )
-        >>> rdf.documents_by_year().altair_barplot()
+        >>> rdf.documents_by_year().seaborn_barplot()
 
         .. image:: ../figs/seaborn_barhplot.jpg
             :width: 800px
@@ -997,7 +964,7 @@ class Result(pd.DataFrame):
             Exception('Invalid call for result of function:' + self._call)
 
         columns = self.columns.tolist()
-        data = List(self.copy())
+        data = Result(self.copy())
         data[columns[0]] = data[columns[0]].map(str) + ' [' + data[columns[1]].map(str) + ']'
         data[data.columns[0]] = data[data.columns[0]].map(lambda x: cut_text(x))
 
@@ -1011,8 +978,6 @@ class Result(pd.DataFrame):
         _, labels = plt.xticks()
         result.set_xticklabels(labels, rotation=90)
         plt.gca().yaxis.grid(True)
-
-
 
     #----------------------------------------------------------------------------------------------------
     def seaborn_heatmap(self, ascending_r=None, ascending_c=None, filename=None):
@@ -1200,302 +1165,6 @@ class Result(pd.DataFrame):
     
 
     #----------------------------------------------------------------------------------------------------
-    # def circlerel(self, ascending_r=None, ascending_c=None, library=None):
-    #     """
-
-    #     >>> import pandas as pd
-    #     >>> import matplotlib.pyplot as plt
-    #     >>> from techminer.dataframe import  *
-    #     >>> rdf = RecordsDataFrame(
-    #     ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-    #     ... )
-    #     >>> rdf.auto_corr(
-    #     ...     column='Authors',
-    #     ...     sep=',',
-    #     ...     top_n=30
-    #     ... ).circlerel()
-    #     alt.Chart(...)
-    #     >>> plt.savefig('./figs/circlerel.jpg')
-        
-    #     .. image:: ../figs//circlerel.jpg
-    #         :width: 600px
-    #         :align: center
-
-    #     """
-
-    #     if library is None or library == 'altair':
-    #         if ascending_r is None or ascending_r is True:
-    #             sort_X = 'ascending'
-    #         else:
-    #             sort_X = 'descending'
-
-    #         if ascending_c is None or ascending_c is True:
-    #             sort_Y = 'ascending'
-    #         else:
-    #             sort_Y = 'descending'
-
-    #         return alt.Chart(self).mark_circle().encode(
-    #             alt.X(self.columns[0] + ':N',
-    #                 axis=alt.Axis(labelAngle=270), 
-    #                 sort=sort_X),
-    #             alt.Y(self.columns[1] + ':N',
-    #                 sort=sort_Y),
-    #             size=self.columns[2],
-    #             color=self.columns[2])
-
-    #     if library == 'seaborn':
-    #         sns.relplot(
-    #             x = self.columns[0],
-    #             y = self.columns[1],
-    #             size = self.columns[2],
-    #             alpha = 0.8,
-    #             palette = 'viridis',
-    #             data = df)
-    #         plt.xticks(rotation=90)
-
-
-
-
-
-
-
-    
-
-
-
-
-    #----------------------------------------------------------------------------------------------------
-    def map__(self, min_value=None, top_links=None, figsize = (10,10)):
-
-        def add_group(group, cluster_number, weight, style):
-            """
-            """
-            for row in group[col0].tolist():                    
-                graph.add_edge(row, cluster_number,  weight=weight, style=style)
-
-        ## main routine
-        x = self.copy()
-
-        ## column names in dataframe
-        col0 = x.columns[0]
-        col1 = x.columns[1]
-        col2 = x.columns[2]
-    
-        ## node names
-        nodes = sorted(list(set(x[col0]))) 
-        clusters = sorted(list(set(x[col1])))
-        
-        ## generate a network graph
-        plt.figure(figsize=figsize)
-        graph = nx.Graph()
-        graph.add_nodes_from(nodes, color='lightgray', size=12)
-        graph.add_nodes_from(range(len(clusters)), color='red', size=3)
-
-        ## add nodes to each cluster
-        for idx_cluster, cluster in enumerate(clusters):
-            
-            ## obtains the data for cluster
-            values = x[x[col1] == cluster]
-            values = values.sort_values(col2, ascending=False)
-            values.index = values[col0].tolist()     
-            
-            if top_links is not None and top_links < len(values):
-                values = values.head(top_links)
-            
-            if min_value is None:
-                group0 = values[values[col2] >= 0.75]
-                group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
-                group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
-                group3 = values[values[col2] <= -0.25]
-            else:
-                group0 = values[ 
-                    (values[col2] >= 0.75) & (values[col2].map(abs) >= min_value)
-                    ]
-                group1 = values[ 
-                    (values[col2] < 0.75) & (values[col2] >= 0.50) & (values[col2].map(abs) >= min_value)
-                    ]
-                group2 = values[ 
-                    (values[col2] < 0.50) & (values[col2] >= 0.25) & (values[col2].map(abs) >= min_value)
-                    ]
-                group3 = values[
-                    (values[col2] <= -0.25) & (values[col2].map(abs) >= min_value)
-                    ]
-
-            if len(group0) > 0:
-                add_group(group0, idx_cluster, weight=3, style='solid')
-            if len(group1) > 0:
-                add_group(group1, idx_cluster, weight=2, style='solid')
-            if len(group2) > 0:
-                add_group(group2, idx_cluster, weight=2, style='dashed')
-            if len(group3) > 0:
-                add_group(group3, idx_cluster, weight=1, style='dotted')
-        
-        
-        
-        ## calculate distance between relationated nodes to avoid overlaping
-        path_length = nx.shortest_path_length(graph)
-        distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
-        for row, data in path_length:
-            for col, dist in data.items():
-                distances.loc[row,col] = dist
-        distances = distances.fillna(distances.max().max())
-
-        ## layout of graph
-        layout = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
-
-        ## ------- no se modifican las propiedades de la grafica
-        ## visual graph configuration
-        ## nx.draw(graph, layout, with_labels=True)
-        ## -------
-
-
-        ## visualization
-        nx.draw_networkx_nodes(
-            graph, 
-            layout, 
-            nodelist=nodes, 
-            node_size=11, 
-            node_color='white')
-
-        nx.draw_networkx_nodes(
-            graph, 
-            layout, 
-            nodelist=list(range(len(clusters))), 
-            node_size=80, 
-            node_color='white')
-
-        nx.draw_networkx_edges(
-            graph, 
-            layout,
-            edge_color='gray')
-
-        node_labels = dict(zip(nodes + list(range(len(clusters))), nodes + list(range(len(clusters)))))
-        nx.draw_networkx_labels(
-            graph,
-            layout,
-            labels=node_labels)
-
-        plt.tight_layout()
-        plt.axis('off')
-
-
-        # node_labels = dict(zip(nodes, nodes))
-        # pos_labels = {}
-        # y_off = 0.05  # offset on the y axis
-    
-
-        # for k, v in pos.items():
-        #     plt.text(v[0], v[1], node_labels[k], backgroundcolor='white')
-
-        # for k, v in pos.items():
-        #     pos_labels[k] = (v[0], v[1]+y_off)
-
-        # nx.draw_networkx_labels(
-        #     graph,
-        #     pos_labels,
-        #     labels=node_labels,
-        #     bbox=dict(facecolor='none', edgecolor='black', boxstyle='round'))
-
-        # nx.draw_networkx_nodes(
-        #     graph, 
-        #     pos, 
-        #     nodelist=clusters, 
-        #     node_size=3, 
-        #     node_color='white')
-
-        # nx.draw_networkx_edges(
-        #     graph, 
-        #     pos, 
-        #     width=2, 
-        #     edge_color="gray")
-
-
-        # plt.figure(figsize=figsize)
-        #nx.draw(graph, pos, with_labels=True)
-        
-        #print(graph.nodes())
-        #print()
-        #print(graph.edges())
-        #nx.draw_spectral(graph)
-        # plt.axis('off')
-
-
-
-
-
-
-
-    #----------------------------------------------------------------------------------------------------
-    # def map_to_chord(self, figsize = (10,10), minval=None, R=3):
-
-    #     def add_group(group, linewidth, linestyle):
-            
-    #         if len(group) == 0:
-    #             return
-
-    #         for row in group[col0].tolist():
-    #             for col in group[col0].tolist():
-
-    #                 if row != col:    
-                    
-    #                     from_list.append(row)
-    #                     to_list.append(col)
-    #                     linewidth_list.append(linewidth)
-    #                     linestyle_list.append(linestyle)
-
-
-    #     x = self
-
-    #     ## nombres de las columnas
-    #     col0 = x.columns[0]
-    #     col1 = x.columns[1]
-    #     col2 = x.columns[2]
-
-    #     labels = list(set(x[col0]))
-    #     n_labels = len(labels)
-
-    #     from_list = []
-    #     to_list = []
-    #     linewidth_list = []
-    #     linestyle_list = []
-
-    #     for factor in list(set(x[col1])):
-            
-    #         values = x[x[col1] == factor]
-    #         values.index = values[col0].tolist()     
-            
-    #         if minval is None:
-    #             group0 = values[values[col2] >= 0.75]
-    #             group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
-    #             group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
-    #             group3 = values[values[col2] <= -0.25]
-    #         else:
-    #             group0 = values[(values[col2] >= 0.75) & (values[col2] >= minval)]
-    #             group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50) & (values[col2] >= minval)]
-    #             group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25) & (values[col2] >= minval)]
-    #             group3 = values[(values[col2] <= -0.25) & (values[col2] >= minval)]
-
-            
-    #         if len(group0) > 0:
-    #             add_group(group0, linewidth=3, linestyle='solid')
-    #         if len(group1) > 0:
-    #             add_group(group1, linewidth=2, linestyle='solid')
-    #         if len(group2) > 0:
-    #             add_group(group2, linewidth=2, linestyle='dashed')
-    #         if len(group3) > 0:
-    #             add_group(group3, linewidth=1, linestyle='dotted')
-        
-    #     edges = pd.DataFrame({
-    #         'from' : from_list,
-    #         'to' : to_list,
-    #         'linewidth' : linewidth_list,
-    #         'linestyle' : linestyle_list
-    #     })
-            
-    #     chord_diagram(labels, edges) 
-
-
-    #----------------------------------------------------------------------------------------------------
     #TODO personalizar valor superior para escalar los pesos de los puentes
     #TODO map
     def network(self, save=False, name='network.png', corr_min=0.7, node_color='lightblue',
@@ -1523,6 +1192,8 @@ class Result(pd.DataFrame):
         Returns:
             None
         
+
+
         """
 
         if self._call not in [
@@ -1714,9 +1385,6 @@ class Result(pd.DataFrame):
 
         return None
 
-
-
-
     #----------------------------------------------------------------------------------------------
     def wordcloud(self, figsize=(14, 7), max_font_size=50, max_words=100, 
             background_color="white"):
@@ -1803,272 +1471,7 @@ class Result(pd.DataFrame):
         cax = divider.append_axes("right", size="5%", pad=0.1)
         world.plot(column='q', legend=True, ax=axx, cax=cax, cmap='Pastel2')
 
-
-
-
-
     #----------------------------------------------------------------------------------------------------
-
-
-    #----------------------------------------------------------------------------------------------------
-    # def kmeans(self, n_clusters=2):
-    #     """Apply KMeans to a pandas dataframe.
-    #     """
-
-    #     if self._call not in [
-    #         'co_ocurrence',
-    #         'cross_corr',
-    #         'auto_corr']:
-
-    #         raise Exception('Invalid function call for type: ' + self._call )
-
-    #     if self._call == 'factor_analysis' is True:
-    #         x = self.copy()
-    #     else:
-    #         x = self.tomatrix()
-
-    #     m = KMeans(n_clusters)
-    #     m.fit(x.values)
-
-    #     centers = pd.DataFrame(
-    #         np.transpose(m.cluster_centers_),
-    #         columns = ['Cluster ' + str(i) for i in range(n_clusters)],
-    #         index = x.columns)
-
-    #     clusters = pd.DataFrame(
-    #         {'cluster': m.predict(x.values)},
-    #         index = x.index)
-
-    #     return centers, clusters
-
-    #----------------------------------------------------------------------------------------------------
-    # def xxmap(self, min_value=None, top_links=None, figsize = (10,10)):
-    #     """
-    #     """
-
-    #     def add_group(group, cluster, weight, style):
-            
-    #         for row in group[col0].tolist():                    
-    #             graph.add_edge(row, cluster,  weight=weight, style=style)
-
-    #     x = self
-    #     ## nombres de las columnas
-    #     col0 = x.columns[0]
-    #     col1 = x.columns[1]
-    #     col2 = x.columns[2]
-    
-    #     ## node names
-    #     nodes = sorted(list(set(x[col0]))) 
-    #     clusters = sorted(list(set(x[col1]))) 
-        
-    #     ## generate a network graph
-    #     plt.figure(figsize=figsize)
-    #     graph = nx.Graph()
-    #     graph.add_nodes_from(nodes)
-    #     graph.add_nodes_from(clusters) 
-
-
-    #     for factor in list(set(x[col1])):
-            
-    #         values = x[x[col1] == factor]
-    #         values = values.sort_values(col2, ascending=False)
-    #         values.index = values[col0].tolist()     
-    #         if top_links is not None and top_links < len(values):
-    #             values = values.head(top_links)
-                
-
-            
-    #         if min_value is None:
-    #             group0 = values[values[col2] >= 0.75]
-    #             group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
-    #             group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
-    #             group3 = values[values[col2] <= -0.25]
-    #         else:
-    #             group0 = values[ 
-    #                 (values[col2] >= 0.75) & (values[col2].map(abs) >= min_value)
-    #                 ]
-    #             group1 = values[ 
-    #                 (values[col2] < 0.75) & (values[col2] >= 0.50) & (values[col2].map(abs) >= min_value)
-    #                 ]
-    #             group2 = values[ 
-    #                 (values[col2] < 0.50) & (values[col2] >= 0.25) & (values[col2].map(abs) >= min_value)
-    #                 ]
-    #             group3 = values[
-    #                 (values[col2] <= -0.25) & (values[col2].map(abs) >= min_value)
-    #                 ]
-
-            
-    #         if len(group0) > 0:
-    #             add_group(group0, factor, weight=3, style='solid')
-    #         if len(group1) > 0:
-    #             add_group(group1, factor, weight=2, style='solid')
-    #         if len(group2) > 0:
-    #             add_group(group2, factor, weight=2, style='dashed')
-    #         if len(group3) > 0:
-    #             add_group(group3, factor, weight=1, style='dotted')
-        
-        
-        
-    #     # #calculate distance between relationated nodes to avoid overlaping
-    #     path_length = nx.shortest_path_length(graph)
-    #     distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
-    #     for row, data in path_length:
-    #         for col, dist in data.items():
-    #             distances.loc[row,col] = dist
-    #     distances = distances.fillna(distances.max().max())
-
-    #     #layout of graph
-    #     pos = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
-
-    #     #visual graph configuration
-    #     nx.draw_networkx_nodes(
-    #         graph, 
-    #         pos, 
-    #         nodelist=nodes, 
-    #         node_size=11, 
-    #         node_color='black')
-
-    #     node_labels = dict(zip(nodes, nodes))
-    #     pos_labels = {}
-    #     y_off = 0.05  # offset on the y axis
-    
-
-    #     for k, v in pos.items():
-    #         plt.text(v[0], v[1], node_labels[k], backgroundcolor='white')
-
-    #     # for k, v in pos.items():
-    #     #     pos_labels[k] = (v[0], v[1]+y_off)
-
-    #     # nx.draw_networkx_labels(
-    #     #     graph,
-    #     #     pos_labels,
-    #     #     labels=node_labels,
-    #     #     bbox=dict(facecolor='none', edgecolor='black', boxstyle='round'))
-
-    #     nx.draw_networkx_nodes(
-    #         graph, 
-    #         pos, 
-    #         nodelist=clusters, 
-    #         node_size=3, 
-    #         node_color='white')
-
-    #     nx.draw_networkx_edges(
-    #         graph, 
-    #         pos, 
-    #         width=2, 
-    #         edge_color="gray")
-
-    #     #nx.draw(graph, pos, with_labels=True)
-        
-    #     #print(graph.nodes())
-    #     #print()
-    #     #print(graph.edges())
-    #     #nx.draw_spectral(graph)
-    #     plt.axis('off')
-
-
-    #----------------------------------------------------------------------------------------------------
-    # def _map(self, min_value=None, top_links=None, figsize = (10,10)):
-    #     """
-    #     """
-
-    #     def add_group(group, weight, style):
-            
-    #         for row in group[col0].tolist():
-    #             for col in group[col0].tolist():
-    #                 if row != col:
-    #                     #graph.add_edge(row, col, weight=weight, style=style)
-    #                     graph.add_edge(row, col)
-
-
-    #     x = self
-    #     ## nombres de las columnas
-    #     col0 = x.columns[0]
-    #     col1 = x.columns[1]
-    #     col2 = x.columns[2]
-    
-    #     ## node names
-    #     nodes = sorted(list(set(x[col0])))
-        
-    #     ## generate a network graph
-    #     plt.figure(figsize=figsize)
-    #     graph = nx.Graph()
-    #     graph.add_nodes_from(nodes)
-
-    #     for factor in list(set(x[col1])):
-            
-    #         values = x[x[col1] == factor]
-    #         values = values.sort_values(col2, ascending=False)
-    #         values.index = values[col0].tolist()     
-    #         if top_links is not None and top_links < len(values):
-    #             values = values.head(top_links)
-            
-    #         if min_value is None:
-    #             group0 = values[values[col2] >= 0.75]
-    #             group1 = values[(values[col2] < 0.75) & (values[col2] >= 0.50)]
-    #             group2 = values[(values[col2] < 0.50) & (values[col2] >= 0.25)]
-    #             group3 = values[values[col2] <= -0.25]
-    #         else:
-    #             group0 = values[ 
-    #                 (values[col2] >= 0.75) & (values[col2].map(abs) >= min_value)
-    #                 ]
-    #             group1 = values[ 
-    #                 (values[col2] < 0.75) & (values[col2] >= 0.50) & (values[col2].map(abs) >= min_value)
-    #                 ]
-    #             group2 = values[ 
-    #                 (values[col2] < 0.50) & (values[col2] >= 0.25) & (values[col2].map(abs) >= min_value)
-    #                 ]
-    #             group3 = values[
-    #                 (values[col2] <= -0.25) & (values[col2].map(abs) >= min_value)
-    #                 ]
-
-            
-    #         if len(group0) > 0:
-    #             add_group(group0, weight=3, style='solid')
-    #         if len(group1) > 0:
-    #             add_group(group1, weight=2, style='solid')
-    #         if len(group2) > 0:
-    #             add_group(group2, weight=2, style='dashed')
-    #         if len(group3) > 0:
-    #             add_group(group3, weight=1, style='dotted')
-        
-        
-        
-    #     # #calculate distance between relationated nodes to avoid overlaping
-    #     path_length = nx.shortest_path_length(graph)
-    #     distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
-    #     for row, data in path_length:
-    #         for col, dist in data.items():
-    #             distances.loc[row,col] = dist
-    #     distances = distances.fillna(distances.max().max())
-
-    #     #layout of graph
-    #     pos = nx.kamada_kawai_layout(graph, dist=distances.to_dict())
-
-    #     #visual graph configuration
-    #     nx.draw(graph, pos, with_labels=True)
-        
-    #     #print(graph.nodes())
-    #     #print()
-    #     #print(graph.edges())
-    #     #nx.draw_spectral(graph)
-    
-
-#----------------------------------------------------------------------------------------------------
-def _compute_graph_layout(graph):
-
-    path_length = nx.shortest_path_length(graph)
-    distances = pd.DataFrame(index=graph.nodes(), columns=graph.nodes())
-    for row, data in path_length:
-        for col, dist in data.items():
-            distances.loc[row,col] = dist
-    distances = distances.fillna(distances.max().max())
-
-    return nx.kamada_kawai_layout(graph, dist=distances.to_dict())
-
-
-
-
 
 
 
