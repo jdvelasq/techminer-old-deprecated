@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TechMiner.Result &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TechMiner.strings" href="strings.html" />
+    <link rel="prev" title="TechMiner.records" href="records.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="strings.html" title="TechMiner.strings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="records.html" title="TechMiner.records"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-techminer.result"></span><div class="section" id="techminer-result">
+<h1>TechMiner.Result<a class="headerlink" href="#techminer-result" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="techminer.result.Result">
+<em class="property">class </em><code class="sig-prename descclassname">techminer.result.</code><code class="sig-name descname">Result</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">index=None</em>, <em class="sig-param">columns=None</em>, <em class="sig-param">dtype=None</em>, <em class="sig-param">copy=False</em>, <em class="sig-param">cluster_data=None</em>, <em class="sig-param">call=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
+<p>Class implementing a dataframe with results of analysis.</p>
+<dl class="method">
+<dt id="techminer.result.Result.altair_barhplot">
+<code class="sig-name descname">altair_barhplot</code><span class="sig-paren">(</span><em class="sig-param">color='Greys'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.altair_barhplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.altair_barhplot" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">altair_barhplot</span><span class="p">()</span>
+<span class="go">alt.Chart(...)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/altair_barhplot.jpg"><img alt="_images/altair_barhplot.jpg" class="align-center" src="_images/altair_barhplot.jpg" style="width: 800px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.altair_barplot">
+<code class="sig-name descname">altair_barplot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.altair_barplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.altair_barplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical bar plot in Altair.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">altair_barplot</span><span class="p">()</span>
+<span class="go">alt.Chart(...)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/altair_barplot.jpg"><img alt="_images/altair_barplot.jpg" class="align-center" src="_images/altair_barplot.jpg" style="width: 500px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.altair_circle">
+<code class="sig-name descname">altair_circle</code><span class="sig-paren">(</span><em class="sig-param">ascending_r=None</em>, <em class="sig-param">ascending_c=None</em>, <em class="sig-param">filename=None</em>, <em class="sig-param">**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.altair_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.altair_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Altair scatter plot with filled circles for visualizing relationships.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">auto_corr</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">top_n</span><span class="o">=</span><span class="mi">30</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">altair_circle</span><span class="p">()</span>
+<span class="go">alt.Chart(...)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/altair_circle.png"><img alt="_images/altair_circle.png" class="align-center" src="_images/altair_circle.png" style="width: 800px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.altair_heatmap">
+<code class="sig-name descname">altair_heatmap</code><span class="sig-paren">(</span><em class="sig-param">ascending_r=None</em>, <em class="sig-param">ascending_c=None</em>, <em class="sig-param">filename=None</em>, <em class="sig-param">**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.altair_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.altair_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Altair Heatmap
+Available cmaps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">altair_heatmap</span><span class="p">()</span>
+<span class="go">alt.Chart(...)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/altair_heatmap.jpg"><img alt="_images/altair_heatmap.jpg" class="align-center" src="_images/altair_heatmap.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.barhplot">
+<code class="sig-name descname">barhplot</code><span class="sig-paren">(</span><em class="sig-param">color='gray'</em>, <em class="sig-param">figsize=(12</em>, <em class="sig-param">8)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.barhplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.barhplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a pandas.DataFrame using Altair.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">barhplot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/barhplot.jpg"><img alt="_images/barhplot.jpg" class="align-center" src="_images/barhplot.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.barplot">
+<code class="sig-name descname">barplot</code><span class="sig-paren">(</span><em class="sig-param">color='gray'</em>, <em class="sig-param">figsize=(8</em>, <em class="sig-param">12)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.barplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.barplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical bar plot in matplotlib.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">barplot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/barplot.jpg"><img alt="_images/barplot.jpg" class="align-center" src="_images/barplot.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.chord_diagram">
+<code class="sig-name descname">chord_diagram</code><span class="sig-paren">(</span><em class="sig-param">figsize=(12</em>, <em class="sig-param">12)</em>, <em class="sig-param">minval=None</em>, <em class="sig-param">R=3</em>, <em class="sig-param">n_bezier=100</em>, <em class="sig-param">dist=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.chord_diagram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.chord_diagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a chord diagram for representing clusters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">auto_corr</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">chord_diagram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/chord-diagram.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/chord-diagram.jpg"><img alt="_images/chord-diagram.jpg" class="align-center" src="_images/chord-diagram.jpg" style="width: 800px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.heatmap">
+<code class="sig-name descname">heatmap</code><span class="sig-paren">(</span><em class="sig-param">ascending_r=None</em>, <em class="sig-param">ascending_c=None</em>, <em class="sig-param">figsize=(10</em>, <em class="sig-param">10)</em>, <em class="sig-param">cmap='Blues'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Heat map.</p>
+<p><a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html</a></p>
+<blockquote>
+<div><p>‘Greys’, ‘Purples’, ‘Blues’, ‘Greens’, ‘Oranges’, ‘Reds’,
+‘YlOrBr’, ‘YlOrRd’, ‘OrRd’, ‘PuRd’, ‘RdPu’, ‘BuPu’,
+‘GnBu’, ‘PuBu’, ‘YlGnBu’, ‘PuBuGn’, ‘BuGn’, ‘YlGn’</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/heatmap.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/heatmap.jpg"><img alt="_images/heatmap.jpg" class="align-center" src="_images/heatmap.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.map">
+<code class="sig-name descname">map</code><span class="sig-paren">(</span><em class="sig-param">min_value=None</em>, <em class="sig-param">top_links=None</em>, <em class="sig-param">figsize=(10</em>, <em class="sig-param">10)</em>, <em class="sig-param">font_size=12</em>, <em class="sig-param">factor=None</em>, <em class="sig-param">size=(25</em>, <em class="sig-param">300)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw an autocorrelation, crosscorrelation or factor map.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">auto_corr</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/autocorr-map.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/autocorr-map.jpg"><img alt="_images/autocorr-map.jpg" class="align-center" src="_images/autocorr-map.jpg" style="width: 800px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.network">
+<code class="sig-name descname">network</code><span class="sig-paren">(</span><em class="sig-param">save=False</em>, <em class="sig-param">name='network.png'</em>, <em class="sig-param">corr_min=0.7</em>, <em class="sig-param">node_color='lightblue'</em>, <em class="sig-param">edge_color='lightgrey'</em>, <em class="sig-param">edge_color2='lightcoral'</em>, <em class="sig-param">node_size=None</em>, <em class="sig-param">fond_size=4</em>, <em class="sig-param">figsize=(10</em>, <em class="sig-param">10)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.network" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generates network graph for matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> (<em>pandas.DataFrame</em>) – Matrix with variables on indexes and column titles</p></li>
+<li><p><strong>save</strong> (<em>boolean</em>) – If True, the graph will save with the name given</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name to save the png file with the image</p></li>
+<li><p><strong>corr_min</strong> (<em>int</em>) – Minimum absolute value for  the relationships between variables
+to be shown in the graph.
+It is suggested when a correlation matrix is ​​being used</p></li>
+<li><p><strong>node_color</strong> (<em>str</em>) – Color name used to plot nodes</p></li>
+<li><p><strong>edge_color</strong> (<em>str</em>) – Color name used to plot edges with positive weights</p></li>
+<li><p><strong>edge_color2</strong> (<em>str</em>) – Color name used to plot edges with negative weights</p></li>
+<li><p><strong>node_size</strong> (<em>int</em>) – If None value, the size of the nodes is plotted according
+to the weights of edges that arrive and leave each one of them.
+If numeric value, all nodes will be plotted with this given size</p></li>
+<li><p><strong>fond_size</strong> (<em>int</em>) – Node label fond size</p></li>
+<li><p><strong>figsize</strong> (<em>float</em><em>, </em><em>float</em>) – size of figure drawn</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.networkmap">
+<code class="sig-name descname">networkmap</code><span class="sig-paren">(</span><em class="sig-param">color_edges='grey'</em>, <em class="sig-param">color_node='red'</em>, <em class="sig-param">color_map='white'</em>, <em class="sig-param">edge_map='lightgrey'</em>, <em class="sig-param">node_size=None</em>, <em class="sig-param">edge_weight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.networkmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.networkmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function generates network graph over map, for matrix with country relations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix</strong> (<em>pandas.DataFrame</em>) – Matrix with variables on indexes and column titles</p></li>
+<li><p><strong>color_edges</strong> (<em>str</em>) – Color name used to plot edges</p></li>
+<li><p><strong>color_node</strong> (<em>str</em>) – Color name used to plot nodes</p></li>
+<li><p><strong>color_map</strong> (<em>str</em>) – Color name used to plot map countries</p></li>
+<li><p><strong>edge_map</strong> (<em>str</em>) – Color name used to plot contries border</p></li>
+<li><p><strong>node_size</strong> (<em>int</em>) – If None value, the size of the nodes is plotted according
+to the weights of edges that arrive and leave each one of them.
+If numeric value, all nodes will be plotted with this given size</p></li>
+<li><p><strong>edge_weight</strong> (<em>int</em>) – If None value, the weigth of the edges is plotted according
+to matrix values
+If numeric value, all edges will be plotted with this given size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p>#</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.ocurrence_map">
+<code class="sig-name descname">ocurrence_map</code><span class="sig-paren">(</span><em class="sig-param">min_value=None</em>, <em class="sig-param">top_links=None</em>, <em class="sig-param">figsize=(10</em>, <em class="sig-param">10)</em>, <em class="sig-param">font_size=12</em>, <em class="sig-param">factor=None</em>, <em class="sig-param">size=(300</em>, <em class="sig-param">1000)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.ocurrence_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.ocurrence_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cluster map for ocurrence and co-ocurrence matrices.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">co_ocurrence</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">column_r</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">column_c</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep_r</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep_c</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">heatmap</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/heatmap-ocurrence-map.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/heatmap-ocurrence-map.jpg"><img alt="_images/heatmap-ocurrence-map.jpg" class="align-center" src="_images/heatmap-ocurrence-map.jpg" style="width: 600px;" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">co_ocurrence</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">column_r</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">column_c</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep_r</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep_c</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">ocurrence_map</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">),</span>
+<span class="gp">... </span>   <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">factor</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/ocurrence-map.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/ocurrence-map.jpg"><img alt="_images/ocurrence-map.jpg" class="align-center" src="_images/ocurrence-map.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.print_IDs">
+<code class="sig-name descname">print_IDs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.print_IDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.print_IDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary function to print IDs of documents.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.sankey_plot">
+<code class="sig-name descname">sankey_plot</code><span class="sig-paren">(</span><em class="sig-param">figsize=(7</em>, <em class="sig-param">10)</em>, <em class="sig-param">minval=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.sankey_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.sankey_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross-relation sankey plot.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">cross_corr</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">column_r</span><span class="o">=</span><span class="s1">&#39;keywords (cleaned)&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep_r</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">column_c</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep_c</span><span class="o">=</span><span class="s1">&#39;,&#39;</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">sankey_plot</span><span class="p">(</span><span class="n">minval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/sankey-plot.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/sankey-plot.jpg"><img alt="_images/sankey-plot.jpg" class="align-center" src="_images/sankey-plot.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.seaborn_barhplot">
+<code class="sig-name descname">seaborn_barhplot</code><span class="sig-paren">(</span><em class="sig-param">color='gray'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.seaborn_barhplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.seaborn_barhplot" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">seaborn_barhplot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/seaborn_barhplot.jpg"><img alt="_images/seaborn_barhplot.jpg" class="align-center" src="_images/seaborn_barhplot.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.seaborn_barplot">
+<code class="sig-name descname">seaborn_barplot</code><span class="sig-paren">(</span><em class="sig-param">color='gray'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.seaborn_barplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.seaborn_barplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vertical bar plot in Seaborn.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">seaborn_barplot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/seaborn_barhplot.jpg"><img alt="_images/seaborn_barhplot.jpg" class="align-center" src="_images/seaborn_barhplot.jpg" style="width: 800px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.seaborn_heatmap">
+<code class="sig-name descname">seaborn_heatmap</code><span class="sig-paren">(</span><em class="sig-param">ascending_r=None</em>, <em class="sig-param">ascending_c=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.seaborn_heatmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.seaborn_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Heat map.</p>
+<p><a class="reference external" href="https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html">https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html</a></p>
+<blockquote>
+<div><p>‘Greys’, ‘Purples’, ‘Blues’, ‘Greens’, ‘Oranges’, ‘Reds’,
+‘YlOrBr’, ‘YlOrRd’, ‘OrRd’, ‘PuRd’, ‘RdPu’, ‘BuPu’,
+‘GnBu’, ‘PuBu’, ‘YlGnBu’, ‘PuBuGn’, ‘BuGn’, ‘YlGn’</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">seaborn_heatmap</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./figs/seaborn_heatmap.jpg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/seaborn_heatmap.jpg"><img alt="_images/seaborn_heatmap.jpg" class="align-center" src="_images/seaborn_heatmap.jpg" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.seaborn_relplot">
+<code class="sig-name descname">seaborn_relplot</code><span class="sig-paren">(</span><em class="sig-param">ascending_r=None</em>, <em class="sig-param">ascending_c=None</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.seaborn_relplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.seaborn_relplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seaborn relplot plot with filled circles for visualizing relationships.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">auto_corr</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">top_n</span><span class="o">=</span><span class="mi">30</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">seaborn_relplot</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./figs/seaborn_relplot.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/seaborn_relplot.png"><img alt="_images/seaborn_relplot.png" class="align-center" src="_images/seaborn_relplot.png" style="width: 600px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.tomatrix">
+<code class="sig-name descname">tomatrix</code><span class="sig-paren">(</span><em class="sig-param">ascending_r=None</em>, <em class="sig-param">ascending_c=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.tomatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.tomatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a term by term dataframe as a matrix.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mtx</span> <span class="o">=</span> <span class="n">Result</span><span class="p">({</span>
+<span class="gp">... </span>  <span class="s1">&#39;rows&#39;</span><span class="p">:[</span><span class="s1">&#39;r0&#39;</span><span class="p">,</span> <span class="s1">&#39;r1&#39;</span><span class="p">,</span> <span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="s1">&#39;r0&#39;</span><span class="p">,</span> <span class="s1">&#39;r1&#39;</span><span class="p">,</span> <span class="s1">&#39;r2&#39;</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="s1">&#39;cols&#39;</span><span class="p">:[</span><span class="s1">&#39;c0&#39;</span><span class="p">,</span> <span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="s1">&#39;c0&#39;</span><span class="p">,</span> <span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="s1">&#39;c0&#39;</span><span class="p">,</span> <span class="s1">&#39;c1&#39;</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="s1">&#39;vals&#39;</span><span class="p">:[</span> <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">2.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="mf">4.0</span><span class="p">,</span>  <span class="mf">5.0</span><span class="p">,</span>  <span class="mf">6.0</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mtx</span>
+<span class="go">  rows cols  vals</span>
+<span class="go">0   r0   c0   1.0</span>
+<span class="go">1   r1   c1   2.0</span>
+<span class="go">2   r2   c0   3.0</span>
+<span class="go">3   r0   c1   4.0</span>
+<span class="go">4   r1   c0   5.0</span>
+<span class="go">5   r2   c1   6.0</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mtx</span><span class="o">.</span><span class="n">tomatrix</span><span class="p">()</span> 
+<span class="go">     c0   c1</span>
+<span class="go">r0  1.0  4.0</span>
+<span class="go">r1  5.0  2.0</span>
+<span class="go">r2  3.0  6.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.transpose">
+<code class="sig-name descname">transpose</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transpose results matrix.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.wordcloud">
+<code class="sig-name descname">wordcloud</code><span class="sig-paren">(</span><em class="sig-param">figsize=(14</em>, <em class="sig-param">7)</em>, <em class="sig-param">max_font_size=50</em>, <em class="sig-param">max_words=100</em>, <em class="sig-param">background_color='white'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.wordcloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.wordcloud" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_terms</span><span class="p">(</span><span class="s1">&#39;Source title&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">wordcloud</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/wordcloud.jpg"><img alt="_images/wordcloud.jpg" class="align-center" src="_images/wordcloud.jpg" style="width: 800px;" /></a>
+</dd></dl>
+
+<dl class="method">
+<dt id="techminer.result.Result.worldmap">
+<code class="sig-name descname">worldmap</code><span class="sig-paren">(</span><em class="sig-param">figsize=(14</em>, <em class="sig-param">7)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/result.html#Result.worldmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.result.Result.worldmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worldmap plot with the number of documents per country.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.dataframe</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.strings</span> <span class="k">import</span>  <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="p">[</span><span class="s1">&#39;Country&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdf</span><span class="p">[</span><span class="s1">&#39;Affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extract_country</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_terms</span><span class="p">(</span><span class="s1">&#39;Country&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">          Country  Num Documents                                                 ID</span>
+<span class="go">0           China             83  [[*3*], [*4*], [*6*], [*6*], [*7*], [*10*], [*...</span>
+<span class="go">1          Taiwan             20  [[*14*], [*14*], [*17*], [*17*], [*17*], [*17*...</span>
+<span class="go">2   United States             17  [[*3*], [*22*], [*23*], [*23*], [*26*], [*26*]...</span>
+<span class="go">3  United Kingdom             15  [[*5*], [*7*], [*11*], [*11*], [*11*], [*28*],...</span>
+<span class="go">4           India             15  [[*9*], [*50*], [*51*], [*56*], [*56*], [*57*]...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_terms</span><span class="p">(</span><span class="s1">&#39;Country&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">worldmap</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/worldmap.jpg"><img alt="_images/worldmap.jpg" class="align-center" src="_images/worldmap.jpg" style="width: 800px;" /></a>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="records.html"
+                        title="previous chapter">TechMiner.records</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="strings.html"
+                        title="next chapter">TechMiner.strings</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/result.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="strings.html" title="TechMiner.strings"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="records.html" title="TechMiner.records"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Modules</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>
