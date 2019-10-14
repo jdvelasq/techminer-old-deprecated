@@ -5,6 +5,9 @@ TechMiner.common
 """
 import matplotlib.pyplot as plt
 import numpy as np
+import spacy
+from spacy.lang.en import English
+from spacy.lang.es import Spanish
 
 #---------------------------------------------------------------------------------------------
 def cut_text(w):
@@ -117,3 +120,39 @@ def chord_diagram(labels, edges, figsize=(12, 12), minval=None, R=3, n_bezier=10
             bezier( [x0, y0], [x1, y1], [x2, y2], linewidth=linewidth, linestyle=linestyle, color=color)
 
     plt.tight_layout()
+#---------------------------------------------------------------------------------------------
+def nlp_resource(language='english'):
+    if not isinstance(language, str):
+        raise TypeError('Must specify a language as a string')
+    if language == 'english':
+        try:
+            nlp = spacy.load('en_core_web_sm')
+            return nlp
+        except ImportError('SpaCy english language model not found\n Try python -m spacy download en_core_news_sm'):
+            return None
+    elif language == 'spanish':
+        try:
+            nlp = spacy.load('es_core_web_sm')
+            return nlp
+        except ImportError('SpaCy spanish language model not found\n Try python -m spacy download es_core_news_sm'):
+            return None
+    else:
+        raise NameError('Must specify language available')
+#---------------------------------------------------------------------------------------------
+def load_stopwords(language='english'):
+    if not isinstance(language, str):
+        raise TypeError('Must specify a language as a string')
+    if language == 'english':
+        try:
+            stopwords_list = spacy.lang.en.stop_words.STOP_WORDS
+            return list(stopwords_list)
+        except ImportError('SpaCy english language not found\n Try python -m spacy download en_core_news_sm'):
+            return None
+    elif language == 'spanish':
+        try:
+            stopwords_list = spacy.lang.es.stop_words.STOP_WORDS
+            return list(stopwords_list)
+        except ImportError('SpaCy spanish language not found\n Try python -m spacy download es_core_news_sm'):
+            return None
+    else:
+        raise NameError('Must specify language available')
