@@ -11,6 +11,8 @@ import numpy as np
 from sklearn.decomposition import PCA
 from techminer.common import cut_text
 from techminer.result import Result
+from techminer.docs_transformer import DocsTransformer
+from techminer.document_clustering import DocumentClustering
 import matplotlib.pyplot as plt
 import networkx as nx
 from collections import OrderedDict 
@@ -1394,8 +1396,6 @@ class RecordsDataFrame(pd.DataFrame):
         result._add_count_to_label(column)
         result._add_count_to_label('Year')
         return result
-
-
 
 
 

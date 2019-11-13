@@ -22,4 +22,5 @@ setup(name='techminer',
       test_suite='nose.collector',
       tests_require=['nose'],
       include_package_data=True,
-      zip_safe=False)
+      zip_safe=False,
+      install_requires=['scikit-learn', 'pandas', 'numpy', 'scipy', 'spacy', 'nltk'])
