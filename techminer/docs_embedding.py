@@ -17,6 +17,8 @@ class DocEmbeddingVectorizer(BaseEstimator, TransformerMixin):
      
     dimension: int, default: 50 
     Number of word embeddings features, only receives 50 or 100
+
+    
     """
     
     def __init__(self, dimension:int = 50):

@@ -23,9 +23,39 @@ class DocNormalizer(BaseEstimator, TransformerMixin):
         
     Parameters
     ----------
-    
     words_keep: list, optional, default: None 
     list of words to keep from removing stop words from documents.
+
+    Attributes
+    ----------
+    stopwords_: set of words to be removed from the string to be normalized
+    words_keep_: list of words to keep in case it is in the stopwords set
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from techminer import DocNormalizer
+    >>> from techminer import RecordsDataFrame
+    >>> rdf = RecordsDataFrame(
+    ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
+    ... )
+    >>> doc_normalizer = DocNormalizer()
+    >>> doc_normalizer.fit(rdf['Title'])
+    >>> doc_normalizer.stopwords_[:10]
+    ['over', "'re", 'so', 'of', 'via', 'when', 'whole', 'part', 'formerly', 'then']
+    >>> docs_normalized = doc_normalizer.transform(rdf['Title'])
+    >>> rdf.loc[0,'Title']
+    'Improving DWT-RNN model via B-spline wavelet multiresolution to forecast a high-frequency time series'
+    >>> docs_normalized[0]
+    'improve dwtrnn model via bspline wavelet multiresolution to forecast a highfrequency time series'
+    >>> corpus = list(rdf.loc[:,'Title'].values)
+    >>> vocabulary = [word for doc in corpus for word in doc.split()]
+    >>> len(set(vocabulary)) 
+    579 # Number of words in the vocabulary before normalization
+    >>> vocabulary_cleaned = [word for doc in docs_normalized for word in doc.split()]
+    >>> len(set(vocabulary_cleaned))
+    443 # Number of words in the vocabulary after normalization 
+
     """
 
     def __init__(self, words_keep = None):
@@ -50,7 +80,10 @@ class DocNormalizer(BaseEstimator, TransformerMixin):
         """ Fit method:  
             * loads spacy resources  
             * If words_keep is not None, then words_keep are removed from stopwords list
+
         """
+
+
         self.__load_spacy_resources()
         if self.words_keep_ is not None:
             try:
