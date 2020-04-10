@@ -1,7 +1,7 @@
 Analysis of bibliographic datasets using Python
 ============================================================================================
 
-*tech-miner** is a package for mining relevant information about topics related to Research and 
+*tech-miner* is a package for mining relevant information about topics related to Research and 
 Development (R&D) literature extracted from bibliographical databases as Scopus. *tech-miner*
 facilitates studies of systematic mapping of literature and Tech mining studies. The package can 
 be used by users with basic knowledge of Python programming. However, users with advanced 
