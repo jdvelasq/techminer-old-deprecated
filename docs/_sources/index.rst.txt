@@ -1,7 +1,7 @@
-techMiner: A Tool for Analyzing Bibliographic Data using Python
+TechMiner: A Tool for Analyzing Bibliographic Data using Python
 ============================================================================================
 
-**techMiner** is a package for mining relevant information about topics related to Research and 
+**TechMiner** is a package for mining relevant information about topics related to Research and 
 Development (R&D) literature extracted from bibliographical databases as Scopus. **techMiner**
 facilitates studies of systematic mapping of literature and Tech mining studies. The package can 
 be used by users with basic knowledge of Python programming. However, users with advanced 
@@ -20,7 +20,7 @@ of the library and develop advanced analysis. The package can be used to:
 
 * Plot heatmaps, networks and many other types of plots for analyzing data.
 
-**techMiner** is an open source (distributed under the MIT license) and friendly-user
+**TechMiner** is an open source (distributed under the MIT license) and friendly-user
 package developed and tested in Python version 3.6. 
 
 
@@ -29,9 +29,9 @@ Getting Started
 
 The current stable version can be installed from the command line using:
 
-``$ pip3 install techMiner``
+``$ pip3 install techminer``
 
-**techMiner** can be used interactively at the Python’s command prompt, but a better
+**TechMiner** can be used interactively at the Python’s command prompt, but a better
 experience is achieved when IPython or Jupyter’s notebook are used, allows the
 user to fully document the analysis and draw conclusions. Due to the design of
 the package, it is easy to use techMiner with the tools available in the ecosystem
@@ -68,15 +68,15 @@ Release Information
 
 * **Binary Installers:** 
    
-    `<https://pypi.org/project/techMiner>`_
+    `<https://pypi.org/project/techminer>`_
 
 * **Source Repository**: 
 
-    `<https://github.com/jdvelasq/techMiner>`_
+    `<https://github.com/jdvelasq/techminer>`_
 
 * **Documentation**: 
 
-    `<https://jdvelasq.github.io/techMiner/>`_
+    `<https://jdvelasq.github.io/techminer/>`_
 
 
 Table of Contents
@@ -99,7 +99,7 @@ Table of Contents
 MIT license
 -------------------------------------------------------------------------------
 
-Copyright (c) 2019 Juan David Velásquez-Henao, Ivanohe Johana Garces-Correa.
+Copyright (c) 2020 Juan David Velásquez-Henao, Ivanohe Johana Garces-Correa.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

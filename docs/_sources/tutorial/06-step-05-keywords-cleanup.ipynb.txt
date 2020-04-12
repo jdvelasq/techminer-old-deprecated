@@ -16,11 +16,7 @@
     "import pandas as pd\n",
     "from techminer import RecordsDataFrame\n",
     "\n",
-    "rdf = RecordsDataFrame(\n",
-    "    pd.read_json(\n",
-    "        'step-04.json', \n",
-    "        orient='records', \n",
-    "        lines=True))"
+    "rdf = RecordsDataFrame(pd.read_json(\"step-04.json\", orient=\"records\", lines=True))"
    ]
   },
   {
@@ -75,7 +71,9 @@
    "source": [
     "from techminer import Thesaurus, text_clustering\n",
     "\n",
-    "## busca keywords que tengan la misma raiz\n",
+    "#\n",
+    "# Search of keywords with the same root\n",
+    "#\n",
     "th = text_clustering(rdf['keywords'], sep=';', transformer=lambda x: x.lower())\n",
     "with open('thesaurus-1.json', 'w') as f:\n",
     "    f.write(th.__repr__())\n",
@@ -96,10 +94,14 @@
     }
    ],
    "source": [
-    "##\n",
-    "## Numero de cadenas de texto diferentes en keywords\n",
-    "##\n",
-    "print(len(set([w.strip() for x in rdf['keywords'] if x is not None for w in x.split(';')]))) "
+    "#\n",
+    "#  Number of strings differing in keywords\n",
+    "#\n",
+    "print(\n",
+    "    len(\n",
+    "        set([w.strip() for x in rdf[\"keywords\"] if x is not None for w in x.split(\";\")])\n",
+    "    )\n",
+    ")"
    ]
   },
   {
@@ -108,21 +110,27 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "##\n",
-    "## Lectura de las palabras clave editadas manualmente\n",
-    "##\n",
+    "#\n",
+    "# Reading of keywords edited by the analyst\n",
+    "#\n",
     "import json\n",
-    "with open('thesaurus-1-edited.json', 'r') as f:\n",
-    "    dictionary = json.loads(' '.join(f.readlines()))\n",
-    "    \n",
+    "\n",
+    "with open(\"thesaurus-1-edited.json\", \"r\") as f:\n",
+    "    dictionary = json.loads(\" \".join(f.readlines()))\n",
+    "\n",
     "##\n",
     "## Limpieza\n",
     "##\n",
     "from techminer import Thesaurus\n",
+    "\n",
     "th = Thesaurus(dictionary, ignore_case=False, full_match=True, use_re=False)\n",
-    "rdf['keywords (cleaned)'] = rdf['keywords'].map(lambda x: th.apply(x, sep=';'))\n",
-    "rdf['keywords (cleaned)'] = rdf['keywords (cleaned)'].map(lambda x: ';'.join(set([w.strip() for w in x.split(';')])))\n",
-    "rdf['keywords (cleaned)'] = rdf['keywords (cleaned)'].map(lambda x: x if x !='' else None)"
+    "rdf[\"keywords (cleaned)\"] = rdf[\"keywords\"].map(lambda x: th.apply(x, sep=\";\"))\n",
+    "rdf[\"keywords (cleaned)\"] = rdf[\"keywords (cleaned)\"].map(\n",
+    "    lambda x: \";\".join(set([w.strip() for w in x.split(\";\")]))\n",
+    ")\n",
+    "rdf[\"keywords (cleaned)\"] = rdf[\"keywords (cleaned)\"].map(\n",
+    "    lambda x: x if x != \"\" else None\n",
+    ")"
    ]
   },
   {
@@ -139,10 +147,21 @@
     }
    ],
    "source": [
-    "##\n",
-    "## Numero de cadenas de texto diferentes en keywords\n",
-    "##\n",
-    "print(len(set([w.strip() for x in rdf['keywords (cleaned)'] if x is not None for w in x.split(';')])))"
+    "#\n",
+    "# Number unique of strings\n",
+    "#\n",
+    "print(\n",
+    "    len(\n",
+    "        set(\n",
+    "            [\n",
+    "                w.strip()\n",
+    "                for x in rdf[\"keywords (cleaned)\"]\n",
+    "                if x is not None\n",
+    "                for w in x.split(\";\")\n",
+    "            ]\n",
+    "        )\n",
+    "    )\n",
+    ")"
    ]
   },
   {
@@ -225,9 +244,9 @@
     }
    ],
    "source": [
-    "##\n",
-    "## subcadenas en palabras clave\n",
-    "##\n",
+    "#\n",
+    "# Substrings in keywords\n",
+    "#\n",
     "from techminer import text_nesting\n",
     "tn = text_nesting(rdf['keywords (cleaned)'], sep=';', max_distance=1, transformer=lambda x: x.lower())\n",
     "with open('thesaurus-2.json', 'w') as f:\n",
@@ -317,8 +336,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "with open('thesaurus-2-edited.json', 'r') as f:\n",
-    "    dictionary = json.loads(' '.join(f.readlines()))\n",
+    "with open(\"thesaurus-2-edited.json\", \"r\") as f:\n",
+    "    dictionary = json.loads(\" \".join(f.readlines()))\n",
     "th = Thesaurus(dictionary, ignore_case=False, full_match=True, use_re=False)"
    ]
   },
@@ -328,19 +347,15 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "rdf['keywords (cleaned)'] = rdf['keywords (cleaned)'].map(lambda x: th.apply(x, sep=';'))\n",
-    "rdf['keywords (cleaned)'] = rdf['keywords (cleaned)'].map(lambda x: ';'.join(set([w.strip() for w in x.split(';')])))\n",
-    "rdf['keywords (cleaned)'] = rdf['keywords (cleaned)'].map(lambda x: x if x !='' else None)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#x = rdf['keywords (cleaned)'].map(lambda x: x.split(';') if x is not None else None)\n",
-    "#sorted(list(set(x.explode())))"
+    "rdf[\"keywords (cleaned)\"] = rdf[\"keywords (cleaned)\"].map(\n",
+    "    lambda x: th.apply(x, sep=\";\")\n",
+    ")\n",
+    "rdf[\"keywords (cleaned)\"] = rdf[\"keywords (cleaned)\"].map(\n",
+    "    lambda x: \";\".join(set([w.strip() for w in x.split(\";\")]))\n",
+    ")\n",
+    "rdf[\"keywords (cleaned)\"] = rdf[\"keywords (cleaned)\"].map(\n",
+    "    lambda x: x if x != \"\" else None\n",
+    ")"
    ]
   },
   {
@@ -357,10 +372,21 @@
     }
    ],
    "source": [
-    "##\n",
-    "## Numero de cadenas de texto diferentes en keywords\n",
-    "##\n",
-    "print(len(set([w.strip() for x in rdf['keywords (cleaned)'] if x is not None for w in x.split(';')])))"
+    "#\n",
+    "# Number of unique keywords\n",
+    "#\n",
+    "print(\n",
+    "    len(\n",
+    "        set(\n",
+    "            [\n",
+    "                w.strip()\n",
+    "                for x in rdf[\"keywords (cleaned)\"]\n",
+    "                if x is not None\n",
+    "                for w in x.split(\";\")\n",
+    "            ]\n",
+    "        )\n",
+    "    )\n",
+    ")"
    ]
   },
   {
@@ -436,11 +462,12 @@
     }
    ],
    "source": [
-    "##\n",
-    "## Review\n",
-    "##\n",
+    "#\n",
+    "# Review\n",
+    "#\n",
     "from techminer import display_records\n",
-    "display_records(rdf[['Title', 'keywords (cleaned)']].head(10))"
+    "\n",
+    "display_records(rdf[[\"Title\", \"keywords (cleaned)\"]].head(10))"
    ]
   },
   {
@@ -525,7 +552,7 @@
    "source": [
     "from techminer import display_records\n",
     "\n",
-    "display_records(rdf[['Title', 'keywords (cleaned)']].head(10))"
+    "display_records(rdf[[\"Title\", \"keywords (cleaned)\"]].head(10))"
    ]
   },
   {
@@ -550,8 +577,9 @@
    ],
    "source": [
     "from techminer.keywords import Keywords\n",
+    "\n",
     "kyw = Keywords()\n",
-    "kyw.add_keywords(['Vacuum', 'market data'])\n",
+    "kyw.add_keywords([\"Vacuum\", \"market data\"])\n",
     "kyw"
    ]
   },
@@ -572,7 +600,7 @@
     }
    ],
    "source": [
-    "'vacuum' in kyw"
+    "\"vacuum\" in kyw"
    ]
   },
   {
@@ -581,7 +609,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "idx = rdf['keywords (cleaned)'].map(lambda x: not kyw.common(x, sep=';'))"
+    "idx = rdf[\"keywords (cleaned)\"].map(lambda x: not kyw.common(x, sep=\";\"))"
    ]
   },
   {
@@ -639,9 +667,9 @@
     }
    ],
    "source": [
-    "print('Records before = ', len(rdf))\n",
+    "print(\"Records before = \", len(rdf))\n",
     "rdf = rdf[idx]\n",
-    "print('Records after = ', len(rdf))"
+    "print(\"Records after = \", len(rdf))"
    ]
   },
   {
@@ -650,10 +678,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "rdf.to_json(\n",
-    "    'step-05.json', \n",
-    "    orient='records', \n",
-    "    lines=True)"
+    "rdf.to_json(\"step-05.json\", orient=\"records\", lines=True)"
    ]
   }
  ],
@@ -673,7 +698,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.8"
+   "version": "3.6.9"
   }
  },
  "nbformat": 4,

@@ -16,11 +16,7 @@
     "import pandas as pd\n",
     "from techminer import RecordsDataFrame\n",
     "\n",
-    "rdf = RecordsDataFrame(\n",
-    "    pd.read_json(\n",
-    "        'step-07.json', \n",
-    "        orient='records', \n",
-    "        lines=True))"
+    "rdf = RecordsDataFrame(pd.read_json(\"step-07.json\", orient=\"records\", lines=True))"
    ]
   },
   {
@@ -683,10 +679,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='Authors', \n",
-    "    sep=',', \n",
-    "    top_n=20).tomatrix()"
+    "rdf.ocurrence(column=\"Authors\", sep=\",\", top_n=20).tomatrix()"
    ]
   },
   {
@@ -708,10 +701,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='Authors', \n",
-    "    sep=',', \n",
-    "    top_n=20).heatmap(figsize=(10,8))"
+    "rdf.ocurrence(column=\"Authors\", sep=\",\", top_n=20).heatmap(figsize=(10, 8))"
    ]
   },
   {
@@ -740,10 +730,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='Authors', \n",
-    "    sep=',', \n",
-    "    top_n=20).ocurrence_map()"
+    "rdf.ocurrence(column=\"Authors\", sep=\",\", top_n=20).ocurrence_map()"
    ]
   },
   {
@@ -1648,10 +1635,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='keywords (cleaned)', \n",
-    "    sep=';',\n",
-    "    top_n=20).tomatrix()"
+    "rdf.ocurrence(column=\"keywords (cleaned)\", sep=\";\", top_n=20).tomatrix()"
    ]
   },
   {
@@ -1673,10 +1657,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='keywords (cleaned)', \n",
-    "    sep=';',\n",
-    "    top_n=10).heatmap(figsize=(9,8))"
+    "rdf.ocurrence(column=\"keywords (cleaned)\", sep=\";\", top_n=10).heatmap(figsize=(9, 8))"
    ]
   },
   {
@@ -1698,10 +1679,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='keywords (cleaned)', \n",
-    "    sep=';',\n",
-    "    top_n=20).heatmap(figsize=(11,10))"
+    "rdf.ocurrence(column=\"keywords (cleaned)\", sep=\";\", top_n=20).heatmap(figsize=(11, 10))"
    ]
   },
   {
@@ -1723,10 +1701,7 @@
     }
    ],
    "source": [
-    "rdf.ocurrence(\n",
-    "    column='keywords (cleaned)', \n",
-    "    sep=';',\n",
-    "    top_n=30).heatmap(figsize=(12,11))"
+    "rdf.ocurrence(column=\"keywords (cleaned)\", sep=\";\", top_n=30).heatmap(figsize=(12, 11))"
    ]
   }
  ],
@@ -1746,7 +1721,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.8"
+   "version": "3.6.9"
   }
  },
  "nbformat": 4,
