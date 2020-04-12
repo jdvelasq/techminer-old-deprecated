@@ -16,11 +16,7 @@
     "import pandas as pd\n",
     "from techminer import RecordsDataFrame\n",
     "\n",
-    "rdf = RecordsDataFrame(\n",
-    "    pd.read_json(\n",
-    "        'step-03.json', \n",
-    "        orient='records', \n",
-    "        lines=True))"
+    "rdf = RecordsDataFrame(pd.read_json(\"step-03.json\", orient=\"records\", lines=True))"
    ]
   },
   {
@@ -37,9 +33,10 @@
    "outputs": [],
    "source": [
     "from techminer import Keywords\n",
+    "\n",
     "conf = Keywords()\n",
-    "conf.add_keywords(['Conference', 'Proceeding', 'Workshop', 'Congress'])\n",
-    "rdf['CONF'] = rdf['Title'].map(lambda x: True if x in conf else False)"
+    "conf.add_keywords([\"Conference\", \"Proceeding\", \"Workshop\", \"Congress\"])\n",
+    "rdf[\"CONF\"] = rdf[\"Title\"].map(lambda x: True if x in conf else False)"
    ]
   },
   {
@@ -61,7 +58,7 @@
     }
    ],
    "source": [
-    "for title in rdf[rdf['CONF']]['Title']:\n",
+    "for title in rdf[rdf[\"CONF\"]][\"Title\"]:\n",
     "    print(title)"
    ]
   },
@@ -80,9 +77,9 @@
     }
    ],
    "source": [
-    "print('Num. records before = ', len(rdf))\n",
-    "rdf = rdf[rdf['CONF'].map(lambda x: False if x is True else True)]\n",
-    "print('Num. records after = ', len(rdf))"
+    "print(\"Num. records before = \", len(rdf))\n",
+    "rdf = rdf[rdf[\"CONF\"].map(lambda x: False if x is True else True)]\n",
+    "print(\"Num. records after = \", len(rdf))"
    ]
   },
   {
@@ -109,9 +106,9 @@
    "source": [
     "from techminer import remove_duplicate_records\n",
     "\n",
-    "print('Num. records before = ', len(rdf))\n",
-    "rdf = remove_duplicate_records(rdf, 'Title', match_type='fingerprint')\n",
-    "print('Num. records after = ', len(rdf))"
+    "print(\"Num. records before = \", len(rdf))\n",
+    "rdf = remove_duplicate_records(rdf, \"Title\", match_type=\"fingerprint\")\n",
+    "print(\"Num. records after = \", len(rdf))"
    ]
   },
   {
@@ -120,10 +117,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "rdf.to_json(\n",
-    "    'step-04.json', \n",
-    "    orient='records', \n",
-    "    lines=True)"
+    "rdf.to_json(\"step-04.json\", orient=\"records\", lines=True)"
    ]
   }
  ],
@@ -143,7 +137,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.8"
+   "version": "3.6.9"
   }
  },
  "nbformat": 4,

@@ -1,8 +1,8 @@
 Analysis of bibliographic datasets using Python
 ============================================================================================
 
-*tech-miner* is a package for mining relevant information about topics related to Research and 
-Development (R&D) literature extracted from bibliographical databases as Scopus. *tech-miner*
+*TechMiner* is a package for mining relevant information about topics related to Research and 
+Development (R&D) literature extracted from bibliographical databases as Scopus. *TechMiner*
 facilitates studies of systematic mapping of literature and Tech mining studies. The package can 
 be used by users with basic knowledge of Python programming. However, users with advanced 
 knowledge in programming and text mining can easily incorporate their codes to maximize the power 
@@ -20,7 +20,7 @@ of the library and develop advanced analysis. The package can be used to:
 
 * Plot heatmaps, networks and many other types of plots for analyzing data.
 
-*tech-miner* is an open source (distributed under the MIT license) and friendly-user
+*TechMiner* is an open source (distributed under the MIT license) and friendly-user
 package developed and tested in Python version 3.6. 
 
 
@@ -29,9 +29,9 @@ Getting Started
 
 The current stable version can be installed from the command line using:
 
-``$ pip install tech-miner``
+``$ pip install techminer``
 
-*tech-miner** can be used interactively at the Python’s command prompt, but a better
+*TechMiner** can be used interactively at the Python’s command prompt, but a better
 experience is achieved when IPython or Jupyter’s notebook are used, allows the
 user to fully document the analysis and draw conclusions. Due to the design of
 the package, it is easy to use techMiner with the tools available in the ecosystem

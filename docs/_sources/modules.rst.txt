@@ -12,4 +12,5 @@ Modules
     thesaurus
     transform
     common
+    datasets
     

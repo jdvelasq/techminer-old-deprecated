@@ -7,11 +7,12 @@
     <title>TechMiner.Thesaurus &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="TechMiner.transform" href="transform.html" />
@@ -44,15 +45,15 @@
             
   <span class="target" id="module-techminer.thesaurus"></span><div class="section" id="techminer-thesaurus">
 <h1>TechMiner.Thesaurus<a class="headerlink" href="#techminer-thesaurus" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="techminer.thesaurus.Thesaurus">
-<em class="property">class </em><code class="sig-prename descclassname">techminer.thesaurus.</code><code class="sig-name descname">Thesaurus</code><span class="sig-paren">(</span><em class="sig-param">x={}</em>, <em class="sig-param">ignore_case=True</em>, <em class="sig-param">full_match=False</em>, <em class="sig-param">use_re=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">techminer.thesaurus.</code><code class="sig-name descname">Thesaurus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">ignore_case</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">full_match</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_re</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.thesaurus.Thesaurus.apply">
-<code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">sep=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.apply" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a thesaurus to a string x.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd eee&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd fff&#39;</span><span class="p">,</span>  <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;zzz&#39;</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
@@ -67,7 +68,7 @@
 <span class="go">7      zzz</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;aaa&#39;</span><span class="p">:[</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;eee&#39;</span><span class="p">,</span> <span class="s1">&#39;fff&#39;</span><span class="p">],</span>  <span class="s1">&#39;1&#39;</span><span class="p">:[</span><span class="s1">&#39;000&#39;</span><span class="p">]}</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;aaa&#39;</span><span class="p">:[</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;eee&#39;</span><span class="p">,</span> <span class="s1">&#39;fff&#39;</span><span class="p">],</span>  <span class="s1">&#39;1&#39;</span><span class="p">:[</span><span class="s1">&#39;000&#39;</span><span class="p">]}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Thesaurus</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 <span class="go">0     aaa</span>
 <span class="go">1     aaa</span>
@@ -80,7 +81,7 @@
 <span class="go">Name: f, dtype: object</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;aaa|ccc aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;bbb|ccc bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc aaa&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc bbb&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd eee&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd fff&#39;</span><span class="p">,</span>  <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;zzz&#39;</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
@@ -105,7 +106,7 @@
 <span class="go">Name: f, dtype: object</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">})</span>
@@ -124,12 +125,12 @@
 <span class="go">10     9</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
 <span class="gp">... </span>     <span class="s1">&#39;b&#39;</span><span class="p">:[</span><span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">],</span>
 <span class="gp">... </span>     <span class="s1">&#39;c&#39;</span><span class="p">:[</span><span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">]}</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Thesaurus</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">ignore_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">full_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Thesaurus</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">ignore_case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">full_match</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> 
 <span class="go">0        a</span>
 <span class="go">1        a</span>
 <span class="go">2        a</span>
@@ -144,7 +145,7 @@
 <span class="go">Name: f, dtype: object</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a b, A B&#39;</span><span class="p">,</span> <span class="s1">&#39;A b, A B&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;b c&#39;</span><span class="p">,</span> <span class="s1">&#39;b, B A&#39;</span><span class="p">,</span> <span class="s1">&#39;b, a, c&#39;</span><span class="p">,</span> <span class="s1">&#39;A, B&#39;</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
@@ -172,17 +173,17 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.thesaurus.Thesaurus.change_key">
-<code class="sig-name descname">change_key</code><span class="sig-paren">(</span><em class="sig-param">current_key</em>, <em class="sig-param">new_key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.change_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.change_key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">change_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">current_key</span></em>, <em class="sig-param"><span class="n">new_key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.change_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.change_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.thesaurus.Thesaurus.find_and_replace">
-<code class="sig-name descname">find_and_replace</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">sep=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.find_and_replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.find_and_replace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">find_and_replace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.find_and_replace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.find_and_replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies a thesaurus to a string, reemplacing the portion of string
 matching the current pattern with the key.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AAA&#39;</span><span class="p">,</span> <span class="s1">&#39;BBB&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc AAA&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc BBB&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd EEE&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd FFF&#39;</span><span class="p">,</span>  <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;zzz&#39;</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
@@ -208,7 +209,7 @@ matching the current pattern with the key.</p>
 <span class="go">Name: f, dtype: object</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;AAA|ccc AAA&#39;</span><span class="p">,</span> <span class="s1">&#39;BBB ccc|ccc&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc AAA&#39;</span><span class="p">,</span> <span class="s1">&#39;ccc BBB&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd EEE&#39;</span><span class="p">,</span> <span class="s1">&#39;ddd FFF&#39;</span><span class="p">,</span>  <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;zzz&#39;</span><span class="p">],</span>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
@@ -235,28 +236,28 @@ matching the current pattern with the key.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.thesaurus.Thesaurus.merge_keys">
-<code class="sig-name descname">merge_keys</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">popkey</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.merge_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.merge_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">merge_keys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">popkey</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.merge_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.merge_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds the strings associated to popkey to key and delete popkey.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.thesaurus.Thesaurus.pop_key">
-<code class="sig-name descname">pop_key</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.pop_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.pop_key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pop_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#Thesaurus.pop_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.Thesaurus.pop_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes key from thesaurus.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.thesaurus.Thesaurus.thesaurus">
 <em class="property">property </em><code class="sig-name descname">thesaurus</code><a class="headerlink" href="#techminer.thesaurus.Thesaurus.thesaurus" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="techminer.thesaurus.text_clustering">
-<code class="sig-prename descclassname">techminer.thesaurus.</code><code class="sig-name descname">text_clustering</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">name_strategy='mostfrequent'</em>, <em class="sig-param">search_strategy='fingerprint'</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">transformer=None</em>, <em class="sig-param">min_cluster_size=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#text_clustering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.text_clustering" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">techminer.thesaurus.</code><code class="sig-name descname">text_clustering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">name_strategy</span><span class="o">=</span><span class="default_value">'mostfrequent'</span></em>, <em class="sig-param"><span class="n">search_strategy</span><span class="o">=</span><span class="default_value">'fingerprint'</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">transformer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_cluster_size</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#text_clustering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.text_clustering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a thesaurus by clustering a list of strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -281,7 +282,7 @@ matching the current pattern with the key.</p>
 <dd class="field-even"><p>A Thesaurus object.</p>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a b c a b a&#39;</span><span class="p">,</span>
 <span class="gp">... </span>         <span class="s1">&#39;a b c a b&#39;</span><span class="p">,</span>
@@ -302,7 +303,7 @@ matching the current pattern with the key.</p>
 <span class="go">6          a B</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">)</span> 
 <span class="go">{</span>
 <span class="go">  &quot;a b&quot;: [</span>
 <span class="go">    &quot;a B&quot;,</span>
@@ -317,7 +318,7 @@ matching the current pattern with the key.</p>
 <span class="go">}</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">name_strategy</span><span class="o">=</span><span class="s1">&#39;shortest&#39;</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">name_strategy</span><span class="o">=</span><span class="s1">&#39;shortest&#39;</span><span class="p">)</span> 
 <span class="go">{</span>
 <span class="go">  &quot;A C b&quot;: [</span>
 <span class="go">    &quot;A C b&quot;,</span>
@@ -332,7 +333,7 @@ matching the current pattern with the key.</p>
 <span class="go">}</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">name_strategy</span><span class="o">=</span><span class="s1">&#39;longest&#39;</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">name_strategy</span><span class="o">=</span><span class="s1">&#39;longest&#39;</span><span class="p">)</span> 
 <span class="go">{</span>
 <span class="go">  &quot;a B&quot;: [</span>
 <span class="go">    &quot;a B&quot;,</span>
@@ -347,7 +348,7 @@ matching the current pattern with the key.</p>
 <span class="go">}</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a b, c a, b a&#39;</span><span class="p">,</span>
 <span class="gp">... </span>         <span class="s1">&#39;A b, c A, b&#39;</span><span class="p">,</span>
 <span class="gp">... </span>         <span class="s1">&#39;a b, C A, B&#39;</span><span class="p">,</span>
@@ -369,7 +370,7 @@ matching the current pattern with the key.</p>
 <span class="go">7            a B</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">name_strategy</span><span class="o">=</span><span class="s1">&#39;longest&#39;</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_clustering</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">name_strategy</span><span class="o">=</span><span class="s1">&#39;longest&#39;</span><span class="p">)</span> 
 <span class="go">{</span>
 <span class="go">  &quot;A C&quot;: [</span>
 <span class="go">    &quot;A C&quot;,</span>
@@ -392,10 +393,10 @@ matching the current pattern with the key.</p>
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="techminer.thesaurus.text_nesting">
-<code class="sig-prename descclassname">techminer.thesaurus.</code><code class="sig-name descname">text_nesting</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">search_strategy='fingerprint'</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">transformer=None</em>, <em class="sig-param">max_distance=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#text_nesting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.text_nesting" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<code class="sig-prename descclassname">techminer.thesaurus.</code><code class="sig-name descname">text_nesting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">search_strategy</span><span class="o">=</span><span class="default_value">'fingerprint'</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">transformer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_distance</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/thesaurus.html#text_nesting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.thesaurus.text_nesting" title="Permalink to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span>
 <span class="gp">... </span>         <span class="s1">&#39;a b&#39;</span><span class="p">,</span>
@@ -420,7 +421,7 @@ matching the current pattern with the key.</p>
 <span class="go">8  a b e f g</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_nesting</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> 
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_nesting</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> 
 <span class="go">{</span>
 <span class="go">  &quot;a&quot;: [</span>
 <span class="go">    &quot;a&quot;,</span>
@@ -442,7 +443,7 @@ matching the current pattern with the key.</p>
 <span class="go">}</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
 <span class="gp">... </span>   <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;neural networks; Artificial Neural Networks&#39;</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> 
@@ -489,7 +490,7 @@ matching the current pattern with the key.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -515,7 +516,7 @@ matching the current pattern with the key.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
     </div>
   </body>
 </html>

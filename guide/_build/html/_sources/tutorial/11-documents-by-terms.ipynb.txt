@@ -16,11 +16,7 @@
     "import pandas as pd\n",
     "from techminer import RecordsDataFrame\n",
     "\n",
-    "rdf = RecordsDataFrame(\n",
-    "    pd.read_json(\n",
-    "        'step-07.json', \n",
-    "        orient='records', \n",
-    "        lines=True))"
+    "rdf = RecordsDataFrame(pd.read_json(\"step-07.json\", orient=\"records\", lines=True))"
    ]
   },
   {
@@ -118,7 +114,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type')"
+    "rdf.documents_by_terms(\"Document Type\")"
    ]
   },
   {
@@ -127,7 +123,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "rdf.documents_by_terms('Document Type').print_IDs()"
+    "rdf.documents_by_terms(\"Document Type\").print_IDs()"
    ]
   },
   {
@@ -158,7 +154,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type').barhplot();"
+    "rdf.documents_by_terms(\"Document Type\").barhplot()"
    ]
   },
   {
@@ -397,7 +393,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type').altair_barhplot()"
+    "rdf.documents_by_terms(\"Document Type\").altair_barhplot()"
    ]
   },
   {
@@ -419,7 +415,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type').seaborn_barhplot()"
+    "rdf.documents_by_terms(\"Document Type\").seaborn_barhplot()"
    ]
   },
   {
@@ -450,7 +446,8 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type').barplot();"
+    "rdf.documents_by_terms(\"Document Type\").barplot()\n",
+    "plt.show()"
    ]
   },
   {
@@ -689,7 +686,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type').altair_barplot()"
+    "rdf.documents_by_terms(\"Document Type\").altair_barplot()"
    ]
   },
   {
@@ -711,7 +708,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Document Type').seaborn_barplot()"
+    "rdf.documents_by_terms(\"Document Type\").seaborn_barplot()"
    ]
   },
   {
@@ -889,7 +886,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Source title', minmax=(2,100))"
+    "rdf.documents_by_terms(\"Source title\", minmax=(2, 100))"
    ]
   },
   {
@@ -1187,7 +1184,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('keywords (cleaned)', sep=';', top_n=30)"
+    "rdf.documents_by_terms(\"keywords (cleaned)\", sep=\";\", top_n=30)"
    ]
   },
   {
@@ -1365,9 +1362,10 @@
     }
    ],
    "source": [
-    "from techminer.strings import  *\n",
-    "rdf['Country'] = rdf['Affiliations'].map(lambda x: extract_country(x, sep=';'))\n",
-    "rdf.documents_by_terms('Country', sep=';').head(15)"
+    "from techminer.strings import *\n",
+    "\n",
+    "rdf[\"Country\"] = rdf[\"Affiliations\"].map(lambda x: extract_country(x, sep=\";\"))\n",
+    "rdf.documents_by_terms(\"Country\", sep=\";\").head(15)"
    ]
   },
   {
@@ -1389,7 +1387,7 @@
     }
    ],
    "source": [
-    "rdf.documents_by_terms('Country', sep=';').worldmap()"
+    "rdf.documents_by_terms(\"Country\", sep=\";\").worldmap()"
    ]
   }
  ],
@@ -1409,7 +1407,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.6.8"
+   "version": "3.6.9"
   }
  },
  "nbformat": 4,

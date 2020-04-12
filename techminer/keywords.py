@@ -92,19 +92,17 @@ Functions in this module
 ---------------------------------------------------------------------------------------------------
 
 """
-import pandas as pd
-import string
-import re
-import geopandas
 import json
+import re
+import string
 
-from techminer.strings import (
-    find_string, 
-    replace_string,
-    fingerprint
-)
+import geopandas
+import pandas as pd
 
-class Keywords():
+from .strings import find_string, fingerprint, replace_string
+
+
+class Keywords:
     """Creates a Keywords object used to find, extract or remove terms of interest from a string.
 
     Args:
@@ -117,24 +115,25 @@ class Keywords():
         Keywords object
 
 
-    """    
+    """
+
     def __init__(self, x=None, ignore_case=True, full_match=False, use_re=False):
         if x is None:
             self._keywords = None
-        else:    
+        else:
             if isinstance(x, str):
-                x = [x]    
+                x = [x]
             self._keywords = sorted(list(set(x)))
         self._ignore_case = ignore_case
         self._full_match = full_match
         self._use_re = use_re
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     @property
     def keywords(self):
         return self._keywords
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def __contains__(self, x):
         """Implements in operator.
 
@@ -153,7 +152,7 @@ class Keywords():
             return False
         return True
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def __len__(self):
         """Returns the number of keywords.
 
@@ -162,7 +161,7 @@ class Keywords():
         """
         return len(self._keywords)
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def __repr__(self):
         """String representation of the object.
 
@@ -175,18 +174,18 @@ class Keywords():
 
         """
         text = json.dumps(self._keywords, indent=2, sort_keys=True)
-        text += '\nignore_case={}, full_match={}, use_re={}'.format(
+        text += "\nignore_case={}, full_match={}, use_re={}".format(
             self._ignore_case.__repr__(),
             self._full_match.__repr__(),
-            self._use_re.__repr__()
-        ) 
+            self._use_re.__repr__(),
+        )
         return text
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def __str__(self):
         return self.__repr__()
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def add_keywords(self, x, sep=None):
         """Adds new keywords x to list of current keywords.
 
@@ -223,7 +222,7 @@ class Keywords():
         """
         if isinstance(x, str):
             x = [x]
-        
+
         if isinstance(x, Keywords):
             x = x._keywords
 
@@ -231,10 +230,15 @@ class Keywords():
             x = x.tolist()
 
         if sep is not None:
-            x = [z.strip() for y in x if y is not None for z in y.split(sep) if z.strip() != '']    
+            x = [
+                z.strip()
+                for y in x
+                if y is not None
+                for z in y.split(sep)
+                if z.strip() != ""
+            ]
         else:
-            x = [y.strip() for y in x if y is not None and y.strip() != '']
-
+            x = [y.strip() for y in x if y is not None and y.strip() != ""]
 
         if self._keywords is None:
             self._keywords = sorted(list(set(x)))
@@ -242,8 +246,8 @@ class Keywords():
             x.extend(self._keywords)
             self._keywords = sorted(list(set(x)))
 
-    #--------------------------------------------------------------------------------------------------------
-    def extract_from_text(self, x, sep=';'):
+    # --------------------------------------------------------------------------------------------------------
+    def extract_from_text(self, x, sep=";"):
         r"""Returns a new string with the keywords in string x matching the list of keywords used to fit the model.
 
         >>> Keywords([r"xxx", r"two", r"yyy"]).extract_from_text('one two three four five')
@@ -267,22 +271,22 @@ class Keywords():
         for keyword in self._keywords:
 
             y = find_string(
-                pattern = keyword,
-                x = x,
-                ignore_case = self._ignore_case,
-                full_match = self._full_match,
-                use_re = self._use_re
+                pattern=keyword,
+                x=x,
+                ignore_case=self._ignore_case,
+                full_match=self._full_match,
+                use_re=self._use_re,
             )
 
-            if y is not None:     
+            if y is not None:
                 result.extend([y])
-        
+
         if len(result):
             return sep.join(sorted(list(set(result))))
-            
+
         return None
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def remove_from_text(self, x):
         """Returns a string removing the strings that match a 
         list of keywords from x.
@@ -314,32 +318,33 @@ class Keywords():
         for keyword in self._keywords:
 
             found_string = find_string(
-                pattern = keyword,
-                x = x,
-                ignore_case = self._ignore_case,
-                full_match = self._full_match,
-                use_re = self._use_re
+                pattern=keyword,
+                x=x,
+                ignore_case=self._ignore_case,
+                full_match=self._full_match,
+                use_re=self._use_re,
             )
 
             if found_string is not None:
 
                 x = replace_string(
-                        pattern = found_string,
-                        x = x,
-                        repl = '',
-                        ignore_case = False,
-                        full_match = False,
-                        use_re = False)
+                    pattern=found_string,
+                    x=x,
+                    repl="",
+                    ignore_case=False,
+                    full_match=False,
+                    use_re=False,
+                )
 
         return x
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def delete_keyword(self, x):
         """Remove string x from the keywords list.
         """
         self._keywords.remove(x)
 
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     def common(self, x, sep=None):
         """Returns True if x is in keywords list.
 
@@ -360,6 +365,7 @@ class Keywords():
         True
 
         """
+
         def _common(x):
             if self.extract_from_text(x) is None:
                 return False
@@ -377,7 +383,7 @@ class Keywords():
 
     #     Args:
     #         x (string): A string object.
-            
+
     #     Returns:
     #         Boolean.
 
@@ -401,14 +407,13 @@ class Keywords():
     #     if sep is None:
     #         return _complement(x)
 
-    #     return any([_complement(y) for y in x.split(sep)])        
+    #     return any([_complement(y) for y in x.split(sep)])
 
-
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
     # def _stemming(self, x):
     #     x = fingerprint(x)
     #     return [self.extract(z) for z in x.split()]
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
 
     # def stemming_and(self, x):
     #     """
@@ -422,19 +427,9 @@ class Keywords():
     #     z = self._stemming(x)
     #     z = [self.w for w in z if z is not None]
     #     return all(z)
-    #--------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------
 
     # def stemming_any(self, x):
     #     z = self._stemming(x)
     #     z = [w for w in z if z is not None]
     #     return any(z)
-
-        
-
-
-
-
-
-    
-
-

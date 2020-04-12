@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>techminer.datasets &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for techminer.datasets</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TechMiner.datasets</span>
+<span class="sd">===============================================================================</span>
+
+<span class="sd">Overview</span>
+<span class="sd">-------------------------------------------------------------------------------</span>
+
+<span class="sd">The functions in this module allows the user to load bibliographical datasets.</span>
+
+
+<span class="sd">Functions in this module</span>
+<span class="sd">-------------------------------------------------------------------------------</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span><span class="p">,</span> <span class="n">dirname</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">RecordsDataFrame</span>
+
+
+<div class="viewcode-block" id="Bunch"><a class="viewcode-back" href="../../datasets.html#techminer.datasets.Bunch">[docs]</a><span class="k">class</span> <span class="nc">Bunch</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="load_dynacol"><a class="viewcode-back" href="../../datasets.html#techminer.datasets.load_dynacol">[docs]</a><span class="k">def</span> <span class="nf">load_dynacol</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load and return the dynacol dataset.</span>
+
+<span class="sd">    This dataset contains the bibliographical information about publications </span>
+<span class="sd">    in Scopus of the Dyna-Colombia journal, edited by Facultad de Minas, </span>
+<span class="sd">    Universidad Nacional de Colombia, Sede Medellin, between January, 2010 </span>
+<span class="sd">    and September, 2019.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dictionary.</span>
+
+<span class="sd">    **Examples**</span>
+
+<span class="sd">    &gt;&gt;&gt; from techminer.datasets import load_dynacol</span>
+<span class="sd">    &gt;&gt;&gt; data = load_dynacol()</span>
+<span class="sd">    &gt;&gt;&gt; data.data.info()  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;class &#39;techminer.dataframe.RecordsDataFrame&#39;&gt;</span>
+<span class="sd">    RangeIndex: 1714 entries, 0 to 1713</span>
+<span class="sd">    Data columns (total 12 columns):</span>
+<span class="sd">     #   Column                         Non-Null Count  Dtype  </span>
+<span class="sd">    ---  ------                         --------------  -----  </span>
+<span class="sd">     0   Authors                        1714 non-null   object </span>
+<span class="sd">     1   Author(s) ID                   1714 non-null   object </span>
+<span class="sd">     2   Title                          1714 non-null   object </span>
+<span class="sd">     3   Year                           1714 non-null   int64  </span>
+<span class="sd">     4   Volume                         1714 non-null   int64  </span>
+<span class="sd">     5   Issue                          1714 non-null   object </span>
+<span class="sd">     6   Page start                     1677 non-null   float64</span>
+<span class="sd">     7   Page end                       1669 non-null   float64</span>
+<span class="sd">     8   Cited by                       1714 non-null   float64</span>
+<span class="sd">     9   Author Keywords                1681 non-null   object </span>
+<span class="sd">     10  Language of Original Document  1714 non-null   object </span>
+<span class="sd">     11  Abstract                       1714 non-null   object </span>
+<span class="sd">    dtypes: float64(3), int64(2), object(7)</span>
+<span class="sd">    memory usage: 160.8+ KB</span>
+
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module_path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/dyna-col.rst&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">rst_file</span><span class="p">:</span>
+        <span class="n">fdescr</span> <span class="o">=</span> <span class="n">rst_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/dyna-col.csv&quot;</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">Bunch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fdata</span><span class="p">,</span> <span class="n">DESCR</span><span class="o">=</span><span class="n">fdescr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_autotrading_raw"><a class="viewcode-back" href="../../datasets.html#techminer.datasets.load_autotrading_raw">[docs]</a><span class="k">def</span> <span class="nf">load_autotrading_raw</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load and return the autotrading dataset with raw info.</span>
+
+<span class="sd">    This dataset contains the raw bibliographical information for publications </span>
+<span class="sd">    in Scopus automatic trading.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dictionary.</span>
+
+<span class="sd">    **Examples**</span>
+
+<span class="sd">    &gt;&gt;&gt; from techminer.datasets import load_autotrading_raw</span>
+<span class="sd">    &gt;&gt;&gt; data = load_autotrading_raw()</span>
+<span class="sd">    &gt;&gt;&gt; data.data.info()  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;class &#39;techminer.dataframe.RecordsDataFrame&#39;&gt;</span>
+<span class="sd">    Int64Index: 212 entries, 0 to 99</span>
+<span class="sd">    Data columns (total 17 columns):</span>
+<span class="sd">     #   Column           Non-Null Count  Dtype  </span>
+<span class="sd">    ---  ------           --------------  -----  </span>
+<span class="sd">     0   Abstract         212 non-null    object </span>
+<span class="sd">     1   Author Keywords  155 non-null    object </span>
+<span class="sd">     2   Author(s) ID     212 non-null    object </span>
+<span class="sd">     3   Authors          212 non-null    object </span>
+<span class="sd">     4   Cited by         212 non-null    int64  </span>
+<span class="sd">     5   DOI              152 non-null    object </span>
+<span class="sd">     6   Document Type    212 non-null    object </span>
+<span class="sd">     7   EID              212 non-null    object </span>
+<span class="sd">     8   Index Keywords   135 non-null    object </span>
+<span class="sd">     9   Issue            83 non-null     object </span>
+<span class="sd">     10  Page end         185 non-null    float64</span>
+<span class="sd">     11  Page start       185 non-null    float64</span>
+<span class="sd">     12  Selected         212 non-null    bool   </span>
+<span class="sd">     13  Source title     212 non-null    object </span>
+<span class="sd">     14  Title            212 non-null    object </span>
+<span class="sd">     15  Volume           141 non-null    object </span>
+<span class="sd">     16  Year             212 non-null    int64  </span>
+<span class="sd">    dtypes: bool(1), float64(2), int64(2), object(12)</span>
+<span class="sd">    memory usage: 28.4+ KB</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module_path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/auto-trading-raw.rst&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">rst_file</span><span class="p">:</span>
+        <span class="n">fdescr</span> <span class="o">=</span> <span class="n">rst_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/auto-trading-raw.json&quot;</span><span class="p">),</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Bunch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fdata</span><span class="p">,</span> <span class="n">DESCR</span><span class="o">=</span><span class="n">fdescr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_autotrading_selected"><a class="viewcode-back" href="../../datasets.html#techminer.datasets.load_autotrading_selected">[docs]</a><span class="k">def</span> <span class="nf">load_autotrading_selected</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load and return the autotrading dataset with selected info.</span>
+
+<span class="sd">    This dataset contains the raw bibliographical information for publications </span>
+<span class="sd">    in Scopus automatic trading.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dictionary.</span>
+
+<span class="sd">    **Examples**</span>
+
+<span class="sd">    &gt;&gt;&gt; from techminer.datasets import load_autotrading_selected</span>
+<span class="sd">    &gt;&gt;&gt; data = load_autotrading_selected()</span>
+<span class="sd">    &gt;&gt;&gt; data.data.info()  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;class &#39;techminer.dataframe.RecordsDataFrame&#39;&gt;</span>
+<span class="sd">    Int64Index: 95 entries, 0 to 99</span>
+<span class="sd">    Data columns (total 16 columns):</span>
+<span class="sd">     #   Column           Non-Null Count  Dtype  </span>
+<span class="sd">    ---  ------           --------------  -----  </span>
+<span class="sd">     0   Abstract         95 non-null     object </span>
+<span class="sd">     1   Author Keywords  76 non-null     object </span>
+<span class="sd">     2   Author(s) ID     95 non-null     object </span>
+<span class="sd">     3   Authors          95 non-null     object </span>
+<span class="sd">     4   Cited by         95 non-null     int64  </span>
+<span class="sd">     5   DOI              82 non-null     object </span>
+<span class="sd">     6   Document Type    95 non-null     object </span>
+<span class="sd">     7   EID              95 non-null     object </span>
+<span class="sd">     8   Index Keywords   71 non-null     object </span>
+<span class="sd">     9   Issue            33 non-null     object </span>
+<span class="sd">     10  Page end         88 non-null     float64</span>
+<span class="sd">     11  Page start       88 non-null     float64</span>
+<span class="sd">     12  Source title     95 non-null     object </span>
+<span class="sd">     13  Title            95 non-null     object </span>
+<span class="sd">     14  Volume           65 non-null     object </span>
+<span class="sd">     15  Year             95 non-null     int64  </span>
+<span class="sd">    dtypes: float64(2), int64(2), object(12)</span>
+<span class="sd">    memory usage: 12.6+ KB</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module_path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/auto-trading-selected.rst&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">rst_file</span><span class="p">:</span>
+        <span class="n">fdescr</span> <span class="o">=</span> <span class="n">rst_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/auto-trading-selected.json&quot;</span><span class="p">),</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Bunch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fdata</span><span class="p">,</span> <span class="n">DESCR</span><span class="o">=</span><span class="n">fdescr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_test_cleaned"><a class="viewcode-back" href="../../datasets.html#techminer.datasets.load_test_cleaned">[docs]</a><span class="k">def</span> <span class="nf">load_test_cleaned</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load and return a test dataset cleaned.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module_path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/test-cleaned.rst&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">rst_file</span><span class="p">:</span>
+        <span class="n">fdescr</span> <span class="o">=</span> <span class="n">rst_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/test-cleaned.json&quot;</span><span class="p">),</span>
+            <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">,</span>
+            <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Bunch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fdata</span><span class="p">,</span> <span class="n">DESCR</span><span class="o">=</span><span class="n">fdescr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_test_raw"><a class="viewcode-back" href="../../datasets.html#techminer.datasets.load_test_raw">[docs]</a><span class="k">def</span> <span class="nf">load_test_raw</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Load and return a test dataset cleaned.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module_path</span> <span class="o">=</span> <span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/test-raw.rst&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">rst_file</span><span class="p">:</span>
+        <span class="n">fdescr</span> <span class="o">=</span> <span class="n">rst_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s2">&quot;datasets/test-raw.json&quot;</span><span class="p">),</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Bunch</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">fdata</span><span class="p">,</span> <span class="n">DESCR</span><span class="o">=</span><span class="n">fdescr</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
+    </div>
+  </body>
+</html>

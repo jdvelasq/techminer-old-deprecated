@@ -170,10 +170,8 @@ class RecordsDataFrame(pd.DataFrame):
     def auto_corr(self, column, sep=None, top_n=20, cut_value=0):
         """Computes the autocorrelation among items in a column of the dataframe.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.auto_corr(column='Authors', sep=',', top_n=5) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
                Authors (row)     Authors (col)  Autocorrelation                                                ID
         0        Wang J. [7]       Wang J. [7]              1.0  [[*3*], [*10*], [*15*], [*80*], [*87*], [*128*]]
@@ -201,7 +199,6 @@ class RecordsDataFrame(pd.DataFrame):
         22      Zhang G. [4]        Yan X. [3]              0.0                                              None
         23       Wang J. [7]  Hernandez G. [3]              0.0                                              None
         24        Yan X. [3]      Tefas A. [3]              0.0                                              None
-       
 
         """
         result = self.cross_corr(
@@ -214,10 +211,8 @@ class RecordsDataFrame(pd.DataFrame):
     def citations_by_terms(self, column, sep=None, top_n=None, minmax=None):
         """Computes the number of citations by item in a column.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.citations_by_terms(column='Authors', sep=',', top_n=10)
                     Authors  Cited by                                  ID
         0     Yeh W.-C. [1]     188.0                           [[*140*]]
@@ -290,10 +285,8 @@ class RecordsDataFrame(pd.DataFrame):
     def citations_by_terms_by_year(self, column, sep=None, top_n=None, minmax=None):
         """Computes the number of citations by term by year in a column.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.citations_by_terms_by_year('Authors', sep=',', top_n=5)
                     Authors       Year  Cited by                  ID
         0  Hernandez G. [3]  2018 [52]       1.0           [[*100*]]
@@ -350,10 +343,8 @@ class RecordsDataFrame(pd.DataFrame):
     def citations_by_year(self, cumulative=False):
         """Computes the number of citations by year.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.citations_by_year().head()
                Year  Cited by                                    ID
         0  2010 [3]      21.0                    [[*142*], [*143*]]
@@ -404,10 +395,8 @@ class RecordsDataFrame(pd.DataFrame):
     def co_ocurrence(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """Computes the number of rows containing two given items in different columns.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.co_ocurrence(column_r='Authors', sep_r=',', column_c='Document Type', top_n=5)
               Authors (row)    Document Type (col)  Num Documents                                         ID
         0  Hernandez G. [3]  Conference Paper [12]              3                  [[*52*], [*94*], [*100*]]
@@ -418,7 +407,6 @@ class RecordsDataFrame(pd.DataFrame):
         5        Yan X. [3]  Conference Paper [12]              2                           [[*13*], [*85*]]
         6      Zhang G. [4]            Article [8]              2                          [[*27*], [*117*]]
         7      Zhang G. [4]  Conference Paper [12]              2                          [[*78*], [*119*]]
-        
 
         """
 
@@ -491,10 +479,8 @@ class RecordsDataFrame(pd.DataFrame):
         Returns:
             Pandas DataFrame.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.coverage()
                          Field  Number of items Coverage (%)
         0              Authors              144      100.00%
@@ -525,7 +511,6 @@ class RecordsDataFrame(pd.DataFrame):
         25            SELECTED              144      100.00%
         26                  ID              144      100.00%
 
-
         """
 
         result = pd.DataFrame({
@@ -540,10 +525,8 @@ class RecordsDataFrame(pd.DataFrame):
     def cross_corr(self, column_r, column_c=None, sep_r=None, sep_c=None, top_n=20, cut_value=0):
         """Computes the crosscorrelation among items in two different columns of the dataframe.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.cross_corr(column_r='Authors', sep_r=',', column_c='Author Keywords', sep_c=';', top_n=5)
                      Authors               Author Keywords  Crosscorrelation                 ID
         0         Yan X. [3]     Financial time series [7]          0.218218           [[*13*]]
@@ -571,7 +554,6 @@ class RecordsDataFrame(pd.DataFrame):
         22       Wang J. [7]     Financial time series [7]          0.000000               None
         23       Wang J. [7]  Recurrent neural network [8]          0.000000               None
         24      Tefas A. [3]     Financial time series [7]          0.000000               None
-
         
 
         """ 
@@ -767,10 +749,8 @@ class RecordsDataFrame(pd.DataFrame):
     def documents_by_terms(self, column, sep=None, top_n=None, minmax=None):
         """Computes the number of documents per term in a given column.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_terms('Authors', sep=',').head(5)
                 Authors  Num Documents                                                 ID
         0       Wang J.              7  [[*3*], [*10*], [*15*], [*80*], [*87*], [*128*...
@@ -817,10 +797,8 @@ class RecordsDataFrame(pd.DataFrame):
     def documents_by_year(self, cumulative=False):
         """Computes the number of documents per year.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().head()
            Year  Num Documents                                    ID
         0  2010              3           [[*141*], [*142*], [*143*]]
@@ -835,7 +813,6 @@ class RecordsDataFrame(pd.DataFrame):
         2  2012              7                    [[*137*], [*138*]]
         3  2013             11  [[*133*], [*134*], [*135*], [*136*]]
         4  2014             13                    [[*131*], [*132*]]
-
         """
 
         ## number of documents by year
@@ -866,16 +843,14 @@ class RecordsDataFrame(pd.DataFrame):
     def factor_analysis(self, column, sep=None, n_components=None, top_n=10):
         """Computes the matrix of factors for terms in a given column.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.factor_analysis(
         ...    column='Authors', 
         ...    sep=',', 
         ...    n_components=5, 
         ...    top_n=40).tomatrix().head(5) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-                                F0        F1        F2        F3        F4
+                               F0        F1        F2        F3        F4
         Wang J. [7]      -0.025355 -0.040096 -0.695298  0.624399  0.223693
         Zhang G. [4]     -0.017487 -0.028221  0.452656  0.559642 -0.167425
         Yan X. [3]       -0.010094 -0.013940 -0.057740 -0.006361 -0.018068
@@ -1066,10 +1041,8 @@ class RecordsDataFrame(pd.DataFrame):
             pandas.DataFrame
 
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.most_cited_documents(top_n=5)[['Authors', 'Title']]
                                                      Authors                                              Title
         140              Hsieh T.-J., Hsiao H.-F., Yeh W.-C.  Forecasting stock markets using wavelet transf...
@@ -1077,7 +1050,6 @@ class RecordsDataFrame(pd.DataFrame):
         139             Ghazali R., Hussain A.J., Liatsis P.  Dynamic Ridge Polynomial Neural Network: Forec...
         124  Akita R., Yoshihara A., Matsubara T., Uehara K.  Deep learning for stock prediction using numer...
         134                         Sharma V., Srinivasan D.  A hybrid intelligent model based on recurrent ...
-
 
         """
         result = self.sort_values(by='Cited by', ascending=False)
@@ -1097,10 +1069,8 @@ class RecordsDataFrame(pd.DataFrame):
     def num_of_sources(self):
         """Returns the number of source titles in the dataframe.
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.num_of_sources
         103
 
@@ -1111,21 +1081,19 @@ class RecordsDataFrame(pd.DataFrame):
     def ocurrence(self, column, sep=None, top_n=None, minmax=None):
         """
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.ocurrence(column='Authors', sep=',', top_n=10)
                Authors (row)     Authors (col)  Num Documents                                                 ID
-        0     Arévalo A. [9]    Arévalo A. [9]              3                          [[*52*], [*94*], [*100*]]
-        1     Arévalo A. [9]  Hernandez G. [9]              3                          [[*52*], [*94*], [*100*]]
-        2     Arévalo A. [9]   Sandoval J. [9]              3                          [[*52*], [*94*], [*100*]]
-        3   Hernandez G. [9]    Arévalo A. [9]              3                          [[*52*], [*94*], [*100*]]
+        0     Ar\xe9valo A. [9]    Ar\xe9valo A. [9]              3                          [[*52*], [*94*], [*100*]]
+        1     Ar\xe9valo A. [9]  Hernandez G. [9]              3                          [[*52*], [*94*], [*100*]]
+        2     Ar\xe9valo A. [9]   Sandoval J. [9]              3                          [[*52*], [*94*], [*100*]]
+        3   Hernandez G. [9]    Ar\xe9valo A. [9]              3                          [[*52*], [*94*], [*100*]]
         4   Hernandez G. [9]  Hernandez G. [9]              3                          [[*52*], [*94*], [*100*]]
         5   Hernandez G. [9]   Sandoval J. [9]              3                          [[*52*], [*94*], [*100*]]
         6   Iosifidis A. [6]  Iosifidis A. [6]              3                          [[*8*], [*110*], [*114*]]
         7   Iosifidis A. [6]      Tefas A. [6]              3                          [[*8*], [*110*], [*114*]]
-        8    Sandoval J. [9]    Arévalo A. [9]              3                          [[*52*], [*94*], [*100*]]
+        8    Sandoval J. [9]    Ar\xe9valo A. [9]              3                          [[*52*], [*94*], [*100*]]
         9    Sandoval J. [9]  Hernandez G. [9]              3                          [[*52*], [*94*], [*100*]]
         10   Sandoval J. [9]   Sandoval J. [9]              3                          [[*52*], [*94*], [*100*]]
         11      Tefas A. [6]  Iosifidis A. [6]              3                          [[*8*], [*110*], [*114*]]
@@ -1204,8 +1172,8 @@ class RecordsDataFrame(pd.DataFrame):
     def tdf(self, column, sep, top_n=20):
         """
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.tdf('Authors', sep=',', top_n=5).head() # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
            Wang J.  Zhang G.  Yan X.  Hernandez G.  Tefas A.
         0      0.0       0.0     0.0           0.0       0.0
@@ -1244,10 +1212,8 @@ class RecordsDataFrame(pd.DataFrame):
     def terms_by_terms_by_year(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
         """
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.terms_by_terms_by_year(column_r='Authors', sep_r=',', column_c='Author Keywords', sep_c=';', top_n=5)
                        Authors            Author Keywords      Year  Num Documents                 ID
         519   Hernandez G. [2]          Deep learning [7]  2018 [4]              2  [[*94*], [*100*]]
@@ -1260,7 +1226,6 @@ class RecordsDataFrame(pd.DataFrame):
         1854      Zhang G. [4]          Deep learning [7]  2017 [2]              1          [[*117*]]
         1855      Zhang G. [4]          Deep learning [7]  2019 [5]              1           [[*27*]]
         1856      Zhang G. [4]  Financial time series [2]  2017 [2]              1          [[*119*]]
-        
 
         """
         
@@ -1324,10 +1289,8 @@ class RecordsDataFrame(pd.DataFrame):
     def terms_by_year(self, column, sep=None, top_n=None, minmax=None):
         """
 
-        >>> import pandas as pd
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.terms_by_year(column='Author Keywords', sep=';', top_n=5).head()
               Author Keywords       Year  Num Documents                                                ID
         0  Deep Learning [10]  2018 [37]              6  [[*54*], [*78*], [*79*], [*86*], [*95*], [*97*]]
@@ -1335,7 +1298,6 @@ class RecordsDataFrame(pd.DataFrame):
         2  Deep learning [34]   2013 [3]              1                                         [[*134*]]
         3  Deep learning [34]   2016 [2]              1                                         [[*125*]]
         4  Deep learning [34]   2017 [7]              2                                [[*117*], [*120*]]
-
         >>> rdf.terms_by_year('Author Keywords',  minmax=(2,3), sep=';').head()
                              Author Keywords       Year  Num Documents                  ID
         0                          ARIMA [2]  2017 [13]              2  [[*115*], [*122*]]
@@ -1343,7 +1305,6 @@ class RecordsDataFrame(pd.DataFrame):
         2                            CNN [4]  2019 [33]              2    [[*18*], [*50*]]
         3  Convolutional Neural Networks [2]  2018 [47]              2    [[*78*], [*79*]]
         4   Convolutional neural network [4]  2018 [47]              2    [[*64*], [*77*]]
-
         >>> rdf.terms_by_year('Author Keywords',  top_n=3, minmax=(1,3), sep=';').head()
              Author Keywords      Year  Num Documents                  ID
         0  Deep learning [4]  2013 [3]              1           [[*134*]]
@@ -1351,6 +1312,7 @@ class RecordsDataFrame(pd.DataFrame):
         2  Deep learning [4]  2017 [5]              2  [[*117*], [*120*]]
         3           LSTM [6]  2013 [3]              2  [[*133*], [*135*]]
         4           LSTM [6]  2015 [1]              1           [[*130*]]
+
         """
 
         ## computes the number of documents by year

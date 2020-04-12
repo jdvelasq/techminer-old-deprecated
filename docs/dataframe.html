@@ -7,11 +7,12 @@
     <title>TechMiner.RecordsDataFrame &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="TechMiner.Keywords" href="keywords.html" />
@@ -44,19 +45,17 @@
             
   <span class="target" id="module-techminer.dataframe"></span><div class="section" id="techminer-recordsdataframe">
 <h1>TechMiner.RecordsDataFrame<a class="headerlink" href="#techminer-recordsdataframe" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="techminer.dataframe.RecordsDataFrame">
-<em class="property">class </em><code class="sig-prename descclassname">techminer.dataframe.</code><code class="sig-name descname">RecordsDataFrame</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">index=None</em>, <em class="sig-param">columns=None</em>, <em class="sig-param">dtype=None</em>, <em class="sig-param">copy=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">techminer.dataframe.</code><code class="sig-name descname">RecordsDataFrame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Collection<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Collection<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="p">:</span> <span class="n">Union[str, numpy.dtype, ExtensionDtype, None]</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">copy</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
 <p>Class to represent a dataframe of bibliographic records.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.auto_corr">
-<code class="sig-name descname">auto_corr</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">top_n=20</em>, <em class="sig-param">cut_value=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.auto_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.auto_corr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">auto_corr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cut_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.auto_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.auto_corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the autocorrelation among items in a column of the dataframe.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">auto_corr</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> 
 <span class="go">       Authors (row)     Authors (col)  Autocorrelation                                                ID</span>
 <span class="go">0        Wang J. [7]       Wang J. [7]              1.0  [[*3*], [*10*], [*15*], [*80*], [*87*], [*128*]]</span>
@@ -88,14 +87,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.citations_by_terms">
-<code class="sig-name descname">citations_by_terms</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_terms" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">citations_by_terms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_terms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number of citations by item in a column.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">citations_by_terms</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="go">            Authors  Cited by                                  ID</span>
 <span class="go">0     Yeh W.-C. [1]     188.0                           [[*140*]]</span>
@@ -129,14 +126,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.citations_by_terms_by_year">
-<code class="sig-name descname">citations_by_terms_by_year</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_terms_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_terms_by_year" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">citations_by_terms_by_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_terms_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_terms_by_year" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number of citations by term by year in a column.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">citations_by_terms_by_year</span><span class="p">(</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">            Authors       Year  Cited by                  ID</span>
 <span class="go">0  Hernandez G. [3]  2018 [52]       1.0           [[*100*]]</span>
@@ -150,14 +145,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.citations_by_year">
-<code class="sig-name descname">citations_by_year</code><span class="sig-paren">(</span><em class="sig-param">cumulative=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_year" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">citations_by_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cumulative</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.citations_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.citations_by_year" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number of citations by year.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">citations_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">       Year  Cited by                                    ID</span>
 <span class="go">0  2010 [3]      21.0                    [[*142*], [*143*]]</span>
@@ -169,14 +162,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.co_ocurrence">
-<code class="sig-name descname">co_ocurrence</code><span class="sig-paren">(</span><em class="sig-param">column_r</em>, <em class="sig-param">column_c</em>, <em class="sig-param">sep_r=None</em>, <em class="sig-param">sep_c=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.co_ocurrence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.co_ocurrence" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">co_ocurrence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column_r</span></em>, <em class="sig-param"><span class="n">column_c</span></em>, <em class="sig-param"><span class="n">sep_r</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sep_c</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.co_ocurrence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.co_ocurrence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number of rows containing two given items in different columns.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">co_ocurrence</span><span class="p">(</span><span class="n">column_r</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep_r</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">column_c</span><span class="o">=</span><span class="s1">&#39;Document Type&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">      Authors (row)    Document Type (col)  Num Documents                                         ID</span>
 <span class="go">0  Hernandez G. [3]  Conference Paper [12]              3                  [[*52*], [*94*], [*100*]]</span>
@@ -191,7 +182,7 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.coverage">
 <code class="sig-name descname">coverage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.coverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.coverage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Counts the number of None values per column.</p>
@@ -200,10 +191,8 @@
 <dd class="field-odd"><p>Pandas DataFrame.</p>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">coverage</span><span class="p">()</span>
 <span class="go">                 Field  Number of items Coverage (%)</span>
 <span class="go">0              Authors              144      100.00%</span>
@@ -237,14 +226,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.cross_corr">
-<code class="sig-name descname">cross_corr</code><span class="sig-paren">(</span><em class="sig-param">column_r</em>, <em class="sig-param">column_c=None</em>, <em class="sig-param">sep_r=None</em>, <em class="sig-param">sep_c=None</em>, <em class="sig-param">top_n=20</em>, <em class="sig-param">cut_value=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.cross_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.cross_corr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cross_corr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column_r</span></em>, <em class="sig-param"><span class="n">column_c</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sep_r</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sep_c</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cut_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.cross_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.cross_corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the crosscorrelation among items in two different columns of the dataframe.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">cross_corr</span><span class="p">(</span><span class="n">column_r</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep_r</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">column_c</span><span class="o">=</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span> <span class="n">sep_c</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">             Authors               Author Keywords  Crosscorrelation                 ID</span>
 <span class="go">0         Yan X. [3]     Financial time series [7]          0.218218           [[*13*]]</span>
@@ -276,14 +263,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.documents_by_terms">
-<code class="sig-name descname">documents_by_terms</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.documents_by_terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.documents_by_terms" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">documents_by_terms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.documents_by_terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.documents_by_terms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number of documents per term in a given column.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_terms</span><span class="p">(</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">        Authors  Num Documents                                                 ID</span>
 <span class="go">0       Wang J.              7  [[*3*], [*10*], [*15*], [*80*], [*87*], [*128*...</span>
@@ -295,14 +280,12 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.documents_by_year">
-<code class="sig-name descname">documents_by_year</code><span class="sig-paren">(</span><em class="sig-param">cumulative=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.documents_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.documents_by_year" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">documents_by_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cumulative</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.documents_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.documents_by_year" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number of documents per year.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">documents_by_year</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">   Year  Num Documents                                    ID</span>
 <span class="go">0  2010              3           [[*141*], [*142*], [*143*]]</span>
@@ -321,20 +304,18 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.factor_analysis">
-<code class="sig-name descname">factor_analysis</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">n_components=None</em>, <em class="sig-param">top_n=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.factor_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.factor_analysis" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">factor_analysis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">n_components</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.factor_analysis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.factor_analysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the matrix of factors for terms in a given column.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">factor_analysis</span><span class="p">(</span>
 <span class="gp">... </span>   <span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">top_n</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span><span class="o">.</span><span class="n">tomatrix</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
-<span class="go">                        F0        F1        F2        F3        F4</span>
+<span class="go">                       F0        F1        F2        F3        F4</span>
 <span class="go">Wang J. [7]      -0.025355 -0.040096 -0.695298  0.624399  0.223693</span>
 <span class="go">Zhang G. [4]     -0.017487 -0.028221  0.452656  0.559642 -0.167425</span>
 <span class="go">Yan X. [3]       -0.010094 -0.013940 -0.057740 -0.006361 -0.018068</span>
@@ -344,21 +325,21 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.generate_ID">
 <code class="sig-name descname">generate_ID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.generate_ID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.generate_ID" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a unique ID for each document.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.get_records_by_IDs">
-<code class="sig-name descname">get_records_by_IDs</code><span class="sig-paren">(</span><em class="sig-param">IDs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.get_records_by_IDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.get_records_by_IDs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_records_by_IDs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">IDs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.get_records_by_IDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.get_records_by_IDs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts records using the ID number.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.most_cited_documents">
-<code class="sig-name descname">most_cited_documents</code><span class="sig-paren">(</span><em class="sig-param">top_n=10</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.most_cited_documents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.most_cited_documents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">most_cited_documents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.most_cited_documents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.most_cited_documents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the top N most cited documents and citations &gt; min_value .</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -372,10 +353,8 @@
 <dt>Results:</dt><dd><p>pandas.DataFrame</p>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">most_cited_documents</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)[[</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="s1">&#39;Title&#39;</span><span class="p">]]</span>
 <span class="go">                                             Authors                                              Title</span>
 <span class="go">140              Hsieh T.-J., Hsiao H.-F., Yeh W.-C.  Forecasting stock markets using wavelet transf...</span>
@@ -387,27 +366,23 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.num_of_sources">
 <em class="property">property </em><code class="sig-name descname">num_of_sources</code><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.num_of_sources" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of source titles in the dataframe.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">num_of_sources</span>
 <span class="go">103</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.ocurrence">
-<code class="sig-name descname">ocurrence</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.ocurrence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.ocurrence" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<code class="sig-name descname">ocurrence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.ocurrence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.ocurrence" title="Permalink to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">ocurrence</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="go">       Authors (row)     Authors (col)  Num Documents                                                 ID</span>
 <span class="go">0     Arévalo A. [9]    Arévalo A. [9]              3                          [[*52*], [*94*], [*100*]]</span>
@@ -432,11 +407,11 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.tdf">
-<code class="sig-name descname">tdf</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep</em>, <em class="sig-param">top_n=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.tdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.tdf" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<code class="sig-name descname">tdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">20</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.tdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.tdf" title="Permalink to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">tdf</span><span class="p">(</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> 
 <span class="go">   Wang J.  Zhang G.  Yan X.  Hernandez G.  Tefas A.</span>
 <span class="go">0      0.0       0.0     0.0           0.0       0.0</span>
@@ -448,13 +423,11 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.terms_by_terms_by_year">
-<code class="sig-name descname">terms_by_terms_by_year</code><span class="sig-paren">(</span><em class="sig-param">column_r</em>, <em class="sig-param">column_c</em>, <em class="sig-param">sep_r=None</em>, <em class="sig-param">sep_c=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.terms_by_terms_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.terms_by_terms_by_year" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<code class="sig-name descname">terms_by_terms_by_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column_r</span></em>, <em class="sig-param"><span class="n">column_c</span></em>, <em class="sig-param"><span class="n">sep_r</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sep_c</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.terms_by_terms_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.terms_by_terms_by_year" title="Permalink to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_terms_by_year</span><span class="p">(</span><span class="n">column_r</span><span class="o">=</span><span class="s1">&#39;Authors&#39;</span><span class="p">,</span> <span class="n">sep_r</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">column_c</span><span class="o">=</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span> <span class="n">sep_c</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">               Authors            Author Keywords      Year  Num Documents                 ID</span>
 <span class="go">519   Hernandez G. [2]          Deep learning [7]  2018 [4]              2  [[*94*], [*100*]]</span>
@@ -471,13 +444,11 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="techminer.dataframe.RecordsDataFrame.terms_by_year">
-<code class="sig-name descname">terms_by_year</code><span class="sig-paren">(</span><em class="sig-param">column</em>, <em class="sig-param">sep=None</em>, <em class="sig-param">top_n=None</em>, <em class="sig-param">minmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.terms_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.terms_by_year" title="Permalink to this definition">¶</a></dt>
-<dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">RecordsDataFrame</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./data/cleaned.json&#39;</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;records&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">... </span><span class="p">)</span>
+<code class="sig-name descname">terms_by_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">column</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">minmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/dataframe.html#RecordsDataFrame.terms_by_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.dataframe.RecordsDataFrame.terms_by_year" title="Permalink to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_test_cleaned</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span> <span class="o">=</span> <span class="n">load_test_cleaned</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">      Author Keywords       Year  Num Documents                                                ID</span>
 <span class="go">0  Deep Learning [10]  2018 [37]              6  [[*54*], [*78*], [*79*], [*86*], [*95*], [*97*]]</span>
@@ -485,18 +456,14 @@
 <span class="go">2  Deep learning [34]   2013 [3]              1                                         [[*134*]]</span>
 <span class="go">3  Deep learning [34]   2016 [2]              1                                         [[*125*]]</span>
 <span class="go">4  Deep learning [34]   2017 [7]              2                                [[*117*], [*120*]]</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span>  <span class="n">minmax</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span>  <span class="n">minmax</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">                     Author Keywords       Year  Num Documents                  ID</span>
 <span class="go">0                          ARIMA [2]  2017 [13]              2  [[*115*], [*122*]]</span>
 <span class="go">1                            CNN [4]  2018 [47]              2    [[*72*], [*89*]]</span>
 <span class="go">2                            CNN [4]  2019 [33]              2    [[*18*], [*50*]]</span>
 <span class="go">3  Convolutional Neural Networks [2]  2018 [47]              2    [[*78*], [*79*]]</span>
 <span class="go">4   Convolutional neural network [4]  2018 [47]              2    [[*64*], [*77*]]</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span>  <span class="n">top_n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">minmax</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rdf</span><span class="o">.</span><span class="n">terms_by_year</span><span class="p">(</span><span class="s1">&#39;Author Keywords&#39;</span><span class="p">,</span>  <span class="n">top_n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">minmax</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">     Author Keywords      Year  Num Documents                  ID</span>
 <span class="go">0  Deep learning [4]  2013 [3]              1           [[*134*]]</span>
 <span class="go">1  Deep learning [4]  2016 [1]              1           [[*125*]]</span>
@@ -539,7 +506,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -565,7 +532,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
     </div>
   </body>
 </html>

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TechMiner.datasets &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="TechMiner.common" href="common.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="TechMiner.common"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Modules</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-techminer.datasets"></span><div class="section" id="techminer-datasets">
+<h1>TechMiner.datasets<a class="headerlink" href="#techminer-datasets" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The functions in this module allows the user to load bibliographical datasets.</p>
+</div>
+<div class="section" id="functions-in-this-module">
+<h2>Functions in this module<a class="headerlink" href="#functions-in-this-module" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="techminer.datasets.Bunch">
+<em class="property">class </em><code class="sig-prename descclassname">techminer.datasets.</code><code class="sig-name descname">Bunch</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/datasets.html#Bunch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.datasets.Bunch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="techminer.datasets.load_autotrading_raw">
+<code class="sig-prename descclassname">techminer.datasets.</code><code class="sig-name descname">load_autotrading_raw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/datasets.html#load_autotrading_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.datasets.load_autotrading_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return the autotrading dataset with raw info.</p>
+<p>This dataset contains the raw bibliographical information for publications
+in Scopus automatic trading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary.</p>
+</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_autotrading_raw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">load_autotrading_raw</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>  
+<span class="go">&lt;class &#39;techminer.dataframe.RecordsDataFrame&#39;&gt;</span>
+<span class="go">Int64Index: 212 entries, 0 to 99</span>
+<span class="go">Data columns (total 17 columns):</span>
+<span class="go"> #   Column           Non-Null Count  Dtype</span>
+<span class="go">---  ------           --------------  -----</span>
+<span class="go"> 0   Abstract         212 non-null    object</span>
+<span class="go"> 1   Author Keywords  155 non-null    object</span>
+<span class="go"> 2   Author(s) ID     212 non-null    object</span>
+<span class="go"> 3   Authors          212 non-null    object</span>
+<span class="go"> 4   Cited by         212 non-null    int64</span>
+<span class="go"> 5   DOI              152 non-null    object</span>
+<span class="go"> 6   Document Type    212 non-null    object</span>
+<span class="go"> 7   EID              212 non-null    object</span>
+<span class="go"> 8   Index Keywords   135 non-null    object</span>
+<span class="go"> 9   Issue            83 non-null     object</span>
+<span class="go"> 10  Page end         185 non-null    float64</span>
+<span class="go"> 11  Page start       185 non-null    float64</span>
+<span class="go"> 12  Selected         212 non-null    bool</span>
+<span class="go"> 13  Source title     212 non-null    object</span>
+<span class="go"> 14  Title            212 non-null    object</span>
+<span class="go"> 15  Volume           141 non-null    object</span>
+<span class="go"> 16  Year             212 non-null    int64</span>
+<span class="go">dtypes: bool(1), float64(2), int64(2), object(12)</span>
+<span class="go">memory usage: 28.4+ KB</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="techminer.datasets.load_autotrading_selected">
+<code class="sig-prename descclassname">techminer.datasets.</code><code class="sig-name descname">load_autotrading_selected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/datasets.html#load_autotrading_selected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.datasets.load_autotrading_selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return the autotrading dataset with selected info.</p>
+<p>This dataset contains the raw bibliographical information for publications
+in Scopus automatic trading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary.</p>
+</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_autotrading_selected</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">load_autotrading_selected</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>  
+<span class="go">&lt;class &#39;techminer.dataframe.RecordsDataFrame&#39;&gt;</span>
+<span class="go">Int64Index: 95 entries, 0 to 99</span>
+<span class="go">Data columns (total 16 columns):</span>
+<span class="go"> #   Column           Non-Null Count  Dtype</span>
+<span class="go">---  ------           --------------  -----</span>
+<span class="go"> 0   Abstract         95 non-null     object</span>
+<span class="go"> 1   Author Keywords  76 non-null     object</span>
+<span class="go"> 2   Author(s) ID     95 non-null     object</span>
+<span class="go"> 3   Authors          95 non-null     object</span>
+<span class="go"> 4   Cited by         95 non-null     int64</span>
+<span class="go"> 5   DOI              82 non-null     object</span>
+<span class="go"> 6   Document Type    95 non-null     object</span>
+<span class="go"> 7   EID              95 non-null     object</span>
+<span class="go"> 8   Index Keywords   71 non-null     object</span>
+<span class="go"> 9   Issue            33 non-null     object</span>
+<span class="go"> 10  Page end         88 non-null     float64</span>
+<span class="go"> 11  Page start       88 non-null     float64</span>
+<span class="go"> 12  Source title     95 non-null     object</span>
+<span class="go"> 13  Title            95 non-null     object</span>
+<span class="go"> 14  Volume           65 non-null     object</span>
+<span class="go"> 15  Year             95 non-null     int64</span>
+<span class="go">dtypes: float64(2), int64(2), object(12)</span>
+<span class="go">memory usage: 12.6+ KB</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="techminer.datasets.load_dynacol">
+<code class="sig-prename descclassname">techminer.datasets.</code><code class="sig-name descname">load_dynacol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/datasets.html#load_dynacol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.datasets.load_dynacol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return the dynacol dataset.</p>
+<p>This dataset contains the bibliographical information about publications
+in Scopus of the Dyna-Colombia journal, edited by Facultad de Minas,
+Universidad Nacional de Colombia, Sede Medellin, between January, 2010
+and September, 2019.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary.</p>
+</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">techminer.datasets</span> <span class="kn">import</span> <span class="n">load_dynacol</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">load_dynacol</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>  
+<span class="go">&lt;class &#39;techminer.dataframe.RecordsDataFrame&#39;&gt;</span>
+<span class="go">RangeIndex: 1714 entries, 0 to 1713</span>
+<span class="go">Data columns (total 12 columns):</span>
+<span class="go"> #   Column                         Non-Null Count  Dtype</span>
+<span class="go">---  ------                         --------------  -----</span>
+<span class="go"> 0   Authors                        1714 non-null   object</span>
+<span class="go"> 1   Author(s) ID                   1714 non-null   object</span>
+<span class="go"> 2   Title                          1714 non-null   object</span>
+<span class="go"> 3   Year                           1714 non-null   int64</span>
+<span class="go"> 4   Volume                         1714 non-null   int64</span>
+<span class="go"> 5   Issue                          1714 non-null   object</span>
+<span class="go"> 6   Page start                     1677 non-null   float64</span>
+<span class="go"> 7   Page end                       1669 non-null   float64</span>
+<span class="go"> 8   Cited by                       1714 non-null   float64</span>
+<span class="go"> 9   Author Keywords                1681 non-null   object</span>
+<span class="go"> 10  Language of Original Document  1714 non-null   object</span>
+<span class="go"> 11  Abstract                       1714 non-null   object</span>
+<span class="go">dtypes: float64(3), int64(2), object(7)</span>
+<span class="go">memory usage: 160.8+ KB</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="techminer.datasets.load_test_cleaned">
+<code class="sig-prename descclassname">techminer.datasets.</code><code class="sig-name descname">load_test_cleaned</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/datasets.html#load_test_cleaned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.datasets.load_test_cleaned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return a test dataset cleaned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="techminer.datasets.load_test_raw">
+<code class="sig-prename descclassname">techminer.datasets.</code><code class="sig-name descname">load_test_raw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/techminer/datasets.html#load_test_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#techminer.datasets.load_test_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and return a test dataset cleaned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">TechMiner.datasets</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#functions-in-this-module">Functions in this module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="common.html"
+                        title="previous chapter">TechMiner.common</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/datasets.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="TechMiner.common"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Modules</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
+    </div>
+  </body>
+</html>

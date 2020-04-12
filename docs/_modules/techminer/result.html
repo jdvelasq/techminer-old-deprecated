@@ -7,11 +7,12 @@
     <title>techminer.result &#8212; techMiner - A Package for Bibliographical Analysis using Python 0.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -49,14 +50,14 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">techminer.common</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span> 
-<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="k">import</span> <span class="n">make_axes_locatable</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="k">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">LineString</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="k">import</span> <span class="n">KMeans</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="k">import</span> <span class="n">Rectangle</span>
-<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="k">import</span> <span class="n">WordCloud</span><span class="p">,</span> <span class="n">ImageColorGenerator</span>
+<span class="kn">from</span> <span class="nn">techminer.common</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span> 
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">LineString</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Rectangle</span>
+<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span><span class="p">,</span> <span class="n">ImageColorGenerator</span>
 
 <span class="c1">#----------------------------------------------------------------------------------------------------</span>
 <span class="k">def</span> <span class="nf">_compute_graph_layout</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
@@ -75,7 +76,7 @@
     <span class="sd">&quot;&quot;&quot;Class implementing a dataframe with results of analysis.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1">#----------------------------------------------------------------------------------------------------</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  
             <span class="n">cluster_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">call</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span>
@@ -103,10 +104,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_year().altair_barhplot()</span>
 <span class="sd">        alt.Chart(...)</span>
 
@@ -137,10 +136,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_year().altair_barplot()</span>
 <span class="sd">        alt.Chart(...)</span>
 
@@ -167,10 +164,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.auto_corr(</span>
 <span class="sd">        ...     column=&#39;Authors&#39;,</span>
 <span class="sd">        ...     sep=&#39;,&#39;,</span>
@@ -218,8 +213,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True))</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.terms_by_year( </span>
 <span class="sd">        ...    column=&#39;Authors&#39;, </span>
 <span class="sd">        ...    sep=&#39;,&#39;,</span>
@@ -288,10 +283,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_year().barhplot()</span>
 
 <span class="sd">        .. image:: ../figs/barhplot.jpg</span>
@@ -325,10 +318,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_year().barplot()</span>
 
 <span class="sd">        .. image:: ../figs/barplot.jpg</span>
@@ -355,10 +346,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.auto_corr(</span>
 <span class="sd">        ...     column=&#39;Authors&#39;,</span>
 <span class="sd">        ...     sep=&#39;,&#39;,</span>
@@ -398,8 +387,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True))</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.terms_by_year( </span>
 <span class="sd">        ...    column=&#39;Authors&#39;, </span>
 <span class="sd">        ...    sep=&#39;,&#39;,</span>
@@ -513,10 +502,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.auto_corr(</span>
 <span class="sd">        ...     column=&#39;Authors&#39;,</span>
 <span class="sd">        ...     sep=&#39;,&#39;,</span>
@@ -671,10 +658,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.co_ocurrence(</span>
 <span class="sd">        ...    column_r=&#39;Authors&#39;, </span>
 <span class="sd">        ...    column_c=&#39;Authors&#39;, </span>
@@ -859,8 +844,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True))</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.cross_corr(</span>
 <span class="sd">        ...    column_r=&#39;keywords (cleaned)&#39;,</span>
 <span class="sd">        ...    sep_r=&#39;;&#39;,</span>
@@ -948,10 +933,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_year().seaborn_barhplot()</span>
 <span class="sd">        </span>
 
@@ -987,10 +970,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_year().seaborn_barplot()</span>
 
 <span class="sd">        .. image:: ../figs/seaborn_barhplot.jpg</span>
@@ -1030,8 +1011,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True))</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.terms_by_year( </span>
 <span class="sd">        ...    column=&#39;Authors&#39;, </span>
 <span class="sd">        ...    sep=&#39;,&#39;,</span>
@@ -1081,10 +1062,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.auto_corr(</span>
 <span class="sd">        ...     column=&#39;Authors&#39;,</span>
 <span class="sd">        ...     sep=&#39;,&#39;,</span>
@@ -1430,10 +1409,8 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_terms(&#39;Source title&#39;).wordcloud()</span>
 
 <span class="sd">        .. image:: ../figs/wordcloud.jpg</span>
@@ -1464,11 +1441,9 @@
 
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">        &gt;&gt;&gt; from techminer.dataframe import  *</span>
+<span class="sd">        &gt;&gt;&gt; from techminer.datasets import load_test_cleaned</span>
+<span class="sd">        &gt;&gt;&gt; rdf = load_test_cleaned().data</span>
 <span class="sd">        &gt;&gt;&gt; from techminer.strings import  *</span>
-<span class="sd">        &gt;&gt;&gt; rdf = RecordsDataFrame(</span>
-<span class="sd">        ...     pd.read_json(&#39;./data/cleaned.json&#39;, orient=&#39;records&#39;, lines=True)</span>
-<span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; rdf[&#39;Country&#39;] = rdf[&#39;Affiliations&#39;].map(lambda x: extract_country(x, sep=&#39;;&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_terms(&#39;Country&#39;, sep=&#39;;&#39;).head()</span>
 <span class="sd">                  Country  Num Documents                                                 ID</span>
@@ -1477,7 +1452,6 @@
 <span class="sd">        2   United States             17  [[*3*], [*22*], [*23*], [*23*], [*26*], [*26*]...</span>
 <span class="sd">        3  United Kingdom             15  [[*5*], [*7*], [*11*], [*11*], [*11*], [*28*],...</span>
 <span class="sd">        4           India             15  [[*9*], [*50*], [*51*], [*56*], [*56*], [*57*]...</span>
-
 <span class="sd">        &gt;&gt;&gt; rdf.documents_by_terms(&#39;Country&#39;, sep=&#39;;&#39;).worldmap()</span>
 
 <span class="sd">        .. image:: ../figs/worldmap.jpg</span>
@@ -1528,7 +1502,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -1548,7 +1522,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Juan D. Velasquez &amp; Ivanohe J. Garces.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.
     </div>
   </body>
 </html>

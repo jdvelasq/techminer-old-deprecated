@@ -66,10 +66,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().altair_barhplot()
         alt.Chart(...)
 
@@ -100,10 +98,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().altair_barplot()
         alt.Chart(...)
 
@@ -130,10 +126,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.auto_corr(
         ...     column='Authors',
         ...     sep=',',
@@ -181,8 +175,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.terms_by_year( 
         ...    column='Authors', 
         ...    sep=',',
@@ -251,10 +245,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().barhplot()
 
         .. image:: ../figs/barhplot.jpg
@@ -288,10 +280,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().barplot()
 
         .. image:: ../figs/barplot.jpg
@@ -318,10 +308,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.auto_corr(
         ...     column='Authors',
         ...     sep=',',
@@ -361,8 +349,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.terms_by_year( 
         ...    column='Authors', 
         ...    sep=',',
@@ -476,10 +464,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.auto_corr(
         ...     column='Authors',
         ...     sep=',',
@@ -634,10 +620,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.co_ocurrence(
         ...    column_r='Authors', 
         ...    column_c='Authors', 
@@ -822,8 +806,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.cross_corr(
         ...    column_r='keywords (cleaned)',
         ...    sep_r=';',
@@ -911,10 +895,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().seaborn_barhplot()
         
 
@@ -950,10 +932,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_year().seaborn_barplot()
 
         .. image:: ../figs/seaborn_barhplot.jpg
@@ -993,8 +973,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(pd.read_json('./data/cleaned.json', orient='records', lines=True))
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.terms_by_year( 
         ...    column='Authors', 
         ...    sep=',',
@@ -1044,10 +1024,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.auto_corr(
         ...     column='Authors',
         ...     sep=',',
@@ -1393,10 +1371,8 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> rdf.documents_by_terms('Source title').wordcloud()
 
         .. image:: ../figs/wordcloud.jpg
@@ -1427,11 +1403,9 @@ class Result(pd.DataFrame):
 
         >>> import pandas as pd
         >>> import matplotlib.pyplot as plt
-        >>> from techminer.dataframe import  *
+        >>> from techminer.datasets import load_test_cleaned
+        >>> rdf = load_test_cleaned().data
         >>> from techminer.strings import  *
-        >>> rdf = RecordsDataFrame(
-        ...     pd.read_json('./data/cleaned.json', orient='records', lines=True)
-        ... )
         >>> rdf['Country'] = rdf['Affiliations'].map(lambda x: extract_country(x, sep=';'))
         >>> rdf.documents_by_terms('Country', sep=';').head()
                   Country  Num Documents                                                 ID
@@ -1440,7 +1414,6 @@ class Result(pd.DataFrame):
         2   United States             17  [[*3*], [*22*], [*23*], [*23*], [*26*], [*26*]...
         3  United Kingdom             15  [[*5*], [*7*], [*11*], [*11*], [*11*], [*28*],...
         4           India             15  [[*9*], [*50*], [*51*], [*56*], [*56*], [*57*]...
-
         >>> rdf.documents_by_terms('Country', sep=';').worldmap()
 
         .. image:: ../figs/worldmap.jpg
