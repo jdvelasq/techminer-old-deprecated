@@ -8,6 +8,7 @@ from techminer.strings import *
 from techminer.thesaurus import *
 from techminer.transform import *
 from techminer.common import *
+from techminer.datasets import *
 
 
 
