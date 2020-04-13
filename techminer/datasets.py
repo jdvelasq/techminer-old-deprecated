@@ -93,6 +93,42 @@ def load_dynacol():
     return Bunch(data=fdata, DESCR=fdescr)
 
 
+
+def load_dynacol_citedby():
+    """Load and return the dynacol-citedby dataset.
+
+    This dataset contains the bibliographical information about publications 
+    citing in Scopus the Dyna-Colombia journal, edited by Facultad de Minas, 
+    Universidad Nacional de Colombia, Sede Medellin, between January, 2010 
+    and September, 2019.
+
+    Args:
+        None.
+
+    Returns:
+        A dictionary.
+
+    **Examples**
+
+    >>> from techminer.datasets import load_dynacol_citedby
+    >>> data = load_dynacol_citedby().data
+    >>> len(data)  # doctest: +NORMALIZE_WHITESPACE
+    3406
+
+
+    """
+
+    module_path = dirname(__file__)
+
+    with open(join(module_path, "datasets/dyna-col-citedby.rst")) as rst_file:
+        fdescr = rst_file.read()
+
+    fdata = RecordsDataFrame(pd.read_json(join(module_path, "datasets/dyna-col-citedby.json"), orient='index'))
+
+    return Bunch(data=fdata, DESCR=fdescr)
+
+
+
 def load_autotrading_raw():
     """Load and return the autotrading dataset with raw info.
 
@@ -112,28 +148,29 @@ def load_autotrading_raw():
     >>> data.data.info()  # doctest: +NORMALIZE_WHITESPACE
     <class 'techminer.dataframe.RecordsDataFrame'>
     Int64Index: 212 entries, 0 to 99
-    Data columns (total 17 columns):
+    Data columns (total 18 columns):
      #   Column           Non-Null Count  Dtype  
     ---  ------           --------------  -----  
      0   Abstract         212 non-null    object 
-     1   Author Keywords  155 non-null    object 
-     2   Author(s) ID     212 non-null    object 
-     3   Authors          212 non-null    object 
-     4   Cited by         212 non-null    int64  
-     5   DOI              152 non-null    object 
-     6   Document Type    212 non-null    object 
-     7   EID              212 non-null    object 
-     8   Index Keywords   135 non-null    object 
-     9   Issue            83 non-null     object 
-     10  Page end         185 non-null    float64
-     11  Page start       185 non-null    float64
-     12  Selected         212 non-null    bool   
-     13  Source title     212 non-null    object 
-     14  Title            212 non-null    object 
-     15  Volume           141 non-null    object 
-     16  Year             212 non-null    int64  
-    dtypes: bool(1), float64(2), int64(2), object(12)
-    memory usage: 28.4+ KB
+     1   Affiliations     194 non-null    object 
+     2   Author Keywords  155 non-null    object 
+     3   Author(s) ID     212 non-null    object 
+     4   Authors          212 non-null    object 
+     5   Cited by         212 non-null    int64  
+     6   DOI              152 non-null    object 
+     7   Document Type    212 non-null    object 
+     8   EID              212 non-null    object 
+     9   Index Keywords   135 non-null    object 
+     10  Issue            83 non-null     object 
+     11  Page end         185 non-null    float64
+     12  Page start       185 non-null    float64
+     13  Selected         212 non-null    bool   
+     14  Source title     212 non-null    object 
+     15  Title            212 non-null    object 
+     16  Volume           141 non-null    object 
+     17  Year             212 non-null    int64  
+    dtypes: bool(1), float64(2), int64(2), object(13)
+    memory usage: 30.0+ KB
 
     """
 
@@ -170,27 +207,28 @@ def load_autotrading_selected():
     >>> data.data.info()  # doctest: +NORMALIZE_WHITESPACE
     <class 'techminer.dataframe.RecordsDataFrame'>
     Int64Index: 95 entries, 0 to 99
-    Data columns (total 16 columns):
+    Data columns (total 17 columns):
      #   Column           Non-Null Count  Dtype  
     ---  ------           --------------  -----  
      0   Abstract         95 non-null     object 
-     1   Author Keywords  76 non-null     object 
-     2   Author(s) ID     95 non-null     object 
-     3   Authors          95 non-null     object 
-     4   Cited by         95 non-null     int64  
-     5   DOI              82 non-null     object 
-     6   Document Type    95 non-null     object 
-     7   EID              95 non-null     object 
-     8   Index Keywords   71 non-null     object 
-     9   Issue            33 non-null     object 
-     10  Page end         88 non-null     float64
-     11  Page start       88 non-null     float64
-     12  Source title     95 non-null     object 
-     13  Title            95 non-null     object 
-     14  Volume           65 non-null     object 
-     15  Year             95 non-null     int64  
-    dtypes: float64(2), int64(2), object(12)
-    memory usage: 12.6+ KB
+     1   Affiliations     95 non-null     object 
+     2   Author Keywords  76 non-null     object 
+     3   Author(s) ID     95 non-null     object 
+     4   Authors          95 non-null     object 
+     5   Cited by         95 non-null     int64  
+     6   DOI              82 non-null     object 
+     7   Document Type    95 non-null     object 
+     8   EID              95 non-null     object 
+     9   Index Keywords   71 non-null     object 
+     10  Issue            33 non-null     object 
+     11  Page end         88 non-null     float64
+     12  Page start       88 non-null     float64
+     13  Source title     95 non-null     object 
+     14  Title            95 non-null     object 
+     15  Volume           65 non-null     object 
+     16  Year             95 non-null     int64  
+    dtypes: float64(2), int64(2), object(13)
+    memory usage: 13.4+ KB
 
     """
 
