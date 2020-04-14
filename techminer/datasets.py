@@ -88,7 +88,7 @@ def load_dynacol():
     with open(join(module_path, "datasets/dyna-col.rst")) as rst_file:
         fdescr = rst_file.read()
 
-    fdata = RecordsDataFrame(pd.read_csv(join(module_path, "datasets/dyna-col.csv")))
+    fdata = RecordsDataFrame(pd.read_json(join(module_path, "datasets/dyna-col.json"), orient='index'))
 
     return Bunch(data=fdata, DESCR=fdescr)
 
