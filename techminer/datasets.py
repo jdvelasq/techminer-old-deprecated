@@ -60,25 +60,25 @@ def load_dynacol():
     >>> data = load_dynacol()
     >>> data.data.info()  # doctest: +NORMALIZE_WHITESPACE
     <class 'techminer.dataframe.RecordsDataFrame'>
-    RangeIndex: 1714 entries, 0 to 1713
-    Data columns (total 12 columns):
+    Int64Index: 1714 entries, 0 to 999
+    Data columns (total 13 columns):
      #   Column                         Non-Null Count  Dtype  
     ---  ------                         --------------  -----  
-     0   Authors                        1714 non-null   object 
-     1   Author(s) ID                   1714 non-null   object 
-     2   Title                          1714 non-null   object 
-     3   Year                           1714 non-null   int64  
-     4   Volume                         1714 non-null   int64  
-     5   Issue                          1714 non-null   object 
-     6   Page start                     1677 non-null   float64
-     7   Page end                       1669 non-null   float64
-     8   Cited by                       1714 non-null   float64
-     9   Author Keywords                1681 non-null   object 
-     10  Language of Original Document  1714 non-null   object 
-     11  Abstract                       1714 non-null   object 
-    dtypes: float64(3), int64(2), object(7)
-    memory usage: 160.8+ KB
-
+     0   Abstract                       1714 non-null   object 
+     1   Affiliations                   1706 non-null   object 
+     2   Author Keywords                1681 non-null   object 
+     3   Author(s) ID                   1714 non-null   object 
+     4   Authors                        1714 non-null   object 
+     5   Cited by                       1714 non-null   int64  
+     6   Issue                          1714 non-null   object 
+     7   Language of Original Document  1714 non-null   object 
+     8   Page end                       1669 non-null   float64
+     9   Page start                     1677 non-null   float64
+     10  Title                          1714 non-null   object 
+     11  Volume                         1714 non-null   int64  
+     12  Year                           1714 non-null   int64  
+    dtypes: float64(2), int64(3), object(8)
+    memory usage: 187.5+ KB
 
 
     """

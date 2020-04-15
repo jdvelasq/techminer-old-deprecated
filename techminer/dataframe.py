@@ -288,14 +288,13 @@ class RecordsDataFrame(pd.DataFrame):
         >>> from techminer.datasets import load_test_cleaned
         >>> rdf = load_test_cleaned().data
         >>> rdf.citations_by_terms_by_year('Authors', sep=',', top_n=5)
-                    Authors       Year  Cited by                  ID
-        0  Hernandez G. [3]  2018 [52]       1.0           [[*100*]]
-        1      Tefas A. [3]  2017 [19]      31.0  [[*110*], [*114*]]
-        2       Wang J. [7]   2016 [5]      38.0  [[*128*], [*128*]]
-        3       Wang J. [7]  2018 [52]       8.0    [[*80*], [*87*]]
-        4      Zhang G. [4]  2017 [19]       8.0  [[*117*], [*119*]]
-        5      Zhang G. [4]  2018 [52]       1.0            [[*78*]]
-        6      Zhang G. [4]  2019 [53]       3.0            [[*27*]]
+                    Authors       Year  Cited by         ID
+        0   Hsiao H.-F. [1]   2011 [2]     188.0  [[*140*]]
+        1   Hsieh T.-J. [1]   2011 [2]     188.0  [[*140*]]
+        2  Hussain A.J. [2]   2011 [2]      42.0  [[*139*]]
+        3  Hussain A.J. [2]   2016 [5]      10.0  [[*125*]]
+        4     Krauss C. [1]  2018 [52]      49.0   [[*62*]]
+        5     Yeh W.-C. [1]   2011 [2]     188.0  [[*140*]]
 
         """
         data = self[[column, 'Cited by', 'Year', 'ID']].dropna()
@@ -316,9 +315,10 @@ class RecordsDataFrame(pd.DataFrame):
         })
 
         ## rows
-        top = self.documents_by_terms(column, sep)
+        top = self.citations_by_terms(column, sep)
         if top_n is not None and len(top) > top_n:
             top = top[0:top_n][column].tolist()
+            top = [u[0:u.find('[')].strip()  for u in top]
             selected = [True if row[0] in top else False for idx, row in result.iterrows()] 
             result = result[selected]
 
