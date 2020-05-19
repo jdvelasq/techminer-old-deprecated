@@ -393,7 +393,7 @@ class RecordsDataFrame(pd.DataFrame):
 
     #----------------------------------------------------------------------------------------------
     def co_ocurrence(self, column_r, column_c, sep_r=None, sep_c=None, top_n=None, minmax=None):
-        """Computes the number of rows containing two given items in different columns.
+        """Computes the number of documents containing two given items in different columns.
 
         >>> from techminer.datasets import load_test_cleaned
         >>> rdf = load_test_cleaned().data
@@ -409,6 +409,9 @@ class RecordsDataFrame(pd.DataFrame):
         7      Zhang G. [4]  Conference Paper [12]              2                          [[*78*], [*119*]]
 
         """
+
+
+
 
         ## computes the number of documents by term by term        
         data = self[[column_r, column_c, 'ID']].dropna()
